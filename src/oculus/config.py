@@ -35,7 +35,7 @@ class InteractiveConfig():
 def get_config_path() -> str:
     return __config_path
 
-def check_option(section: str, key: str) -> str:
+def check_option(section:str, key:str) -> str:
     try:
         return config[section][key]
     except KeyError:

@@ -1,14 +1,22 @@
-from argparse import ArgumentParser
+from argparse import (
+    ArgumentParser,
+    Namespace as ArgparseNamespace
+)
 
 from .__init__ import __short_name__, __long_name__, __version__
 from .config import config, InteractiveConfig
 
 
-def config_subcommand(args):
+def config_subcommand(args:ArgparseNamespace):
+    """Handles the config subcommand
+    
+    Keyword Arguments:
+    args -- argparse.Namespace"""
     if args.interactive_edit:
         editor = InteractiveConfig()
         editor.launch_preferred_editor()
         return
+    
 
 
 def interactive():

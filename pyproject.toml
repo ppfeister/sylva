@@ -1,5 +1,5 @@
 [project]
-name = "ohshint"
+name = "Oculus"
 version = "0.1.0"
 description = "OSINT Simplified"
 authors = [
@@ -14,7 +14,7 @@ readme = "docs/README.md"
 license = {text = "AGPL-3.0-or-later"}
 
 [project.scripts]
-ohshint = "ohshint.console:interactive"
+oculus = "oculus.console:interactive"
 
 [build-system]
 requires = ["pdm-backend"]
