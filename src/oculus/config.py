@@ -35,11 +35,15 @@ class InteractiveConfig():
 def get_config_path() -> str:
     return __config_path
 
-def check_option(section:str, key:str) -> str:
+def check_option(section:str, key:str, default:str='') -> str:
+    """Check the value of a config option.
+    
+    Returns the value of the option if it exists, otherwise returns an empty
+    string or the value of 'default' if it is provided."""
     try:
         return config[section][key]
     except KeyError:
-        return ''
+        return default
 
 def new_config():
     print(f"Seems to be your first time using {__short_name__}. Let's create a config file for you.")
@@ -49,8 +53,8 @@ def new_config():
 
 def update_config():
     config["General"] = {
-        "debug": "False",
-        "log_level": "INFO",
+        "debug": check_option(section="General", key="debug", default="False"),
+        "log_level": check_option(section="General", key="log_level", default="INFO"),
     }
     if not config.has_section("API"):
         config.add_section("API")
