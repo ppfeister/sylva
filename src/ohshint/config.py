@@ -2,16 +2,38 @@ from argparse import Action as ArgparseAction
 from configparser import ConfigParser
 from platformdirs import user_config_dir
 from os.path import isfile
-from os import makedirs
+from os import makedirs, environ
+from subprocess import call
 
 from .__init__ import __short_name__
 
 __config_dir = user_config_dir(__short_name__.lower())
 __config_path = f"{__config_dir}/config.ini"
 
-class InteractiveConfig(ArgparseAction):
-    def __call__(self, parser, namespace, values, option_string=None):
-        pass
+class InteractiveConfig():
+    def __init__(self):
+        self.config = config
+        self.config_path = get_config_path()
+    def launch_preferred_editor(self):
+        EDITOR = environ.get('EDITOR')
+        if not EDITOR:
+            print('$EDITOR is not set on your system.')
+            print(f'{__short_name__} config may be edited manually at {self.config_path}')
+            return
+        try:
+            call([EDITOR, self.config_path])
+        except FileNotFoundError as e:
+            if e.filename == EDITOR:
+                print(f'Failed to find preferred editor {EDITOR}')
+                print(f'{__short_name__} config may be edited manually at {self.config_path}')
+            elif e.filename == self.config_path:
+                print(f'Unable to find {self.config_path}')
+                print('This is highly unusual. Please report this issue.')
+            else:
+                raise e
+
+def get_config_path() -> str:
+    return __config_path
 
 def check_option(section: str, key: str) -> str:
     try:
