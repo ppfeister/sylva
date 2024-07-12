@@ -1,0 +1,19 @@
+[project]
+name = "ohshint"
+version = "0.1.0"
+description = "OSINT Simplified"
+authors = [
+    {name = "Paul Pfeister", email = "code@pfeister.dev"},
+]
+dependencies = []
+requires-python = ">=3.12"
+readme = "README.md"
+license = {text = "AGPL-3.0-or-later"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[tool.pdm]
+distribution = true
