@@ -28,7 +28,7 @@ def interactive():
     parser_search.set_defaults(func=config_subcommand)
 
     parser_config = subparsers.add_parser('config', help=f'Edit {__short_name__}\'s config')
-    parser_config.add_argument('--edit', dest='interactive_edit', action='store_true', default=False, help='Edit the config interactively')
+    parser_config.add_argument('--edit', '-e', dest='interactive_edit', action='store_true', default=False, help='Edit the config interactively')
     parser_config.set_defaults(func=config_subcommand)
 
     parser.add_argument(
