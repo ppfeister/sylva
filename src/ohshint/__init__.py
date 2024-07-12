@@ -1,6 +1,7 @@
 from .config import *
 
-__short_name__ = "ohshint"
+__short_name__ = "OhShINT"
+__long_name__ = f"{__short_name__} - OSINT Simplified"
 __version__ = "0.1.0"
 __author__ = "Paul Pfeister"
 __author_email__ = "code@pfeister.dev"

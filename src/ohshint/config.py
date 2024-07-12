@@ -1,3 +1,4 @@
+from argparse import Action as ArgparseAction
 from configparser import ConfigParser
 from platformdirs import user_config_dir
 from os.path import isfile
@@ -5,8 +6,12 @@ from os import makedirs
 
 from .__init__ import __short_name__
 
-__config_dir = user_config_dir("ohshint")
+__config_dir = user_config_dir(__short_name__.lower())
 __config_path = f"{__config_dir}/config.ini"
+
+class InteractiveConfig(ArgparseAction):
+    def __call__(self, parser, namespace, values, option_string=None):
+        pass
 
 def check_option(section: str, key: str) -> str:
     try:
@@ -28,7 +33,7 @@ def update_config():
     if not config.has_section("API"):
         config.add_section("API")
     config["API"] = {
-        "HIBP": check_option("API", "HIBP"),
+        "HIBP": check_option(section="API", key="HIBP"),
     }
     with open(__config_path, "w") as configfile:
         config.write(configfile)
