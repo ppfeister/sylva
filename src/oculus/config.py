@@ -56,10 +56,12 @@ def update_config():
         "debug": check_option(section="General", key="debug", default="False"),
         "log_level": check_option(section="General", key="log_level", default="INFO"),
     }
-    if not config.has_section("API"):
-        config.add_section("API")
-    config["API"] = {
-        "HIBP": check_option(section="API", key="HIBP"),
+    config["Cache"] = {
+        "enabled": check_option(section="Cache", key="enabled", default="True"),
+        "ttl": check_option(section="Cache", key="ttl", default="86400"),
+    }
+    config["Keys"] = {
+        "HIBP": check_option(section="Keys", key="HIBP"),
     }
     with open(__config_path, "w") as configfile:
         config.write(configfile)
