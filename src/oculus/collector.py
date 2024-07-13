@@ -1,4 +1,4 @@
-from .modules.__helpers import ResultDataFrame
+from .integrations.__helpers import ResultDataFrame
 
 class Collector:
     def __init__(self):

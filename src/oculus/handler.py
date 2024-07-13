@@ -1,6 +1,6 @@
 from .collector import Collector
-from .modules.__helpers import RequestError
-from .modules import (
+from .integrations.__helpers import RequestError
+from .integrations import (
     endato,
     proxynova,
     intelx,
