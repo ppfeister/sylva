@@ -25,7 +25,8 @@ build-backend = "pdm.backend"
 distribution = true
 
 [tool.pdm.dev-dependencies]
-test = [
+dev = [
     "pytest>=8.2.2",
     "tox>=4.16.0",
+    "ruff>=0.5.1",
 ]
