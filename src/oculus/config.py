@@ -1,12 +1,17 @@
 import configparser
 import os
-import platformdirs
 import subprocess
+#from typing import List
+
+import platformdirs
 
 from . import __short_name__
 
 __config_dir = platformdirs.user_config_dir(__short_name__.lower())
 __config_path = f"{__config_dir}/config.ini"
+
+# Whitelist to help prevent command injection on launch of preferred editor
+#__allowed_editors: List[str] = ['atom', 'atom-beta', 'code', 'code-insiders', 'code-oss', 'emacs', 'geany', 'gedit', 'kate', 'nano', 'notepad++', 'nvim', 'subl', 'vim', 'vim-gtk', 'vscode']
 
 class InteractiveConfig():
     def __init__(self):
@@ -19,6 +24,7 @@ class InteractiveConfig():
             print(f'{__short_name__} config may be edited manually at {self.config_path}')
             return
         try:
+            # TODO Add validation to deter command injection through $EDITOR
             subprocess.call([EDITOR, self.config_path])
         except FileNotFoundError as e:
             if e.filename == EDITOR:
