@@ -33,7 +33,7 @@
                         "description": "Type of validation to perform against the target, if function based",
                         "enum": [ "fingerprint", "keyid", "encoded-email" ]
                     },
-                    "known_possitives": {
+                    "known_positives": {
                         "type": "array",
                         "description": "List of known positives for the target",
                         "items": {
