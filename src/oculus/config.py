@@ -1,13 +1,11 @@
-from argparse import Action as ArgparseAction
-from configparser import ConfigParser
-from platformdirs import user_config_dir
-from os.path import isfile
-from os import makedirs, environ
-from subprocess import call
+import configparser
+import os
+import platformdirs
+import subprocess
 
 from . import __short_name__
 
-__config_dir = user_config_dir(__short_name__.lower())
+__config_dir = platformdirs.user_config_dir(__short_name__.lower())
 __config_path = f"{__config_dir}/config.ini"
 
 class InteractiveConfig():
@@ -15,13 +13,13 @@ class InteractiveConfig():
         self.config = config
         self.config_path = get_config_path()
     def launch_preferred_editor(self):
-        EDITOR = environ.get('EDITOR')
+        EDITOR = os.environ.get('EDITOR')
         if not EDITOR:
             print('$EDITOR is not set on your system.')
             print(f'{__short_name__} config may be edited manually at {self.config_path}')
             return
         try:
-            call([EDITOR, self.config_path])
+            subprocess.call([EDITOR, self.config_path])
         except FileNotFoundError as e:
             if e.filename == EDITOR:
                 print(f'Failed to find preferred editor {EDITOR}')
@@ -47,7 +45,7 @@ def check_option(section:str, key:str, default:str='') -> str:
 
 def new_config():
     print(f"Seems to be your first time using {__short_name__}. Let's create a config file for you.")
-    makedirs(__config_dir, exist_ok=True)
+    os.makedirs(__config_dir, exist_ok=True)
     with open(__config_path, "x") as configfile:
         config.write(configfile)
 
@@ -67,7 +65,7 @@ def update_config():
         config.write(configfile)
 
 def load_config():
-    if not isfile(__config_path):
+    if not os.path.isfile(__config_path):
         new_config()
     else:
         config.read(__config_path)
@@ -76,5 +74,5 @@ def load_config():
 
     return config
 
-config = ConfigParser()
+config = configparser.ConfigParser()
 load_config()
