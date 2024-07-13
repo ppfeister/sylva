@@ -15,8 +15,7 @@ class ProxyNova:
         self.source_name:str = 'ProxyNova'
         self.description:str = 'Free API to search the COMB combo list (3.2 billion entries)'
         self.collector:Collector = collector
-    def search(self, query:str, start:int=0, end:int=5) -> pd.DataFrame:
-        print(self.__api_url.format(QUERY=query, START=start, END=end))
+    def search(self, query:str, start:int=0, end:int=config['Target Options']['proxycheck-default-limit']) -> pd.DataFrame:
         if self.__debug_disable_tag in config['Debug']['disabled_modules']:
             return
         query = requests.utils.requote_uri(query)

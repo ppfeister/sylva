@@ -71,6 +71,9 @@ def update_config():
     config["Debug"] = {
         "disabled_modules": check_option(section="Debug", key="disabled_modules", default="proxynova"),
     }
+    config["Target Options"] = {
+        "proxycheck-default-limit": check_option(section="Target Options", key="proxycheck-default-limit", default="5"),
+    }
     with open(__config_path, "w") as configfile:
         config.write(configfile)
 
