@@ -29,7 +29,7 @@
         {
             "friendly_name": "OpenPGP.org",
             "simple_url": "https://keys.openpgp.org/vks/v1/by-email/{query}",
-            "known_possitives": [ "code@pfeister.dev" ],
+            "known_possitives": [ "code%40pfeister.dev" ],
             "validation_type": "encoded-email"
         }
     ]
