@@ -1,13 +1,10 @@
-from argparse import (
-    ArgumentParser,
-    Namespace as ArgparseNamespace
-)
+import argparse
 
-from .__init__ import __short_name__, __long_name__, __version__
+from . import __short_name__, __long_name__, __version__
 from .config import config, InteractiveConfig
 
 
-def config_subcommand(args:ArgparseNamespace):
+def config_subcommand(args:argparse.Namespace):
     """Handles the config subcommand
     
     Keyword Arguments:
@@ -20,7 +17,7 @@ def config_subcommand(args:ArgparseNamespace):
 
 
 def interactive():
-    parser = ArgumentParser(description=f'{__long_name__}')
+    parser = argparse.ArgumentParser(description=f'{__long_name__}')
     subparsers = parser.add_subparsers(dest='command')
 
     parser_search = subparsers.add_parser('find', help='Find an identity')

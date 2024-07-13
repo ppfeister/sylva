@@ -5,7 +5,7 @@ from os.path import isfile
 from os import makedirs, environ
 from subprocess import call
 
-from .__init__ import __short_name__
+from . import __short_name__
 
 __config_dir = user_config_dir(__short_name__.lower())
 __config_path = f"{__config_dir}/config.ini"
