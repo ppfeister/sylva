@@ -66,7 +66,11 @@ class Endato:
         self.collector.insert(new_data)
         return new_data
     def search(self, query:str) -> pd.DataFrame:
-        if self.__debug_disable_tag in config['Debug']['disabled_modules']:
+        if (
+            self.__debug_disable_tag in config['Debug']['disabled_modules']
+            or not config['Keys']['endato-name']
+            or not config['Keys']['endato-key']
+        ):
             return
         try:
             query_type = self._type(query)
