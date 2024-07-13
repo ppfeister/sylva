@@ -65,14 +65,19 @@ def update_config():
         "ttl": check_option(section="Cache", key="ttl", default="86400"),
     }
     config["Keys"] = {
-        "HIBP": check_option(section="Keys", key="HIBP"),
-        "snusbase": check_option(section="Keys", key="snusbase"),
+        "endato-name": check_option(section="Keys", key="endato-name"),
+        "endato-key": check_option(section="Keys", key="endato-key"),
     }
     config["Debug"] = {
         "disabled_modules": check_option(section="Debug", key="disabled_modules", default="proxynova"),
     }
     config["Target Options"] = {
         "proxycheck-default-limit": check_option(section="Target Options", key="proxycheck-default-limit", default="5"),
+        "proxycheck-spider-in": check_option(section="Target Options", key="proxycheck-spider-in", default="False"),
+        "proxycheck-spider-out": check_option(section="Target Options", key="proxycheck-spider-out", default="False"),
+        "endato-limit-queries": check_option(section="Target Options", key="endato-limit-queries", default="True"),
+        "endato-spider-in": check_option(section="Target Options", key="endato-spider-in", default="False"),
+        "endato-spider-out": check_option(section="Target Options", key="endato-spider-out", default="True"),
     }
     with open(__config_path, "w") as configfile:
         config.write(configfile)

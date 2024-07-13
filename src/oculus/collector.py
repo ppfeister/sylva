@@ -14,6 +14,17 @@ class Collector:
             'email',
             'phone',
             'password',
+            'age',
+            'sex',
+            'first_name',
+            'middle_name',
+            'last_name',
+            'birth_date',
+            'street',
+            'unit',
+            'city',
+            'state',
+            'zip',
             ])
     def insert(self, new_data:pd.DataFrame):
         self.data = pd.concat([self.data, new_data], ignore_index=True)

@@ -13,8 +13,8 @@ class ProxyNova:
         self.__debug_disable_tag:str = 'proxynova'
         self.spider_recommended:bool = False
         self.source_name:str = 'ProxyNova'
-        self.description:str = 'Free API to search the COMB combo list (3.2 billion entries)'
         self.collector:Collector = collector
+    # TODO add validation for username, email, password
     def search(self, query:str, start:int=0, end:int=config['Target Options']['proxycheck-default-limit']) -> pd.DataFrame:
         if self.__debug_disable_tag in config['Debug']['disabled_modules']:
             return
@@ -27,7 +27,7 @@ class ProxyNova:
         new_data = pd.DataFrame(rows, columns=['email', 'password'])
         new_data['query'] = query
         new_data['source_name'] = self.source_name
-        new_data['source_description'] = self.description
-        new_data['spider_recommended'] = self.spider_recommended
+        new_data['spider_recommended'] = config['Target Options']['proxycheck-spider-out']
         self.collector.insert(new_data)
         return new_data
+    #def accepts(self, query:str) -> bool:
