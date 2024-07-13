@@ -3,6 +3,7 @@ from .modules.__helpers import RequestError
 from .modules import (
     endato,
     proxynova,
+    intelx,
 )
 
 
@@ -12,11 +13,16 @@ class Handler:
     def search_all(self, query:str):
         try:
             _proxynova = proxynova.ProxyNova(collector=self.collector)
-            _proxynova.search(query)
+            _proxynova.search(query=query)
         except RequestError:
             pass
         try:
             _endato = endato.Endato(collector=self.collector)
-            _endato.search(query)
+            _endato.search(query=query)
         except RequestError:
             pass
+        #try:
+        #    _intelx = intelx.IntelX(collector=self.collector)
+        #    _intelx.search(query=query)
+        #except RequestError:
+        #    pass

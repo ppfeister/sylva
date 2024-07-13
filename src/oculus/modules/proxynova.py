@@ -24,7 +24,7 @@ class ProxyNova:
             raise RequestError(f'Failed to get results from ProxyNova. Status code: {response.status_code}')
         json_data:dict = json.loads(response.text)
         rows = [line.split(':') if ':' in line else [line, None] for line in json_data['lines']] # ugly but functional
-        new_data = pd.DataFrame(rows, columns=['email', 'password'])
+        new_data = pd.DataFrame(rows[:1], columns=['email', 'password'])
         new_data['query'] = query
         new_data['source_name'] = self.source_name
         new_data['spider_recommended'] = config['Target Options']['proxycheck-spider-out']
