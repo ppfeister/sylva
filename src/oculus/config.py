@@ -66,6 +66,10 @@ def update_config():
     }
     config["Keys"] = {
         "HIBP": check_option(section="Keys", key="HIBP"),
+        "snusbase": check_option(section="Keys", key="snusbase"),
+    }
+    config["Debug"] = {
+        "disabled_modules": check_option(section="Debug", key="disabled_modules", default="proxynova"),
     }
     with open(__config_path, "w") as configfile:
         config.write(configfile)

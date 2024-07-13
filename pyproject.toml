@@ -8,6 +8,8 @@ authors = [
 dependencies = [
     "sherlock-project>=0.15.0",
     "platformdirs>=4.2.2",
+    "requests>=2.32.3",
+    "pandas>=2.2.2",
 ]
 requires-python = ">=3.10"
 readme = "docs/README.md"
