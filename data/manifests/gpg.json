@@ -1,0 +1,36 @@
+{
+    "$schema": "gpg.schema.json",
+    "version": 1,
+    "targets": [
+        {
+            "friendly_name": "GitHub",
+            "simple_url": "https://github.com/{query}.gpg",
+            "known_possitives": [ "ppfeister" ],
+            "validation_pattern": "^[a-z\\d](?:[a-z\\d]|-(?=[a-z\\d])){0,38}$"
+        },
+        {
+            "friendly_name": "GitLab",
+            "simple_url": "https://gitlab.com/{query}.gpg",
+            "known_possitives": [ "ppfeister" ],
+            "validation_pattern": "^[a-z\\d](?:[a-z\\d]|-(?=[a-z\\d])){0,38}$"
+        },
+        {
+            "friendly_name": "OpenPGP.org",
+            "simple_url": "https://keys.openpgp.org/vks/v1/by-fingerprint/{query}",
+            "known_possitives": [ "3DE8EC43BA5B9DCFB22B58A8EC68CB3A265302B7" ],
+            "validation_type": "fingerprint"
+        },
+        {
+            "friendly_name": "OpenPGP.org",
+            "simple_url": "https://keys.openpgp.org/vks/v1/by-keyid/{query}",
+            "known_possitives": [ "EC68CB3A265302B7" ],
+            "validation_type": "keyid"
+        },
+        {
+            "friendly_name": "OpenPGP.org",
+            "simple_url": "https://keys.openpgp.org/vks/v1/by-email/{query}",
+            "known_possitives": [ "code@pfeister.dev" ],
+            "validation_type": "encoded-email"
+        }
+    ]
+}

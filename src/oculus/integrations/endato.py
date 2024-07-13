@@ -6,7 +6,7 @@ import pandas as pd
 import requests
 
 from ..config import config
-from .__helpers import RequestError, IncompatibleQueryType
+from ..helpers.helpers import RequestError, IncompatibleQueryType
 from ..collector import Collector
 
 

@@ -1,0 +1,49 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Oculus PGP Target Manifest",
+    "type": "object",
+    "properties": {
+        "$schema": {
+            "type": "string"
+        },
+        "version": {
+            "type": "integer",
+            "description": "Schema version (used to indicate breaking changes)"
+        },
+        "targets": {
+            "type": "array",
+            "description": "List of targets to search for",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "friendly_name": {
+                        "type": "string",
+                        "description": "Target name as displayed to the user"
+                    },
+                    "simple_url": {
+                        "type": "string",
+                        "description": "Used for simple username or email type substitutions"
+                    },
+                    "validation_pattern": {
+                        "type": "string",
+                        "description": "Regular expression used to validate queries against the target"
+                    },
+                    "validation_type": {
+                        "type": "string",
+                        "description": "Type of validation to perform against the target, if function based",
+                        "enum": [ "fingerprint", "keyid", "encoded-email" ]
+                    },
+                    "known_possitives": {
+                        "type": "array",
+                        "description": "List of known positives for the target",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "additionalProperties": false
+            }
+        }
+    },
+    "additionalProperties": false
+}

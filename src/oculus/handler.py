@@ -1,5 +1,5 @@
 from .collector import Collector
-from .integrations.__helpers import RequestError
+from .helpers.helpers import RequestError
 from .integrations import (
     endato,
     proxynova,

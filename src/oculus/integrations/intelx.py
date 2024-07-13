@@ -7,7 +7,7 @@ import requests
 
 from ..__init__ import __user_agent__
 from ..config import config
-from .__helpers import RequestError, IncompatibleQueryType
+from ..helpers.helpers import RequestError, IncompatibleQueryType
 from ..collector import Collector
 from .intelxapi import IntelX_API
 
