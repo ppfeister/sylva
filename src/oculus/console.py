@@ -1,6 +1,6 @@
 import argparse
 
-from . import __short_name__, __long_name__, __version__
+from . import __short_name__, __long_name__, __version__, __author__
 from .config import config, InteractiveConfig
 from .handler import Handler
 
@@ -51,10 +51,27 @@ def interactive():
         '-v',
         action='version',
         version=f'{__short_name__} Version {__version__}',
-        help='Show the version and exit'
+        help='Show the version and exit',
+    )
+
+    parser.add_argument(
+        '--credits',
+        dest='show_credits',
+        action='store_true',
+        default=False,
+        help='Show author information and exit',
     )
 
     args = parser.parse_args()
+
+    if args.show_credits:
+        print(__long_name__)
+        print(' - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -')
+        print(f'Created by {__author__}    - https://pfeister.dev')
+        print('Star the project on GitHub  - https://github.com/ppfeister/oculus')
+        print('Support further development - https://github.com/sponsors/ppfeister')
+        return
+
     if args.command:
         args.func(args)
     else:
