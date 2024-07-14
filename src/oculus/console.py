@@ -50,7 +50,7 @@ def interactive():
         '--version',
         '-v',
         action='version',
-        version=f'{__short_name__} {__version__}',
+        version=f'{__short_name__} Version {__version__}',
         help='Show the version and exit'
     )
 
