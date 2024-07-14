@@ -101,8 +101,9 @@ class PGPModule:
                 emails:List[str] = []
                 raw_rows:List[Dict] = []
                 data = json.loads(response.text)
-                for email in data[0]['emails']:
-                    raw_rows.append({'email': email['email']})
+                if data:
+                    for email in data[0]['emails']:
+                        raw_rows.append({'email': email['email']})
             else:
                 raw_rows = self._extract_data_from_pgp_block(response.text)
             for row in raw_rows:
