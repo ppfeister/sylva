@@ -1,8 +1,10 @@
 import json
 import pathlib
 import re
-from typing import Dict
+from typing import Dict, List
+
 import pandas as pd
+import pgpy
 import requests
 
 from .. import __github_raw_data_url__
@@ -39,21 +41,54 @@ class PGPModule:
         self.collector:Collector = collector
         self.targets:TargetInformation = TargetInformation()
     # TODO add validation for username, email, password
+    def _extract_data_from_pgp_block(self, block:str) -> List[Dict]:
+        raw_rows:List[Dict] = []
+        key, _ = pgpy.PGPKey.from_blob(block)
+        for uid in key._uids:
+            email = uid.email or pd.NA
+            comment = uid.comment or pd.NA
+            raw_rows.append({
+                'email': email,
+                'comment': comment,
+            })
+        return raw_rows
+
     def search(self, query:str) -> pd.DataFrame:
-        __simple_email_regex__ = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+        __simple_email_regex = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+        __fingerprint_regex = r'^(?:[A-Fa-f0-9]{40}(?:[A-Fa-f0-9]{24})?)$'
+        __keyid_regex = r'^(?:[A-Fa-f0-9]{16})$'
         if self.__debug_disable_tag in config['Debug']['disabled_modules']:
             return
         for target in self.targets.targets:
             if target['validation_pattern']:
-                if not re.match(query, target['validation_pattern']):
+                if not re.match(target['validation_pattern'], query):
                     continue
             elif target['validation_type'] == 'encoded-email':
-                if not re.match(__simple_email_regex__, query):
+                if not re.match(__simple_email_regex, query):
                     continue
                 else:
-                    query = requests.utils.requote_uri(query)
-            response = requests.get(target['simple_url'].format(query=query))
-            print(response.text)
+                    sanitized_query = requests.utils.requote_uri(query)
+            elif target['validation_type'] == 'fingerprint':
+                sanitized_query = query.replace(' ', '')
+                if sanitized_query.startswith('0x'):
+                    sanitized_query = sanitized_query[2:]
+                if not re.match(__fingerprint_regex, sanitized_query):
+                    continue
+            elif target['validation_type'] == 'keyid':
+                sanitized_query = query.replace(' ', '')
+                if sanitized_query.startswith('0x'):
+                    sanitized_query = sanitized_query[2:]
+                if not re.match(__keyid_regex, sanitized_query):
+                    continue
+            response = requests.get(target['simple_url'].format(query=sanitized_query))
+            if response.status_code != 200:
+                continue
+            raw_rows = self._extract_data_from_pgp_block(response.text)
+            for row in raw_rows:
+                row['query'] = query
+                row['source_name'] = target['friendly_name']
+                row['spider_recommended'] = True
+            self.collector.insert(pd.DataFrame(raw_rows))
     def oldsearch(self, query:str, start:int=0, end:int=config['Target Options']['proxycheck-default-limit']) -> pd.DataFrame:
         if self.__debug_disable_tag in config['Debug']['disabled_modules']:
             return

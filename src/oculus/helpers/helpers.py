@@ -30,6 +30,7 @@ class ResultDataFrame:
                 'state',
                 'postal_code',
                 'country',
+                'comment',
                 ]
         )
     def __str__(self) -> str:
