@@ -1,4 +1,5 @@
 import argparse
+import sys
 
 from . import __short_name__, __long_name__, __version__, __author__
 from .config import config, InteractiveConfig
@@ -73,6 +74,8 @@ def interactive():
         return
 
     if args.command:
+        if len(sys.argv) <= 2:
+            subparsers.choices[args.command].print_help()
         args.func(args)
     else:
         parser.print_help()
