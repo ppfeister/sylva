@@ -1,5 +1,6 @@
 import json
 import pathlib
+import re
 from typing import Dict
 import pandas as pd
 import requests
@@ -19,10 +20,16 @@ class TargetInformation:
         r = requests.get(self._remote_manifest_uri)
         if r.status_code != 200:
             with open(self._local_manifest_uri, 'r') as f:
-                self.targets:Dict = json.load(f)
+                manifest_data:Dict = json.load(f)
         else:
             # TODO add validation against discovered schema version number
-            self.targets:Dict = json.loads(r.text)
+            manifest_data:Dict = json.loads(r.text)
+
+        self.targets:Dict = manifest_data['targets']
+
+        for target in self.targets:
+            target['validation_pattern'] = target.get('validation_pattern', None)
+            target['validation_type'] = target.get('validation_type', None)
 
 
 class PGPModule:
@@ -33,7 +40,20 @@ class PGPModule:
         self.targets:TargetInformation = TargetInformation()
     # TODO add validation for username, email, password
     def search(self, query:str) -> pd.DataFrame:
-        pass
+        __simple_email_regex__ = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+        if self.__debug_disable_tag in config['Debug']['disabled_modules']:
+            return
+        for target in self.targets.targets:
+            if target['validation_pattern']:
+                if not re.match(query, target['validation_pattern']):
+                    continue
+            elif target['validation_type'] == 'encoded-email':
+                if not re.match(__simple_email_regex__, query):
+                    continue
+                else:
+                    query = requests.utils.requote_uri(query)
+            response = requests.get(target['simple_url'].format(query=query))
+            print(response.text)
     def oldsearch(self, query:str, start:int=0, end:int=config['Target Options']['proxycheck-default-limit']) -> pd.DataFrame:
         if self.__debug_disable_tag in config['Debug']['disabled_modules']:
             return
@@ -49,4 +69,3 @@ class PGPModule:
         new_data['spider_recommended'] = config['Target Options']['proxycheck-spider-out']
         self.collector.insert(new_data)
         return new_data
-    #def accepts(self, query:str) -> bool:

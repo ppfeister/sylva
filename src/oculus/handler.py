@@ -31,6 +31,6 @@ class Handler:
         #    pass
         try:
             _pgp = pgp_module.PGPModule(collector=self.collector)
-            #_pgp.search(query=query)
+            _pgp.search(query=query)
         except RequestError:
             pass
