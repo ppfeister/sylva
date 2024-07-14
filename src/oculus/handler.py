@@ -5,6 +5,9 @@ from .integrations import (
     proxynova,
     intelx,
 )
+from .modules import (
+    pgp as pgp_module,
+)
 
 
 class Handler:
@@ -26,3 +29,8 @@ class Handler:
         #    _intelx.search(query=query)
         #except RequestError:
         #    pass
+        try:
+            _pgp = pgp_module.PGPModule(collector=self.collector)
+            #_pgp.search(query=query)
+        except RequestError:
+            pass

@@ -1,7 +1,7 @@
 import argparse
 import sys
 
-from . import __short_name__, __long_name__, __version__, __author__
+from . import __short_name__, __long_name__, __version__, __author__, __forge_url__
 from .config import config, InteractiveConfig
 from .handler import Handler
 
@@ -69,7 +69,7 @@ def interactive():
         print(__long_name__)
         print(' - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -')
         print(f'Created by {__author__}    - https://pfeister.dev')
-        print('Star the project on GitHub  - https://github.com/ppfeister/oculus')
+        print(f'Star the project on GitHub  - {__forge_url__}')
         print('Support further development - https://github.com/sponsors/ppfeister')
         return
 

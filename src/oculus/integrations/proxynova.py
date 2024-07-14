@@ -11,7 +11,6 @@ class ProxyNova:
     def __init__(self, collector:Collector):
         self.__api_url:str = 'https://api.proxynova.com/comb?query={QUERY}&start={START}&limit={END}'
         self.__debug_disable_tag:str = 'proxynova'
-        self.spider_recommended:bool = False
         self.source_name:str = 'ProxyNova'
         self.collector:Collector = collector
     # TODO add validation for username, email, password
