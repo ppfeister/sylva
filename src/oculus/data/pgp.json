@@ -1,0 +1,39 @@
+{
+    "$schema": "pgp.schema.json",
+    "version": 1,
+    "targets": [
+        {
+            "friendly_name": "GitHub",
+            "simple_url": "https://api.github.com/users/{query}/gpg_keys",
+            "validation_pattern": "^[a-z\\d](?:[a-z\\d]|-(?=[a-z\\d])){0,38}$",
+            "headers": {
+                "Accept": "application/vnd.github+json",
+                "Authorization": "Bearer {}",
+                "X-GitHub-Api-Version": "2022-11-28"
+            },
+            "config_opts": {
+                "Keys": "github-key"
+            }
+        },
+        {
+            "friendly_name": "GitLab",
+            "simple_url": "https://gitlab.com/api/v4/users/{query}/gpg_keys",
+            "validation_pattern": "^[a-z\\d](?:[a-z\\d]|-(?=[a-z\\d])){0,38}$"
+        },
+        {
+            "friendly_name": "OpenPGP.org",
+            "simple_url": "https://keys.openpgp.org/vks/v1/by-fingerprint/{query}",
+            "validation_type": "fingerprint"
+        },
+        {
+            "friendly_name": "OpenPGP.org",
+            "simple_url": "https://keys.openpgp.org/vks/v1/by-keyid/{query}",
+            "validation_type": "keyid"
+        },
+        {
+            "friendly_name": "OpenPGP.org",
+            "simple_url": "https://keys.openpgp.org/vks/v1/by-email/{query}",
+            "validation_type": "encoded-email"
+        }
+    ]
+}

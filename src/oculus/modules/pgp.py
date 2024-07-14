@@ -92,7 +92,6 @@ class PGPModule:
             if not sanitized_query:
                 sanitized_query = query
             if 'headers' in target:
-                print(target['headers'])
                 response = requests.get(target['simple_url'].format(query=sanitized_query), headers=target['headers'])
             else:
                 response = requests.get(target['simple_url'].format(query=sanitized_query))
