@@ -68,6 +68,8 @@ def update_config():
         "endato-name": check_option(section="Keys", key="endato-name"),
         "endato-key": check_option(section="Keys", key="endato-key"),
         "intelx-key": check_option(section="Keys", key="intelx-key"),
+        "github-key": check_option(section="Keys", key="github-key"),
+        "gitlab-key": check_option(section="Keys", key="gitlab-key"),
     }
     config["Debug"] = {
         "disabled_modules": check_option(section="Debug", key="disabled_modules", default="proxynova"),

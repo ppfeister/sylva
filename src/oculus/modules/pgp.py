@@ -13,10 +13,13 @@ from ..helpers.helpers import RequestError
 from ..collector import Collector
 
 
+# FIXME GitLab PGP API seems to be broken. Documentation indicates no auth
+# is required, but that may be incorrect...
+
 class TargetInformation:
     def __init__(self):
-        self._local_manifest_uri = f'{pathlib.Path(__file__).parent.resolve()}/../data/gpg.json'
-        self._local_schema_uri = f'{pathlib.Path(__file__).parent.resolve()}/../data/gpg.schema.json'
+        self._local_manifest_uri = f'{pathlib.Path(__file__).parent.resolve()}/../data/pgp.json'
+        self._local_schema_uri = f'{pathlib.Path(__file__).parent.resolve()}/../data/pgp.schema.json'
         self._remote_manifest_uri = __github_raw_data_url__
 
         r = requests.get(self._remote_manifest_uri)
@@ -60,6 +63,7 @@ class PGPModule:
         if self.__debug_disable_tag in config['Debug']['disabled_modules']:
             return
         for target in self.targets.targets:
+            sanitized_query: str = None
             if target['validation_pattern']:
                 if not re.match(target['validation_pattern'], query):
                     continue
@@ -80,27 +84,30 @@ class PGPModule:
                     sanitized_query = sanitized_query[2:]
                 if not re.match(__keyid_regex, sanitized_query):
                     continue
-            response = requests.get(target['simple_url'].format(query=sanitized_query))
+            if 'config_opts' in target:
+                for header, value in target['headers'].items():
+                    for config_substitution in target['config_opts'].items():
+                        section, key = config_substitution
+                        target['headers'][header] = value.format(config[section][key])
+            if not sanitized_query:
+                sanitized_query = query
+            if 'headers' in target:
+                print(target['headers'])
+                response = requests.get(target['simple_url'].format(query=sanitized_query), headers=target['headers'])
+            else:
+                response = requests.get(target['simple_url'].format(query=sanitized_query))
             if response.status_code != 200:
                 continue
-            raw_rows = self._extract_data_from_pgp_block(response.text)
+            if target['simple_url'].startswith('https://api.github.com'):
+                emails:List[str] = []
+                raw_rows:List[Dict] = []
+                data = json.loads(response.text)
+                for email in data[0]['emails']:
+                    raw_rows.append({'email': email['email']})
+            else:
+                raw_rows = self._extract_data_from_pgp_block(response.text)
             for row in raw_rows:
                 row['query'] = query
                 row['source_name'] = target['friendly_name']
                 row['spider_recommended'] = True
             self.collector.insert(pd.DataFrame(raw_rows))
-    def oldsearch(self, query:str, start:int=0, end:int=config['Target Options']['proxycheck-default-limit']) -> pd.DataFrame:
-        if self.__debug_disable_tag in config['Debug']['disabled_modules']:
-            return
-        query = requests.utils.requote_uri(query)
-        response = requests.get(self.__api_url.format(QUERY=query, START=start, END=end))
-        if response.status_code != 200:
-            raise RequestError(f'Failed to get results from ProxyNova. Status code: {response.status_code}')
-        json_data:dict = json.loads(response.text)
-        rows = [line.split(':') if ':' in line else [line, None] for line in json_data['lines']] # ugly but functional
-        new_data = pd.DataFrame(rows[:1], columns=['email', 'password'])
-        new_data['query'] = query
-        new_data['source_name'] = self.source_name
-        new_data['spider_recommended'] = config['Target Options']['proxycheck-spider-out']
-        self.collector.insert(new_data)
-        return new_data
