@@ -40,7 +40,8 @@ def interactive():
 
     parser_spider = subparsers.add_parser('spider', help='Recursively search based on discovered identities')
     parser_spider.add_argument('query', help='The query to search for')
-    parser_spider.add_argument('-d', '--depth', type=int, default=1, help='The depth to search')
+    parser_spider.add_argument('-d', '--depth', type=int, default=1, dest='spider_depth', metavar='123', help='The depth to search')
+    parser_spider.add_argument('-a', '--show-all', dest='no_deduplicate', action='store_true', default=False, help='Do not deduplicate results')
     parser_spider.set_defaults(func=spider_subcommand)
 
     parser_config = subparsers.add_parser('config', help=f'Edit {__short_name__}\'s config')
