@@ -24,6 +24,10 @@
                         "type": "string",
                         "description": "Used for simple username or email type substitutions"
                     },
+                    "profile_url": {
+                        "type": "string",
+                        "description": "URL to the user's profile on the target"
+                    },
                     "validation_pattern": {
                         "type": "string",
                         "description": "Regular expression used to validate queries against the target"

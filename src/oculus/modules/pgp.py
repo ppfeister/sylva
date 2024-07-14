@@ -7,7 +7,7 @@ import pandas as pd
 import pgpy
 import requests
 
-from .. import __github_raw_data_url__
+from .. import __github_raw_data_url__, __short_name__
 from ..config import config
 from ..helpers.helpers import RequestError
 from ..collector import Collector
@@ -16,6 +16,8 @@ from ..collector import Collector
 # FIXME GitLab PGP API seems to be broken. Documentation indicates no auth
 # is required, but that may be incorrect...
 
+prefer_local_manifest = True
+
 class TargetInformation:
     def __init__(self):
         self._local_manifest_uri = f'{pathlib.Path(__file__).parent.resolve()}/../data/pgp.json'
@@ -23,7 +25,7 @@ class TargetInformation:
         self._remote_manifest_uri = __github_raw_data_url__
 
         r = requests.get(self._remote_manifest_uri)
-        if r.status_code != 200:
+        if r.status_code != 200 or prefer_local_manifest:
             with open(self._local_manifest_uri, 'r') as f:
                 manifest_data:Dict = json.load(f)
         else:
@@ -108,6 +110,8 @@ class PGPModule:
                 raw_rows = self._extract_data_from_pgp_block(response.text)
             for row in raw_rows:
                 row['query'] = query
-                row['source_name'] = target['friendly_name']
+                row['source_name'] = f"{__short_name__} PGP"
+                row['platform_name'] = target['friendly_name']
+                row['platform_url'] = target['profile_url'].format(query=query)
                 row['spider_recommended'] = True
             self.collector.insert(pd.DataFrame(raw_rows))
