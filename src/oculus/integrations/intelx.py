@@ -7,10 +7,12 @@ import requests
 
 from ..__init__ import __user_agent__
 from ..config import config
-from ..helpers.helpers import RequestError, IncompatibleQueryType
+from ..helpers.helpers import APIKeyError, RequestError, IncompatibleQueryType
 from ..collector import Collector
 from .intelxapi import IntelX_API
 
+
+# TODO IntelX needs quite a bit of work
 
 class IntelX:
     def __init__(self, collector:Collector, api_key:str):
@@ -25,11 +27,8 @@ class IntelX:
         self.source_name:str = 'IntelX'
         self.collector:Collector = collector
     def search(self, query:str, limit:int=2, buckets=["leaks.public", "leaks.private", "pastes", "darknet"], timeout:int=5, datefrom:str=None, dateto:str=None, sort:int=2, media:int=24, terminate=[]) -> pd.DataFrame:
-        if (
-            self.__debug_disable_tag in config['Debug']['disabled_modules']
-            or not config['Keys']['intelx-key']
-        ):
-            return
+        if (not config['Keys']['intelx-key']):
+            raise APIKeyError(key_not_provided=True)
         intelxapi = IntelX_API(key=config['Keys']['intelx-key'], ua=__user_agent__)
         capabilities = intelxapi.GET_CAPABILITIES()
         queried_buckets:List[str] = []
@@ -39,4 +38,4 @@ class IntelX:
         results = intelxapi.search(term=query, maxresults=limit, buckets=buckets, timeout=timeout, datefrom=datefrom, dateto=dateto, sort=sort, media=media, terminate=terminate)
         for record in results['records']:
             print(f"Found media type {record['media']} in {record['bucket']}\n\n{record}\n\n########")
-        # TODO add handling for discovered data
+        return pd.DataFrame(results['records'])

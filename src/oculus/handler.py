@@ -23,7 +23,7 @@ class Handler:
         self.runners:List = [
             proxynova.ProxyNova(collector=self.collector),
             endato.Endato(collector=self.collector, api_name=config['Keys']['endato-name'], api_key=config['Keys']['endato-key']),
-            #intelx.IntelX(collector=self.collector),
+            #intelx.IntelX(collector=self.collector, api_key=config['Keys']['intelx-key']),
             pgp_module.PGPModule(collector=self.collector),
         ]
     def search_all(self, query:str):
@@ -31,7 +31,7 @@ class Handler:
             if loglevel >= LogLevel.INFO.value:
                 print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Searching {runner.source_name}')
             try:
-                results = len(runner.search(query=query).index) or 0
+                results = len(runner.search(query=query).index)
                 if loglevel >= LogLevel.SUCCESS_ONLY.value and results > 0:
                     print(f'{Fore.LIGHTGREEN_EX}{Style.BRIGHT}[+]{Style.RESET_ALL}{Fore.RESET} Found {results} via {runner.source_name}')
             except RequestError:
