@@ -19,7 +19,7 @@ class Sherlock:
     def accepts(self, query:str) -> bool:
         return True
     
-    def search(self, query:str, timeout:int=10) -> pd.DataFrame:
+    def search(self, query:str, timeout:int=3) -> pd.DataFrame:
         try:
             sites = SitesInformation()
         except FileNotFoundError as e:
