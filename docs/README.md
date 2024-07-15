@@ -22,6 +22,7 @@ Most development was done without any paid access -- so despite some integration
 | Name | Description |
 | --- | --- |
 | PGP Spider | Query common keyservers for undiscovered uids |
+| Sherlock (extended) | [__Sherlock__][sherlock] extended for discovery of additional identities and spidering
 
 ## Usage
 
@@ -40,3 +41,5 @@ Oculus uses a pdm backend. Developers can run `pdm install` and source the venv 
 Do not package Oculus yet. Changes are happening quicker than most release cycles, and they aren't readily tagged. Contact for information about planned packaging.
 
 Once ready for production, Oculus will adopt properly tagged releases for consistent downstream packaging.
+
+[sherlock]: https://github.com/sherlock-project/sherlock
