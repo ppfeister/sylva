@@ -31,6 +31,10 @@ def spider_subcommand(args:argparse.Namespace):
     pass
 
 
+def interactive_setup_subcommand(args:argparse.Namespace):
+    pass
+
+
 def interactive():
     parser = argparse.ArgumentParser(description=f'{__long_name__}')
     subparsers = parser.add_subparsers(dest='command')
@@ -45,7 +49,10 @@ def interactive():
     parser_spider.add_argument('-a', '--show-all', dest='no_deduplicate', action='store_true', default=False, help='Do not deduplicate results')
     parser_spider.set_defaults(func=spider_subcommand)
 
-    parser_config = subparsers.add_parser('config', help=f'Edit {__short_name__}\'s config')
+    parser_interactive = subparsers.add_parser('interactive', help='Launch the query builder (mutliple parameters allowed)')
+    parser_interactive.set_defaults(func=interactive_setup_subcommand)
+
+    parser_config = subparsers.add_parser('config', help=f'Edit the {__short_name__} config')
     parser_config.add_argument('-e', '--edit', dest='interactive_edit', action='store_true', default=False, help='Edit the config interactively')
     parser_config.set_defaults(func=config_subcommand)
 
