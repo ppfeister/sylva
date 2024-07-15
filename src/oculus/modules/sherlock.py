@@ -1,6 +1,5 @@
 
 from typing import Dict, List
-import json
 
 import pandas as pd
 from sherlock_project.sherlock import sherlock
@@ -20,13 +19,18 @@ class Sherlock:
     def accepts(self, query:str) -> bool:
         return True
     
-    def search(self, query:str) -> pd.DataFrame:
+    def search(self, query:str, timeout:int=10) -> pd.DataFrame:
         try:
             sites = SitesInformation()
         except FileNotFoundError as e:
             raise RequestError(f'Failed to get results from Sherlock: {e}')
         sites_data = { site.name: site.information for site in sites }
-        results:List[Dict] = sherlock(username=query, site_data=sites_data, query_notify=QueryNotify())
+        results:List[Dict] = sherlock(
+            username=query,
+            site_data=sites_data,
+            query_notify=QueryNotify(),
+            timeout=timeout,
+        )
 
         exists:List[Dict] = []
         for site in sites:
