@@ -13,10 +13,12 @@ class ProxyNova:
         self.__debug_disable_tag:str = 'proxynova'
         self.source_name:str = 'ProxyNova'
         self.collector:Collector = collector
-    # TODO add validation for username, email, password
+
+    def accepts(self, query:str) -> bool:
+        # TODO add validation for username, email, password
+        return True
+
     def search(self, query:str, start:int=0, end:int=config['Target Options']['proxycheck-default-limit']) -> pd.DataFrame:
-        if self.__debug_disable_tag in config['Debug']['disabled_modules']:
-            return pd.DataFrame()
         sanitized_query = requests.utils.requote_uri(query)
         response = requests.get(self.__api_url.format(QUERY=sanitized_query, START=start, END=end))
         if response.status_code != 200:
@@ -29,4 +31,3 @@ class ProxyNova:
         new_data['spider_recommended'] = config['Target Options']['proxycheck-spider-out']
         self.collector.insert(new_data)
         return new_data
-    #def accepts(self, query:str) -> bool:

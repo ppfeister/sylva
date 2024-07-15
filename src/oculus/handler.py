@@ -6,7 +6,11 @@ import pandas as pd
 from .collector import Collector
 from .config import config
 from .easy_logger import LogLevel, loglevel
-from .helpers.helpers import RequestError, APIKeyError
+from .helpers.helpers import (
+    IncompatibleQueryType,
+    RequestError,
+    APIKeyError,
+)
 from .integrations import (
     endato,
     proxynova,
@@ -22,7 +26,7 @@ class Handler:
     def __init__(self):
         self.collector:Collector = Collector()
         self.runners:List = [
-            #proxynova.ProxyNova(collector=self.collector),
+            proxynova.ProxyNova(collector=self.collector),
             endato.Endato(collector=self.collector, api_name=config['Keys']['endato-name'], api_key=config['Keys']['endato-key']),
             #intelx.IntelX(collector=self.collector, api_key=config['Keys']['intelx-key']),
             pgp_module.PGPModule(collector=self.collector),
@@ -30,8 +34,15 @@ class Handler:
         ]
     def search_all(self, query:str):
         for runner in self.runners:
+
+            if not runner.accepts(query):
+                if loglevel >= LogLevel.DEBUG.value:
+                    print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} Query type not supported by {runner.source_name}')
+                continue
+
             if loglevel >= LogLevel.INFO.value:
                 print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Searching {runner.source_name}')
+
             try:
                 results = len(runner.search(query=query).index)
                 if loglevel >= LogLevel.SUCCESS_ONLY.value and results > 0:

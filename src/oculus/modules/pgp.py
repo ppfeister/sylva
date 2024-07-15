@@ -9,7 +9,7 @@ import requests
 
 from .. import __github_raw_data_url__, __short_name__
 from ..config import config
-from ..helpers.helpers import RequestError
+from ..helpers.helpers import IncompatibleQueryType, RequestError
 from ..collector import Collector
 
 
@@ -45,6 +45,9 @@ class PGPModule:
         self.source_name:str = 'Oculus PGP'
         self.collector:Collector = collector
         self.targets:TargetInformation = TargetInformation()
+        self.__simple_email_regex = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+        self.__fingerprint_regex = r'^(?:[A-Fa-f0-9]{40}(?:[A-Fa-f0-9]{24})?)$'
+        self.__keyid_regex = r'^(?:[A-Fa-f0-9]{16})$'
     # TODO add validation for username, email, password
     def _extract_data_from_pgp_block(self, block:str) -> List[Dict]:
         raw_rows:List[Dict] = []
@@ -57,21 +60,27 @@ class PGPModule:
                 'comment': comment,
             })
         return raw_rows
+    
+    def accepts(self, query:str) -> bool:
+        if (
+            not re.match(self.__simple_email_regex, query)
+            and not re.match(self.__fingerprint_regex, query)
+            and not re.match(self.__keyid_regex, query)
+        ):
+            return False
 
     def search(self, query:str) -> pd.DataFrame:
-        __simple_email_regex = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
-        __fingerprint_regex = r'^(?:[A-Fa-f0-9]{40}(?:[A-Fa-f0-9]{24})?)$'
-        __keyid_regex = r'^(?:[A-Fa-f0-9]{16})$'
+        if not self.accepts(query):
+            raise IncompatibleQueryType(f'Query type not supported by {self.source_name}')
+
         new_data = pd.DataFrame()
-        if self.__debug_disable_tag in config['Debug']['disabled_modules']:
-            return new_data
         for target in self.targets.targets:
             sanitized_query: str = None
             if target['validation_pattern']:
                 if not re.match(target['validation_pattern'], query):
                     continue
             elif target['validation_type'] == 'encoded-email':
-                if not re.match(__simple_email_regex, query):
+                if not re.match(self.__simple_email_regex, query):
                     continue
                 else:
                     sanitized_query = requests.utils.requote_uri(query)
@@ -79,13 +88,13 @@ class PGPModule:
                 sanitized_query = query.replace(' ', '')
                 if sanitized_query.startswith('0x'):
                     sanitized_query = sanitized_query[2:]
-                if not re.match(__fingerprint_regex, sanitized_query):
+                if not re.match(self.__fingerprint_regex, sanitized_query):
                     continue
             elif target['validation_type'] == 'keyid':
                 sanitized_query = query.replace(' ', '')
                 if sanitized_query.startswith('0x'):
                     sanitized_query = sanitized_query[2:]
-                if not re.match(__keyid_regex, sanitized_query):
+                if not re.match(self.__keyid_regex, sanitized_query):
                     continue
             if 'config_opts' in target:
                 for header, value in target['headers'].items():

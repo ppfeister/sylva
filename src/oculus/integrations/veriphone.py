@@ -20,7 +20,10 @@ class Veriphone:
         self.collector:Collector = collector
     # TODO add validation for username, email, password
     def accepts(self, query:str) -> bool:
-        return phonenumbers.is_valid_number(phonenumbers.parse(query, self.__country))
+        try:
+            return phonenumbers.is_valid_number(phonenumbers.parse(query, self.__country))
+        except phonenumbers.phonenumberutil.NumberParseException:
+            return False
     def search(self, query:str) -> pd.DataFrame:
         if not self.accepts(query):
             raise IncompatibleQueryType(f'Query unable to be parsed as phone number')
