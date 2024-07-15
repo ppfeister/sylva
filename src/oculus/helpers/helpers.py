@@ -27,6 +27,7 @@ class ResultDataFrame:
                 'first_name',
                 'middle_name',
                 'last_name',
+                'full_name',
                 'birth_date',
                 'street',
                 'unit',

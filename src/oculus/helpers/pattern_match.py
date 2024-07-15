@@ -30,7 +30,8 @@ def search(url:str, body:str=None, query:str=None) -> pd.DataFrame:
         return pd.DataFrame()
 
     if not body and query:
-        response = requests.get(url.format(query))
+        url = url.format(query)
+        response = requests.get(url)
         if response.status_code != 200:
             return pd.DataFrame()
         body = response.text
@@ -41,13 +42,30 @@ def search(url:str, body:str=None, query:str=None) -> pd.DataFrame:
         # TODO add support for subdomain differentials
         return pd.DataFrame()
 
-    patterns = pattern_data[root_domain]['patterns']
-
     new_data:List[Dict] = []
-    for pattern in patterns:
+
+    if 'self' in pattern_data[root_domain]:
+        self_scrape_data:Dict = {}
+        for pattern in pattern_data[root_domain]['self']:
+            captures = re.search(pattern, body)
+            if captures:
+                self_scrape_data['platform_name'] = pattern_data[root_domain]['friendly_name']
+                self_scrape_data['platform_url'] = url
+                if 'uid' in captures.groupdict():
+                    self_scrape_data['username'] = captures.group('uid')
+                if 'fullname' in captures.groupdict():
+                    self_scrape_data['full_name'] = captures.group('fullname')
+                if 'comment' in captures.groupdict():
+                    self_scrape_data['comment'] = captures.group('comment')
+        if self_scrape_data:
+            new_data.append(self_scrape_data)
+
+
+    for pattern in pattern_data[root_domain]['patterns']:
         captures = re.search(pattern['pattern'], body)
         if captures:
             new_item:Dict = {}
+
             if pattern['validation_type'] == 'social':
                 new_item['platform_name'] = pattern['platform_name']
             if 'uid' in captures.groupdict():
@@ -55,4 +73,5 @@ def search(url:str, body:str=None, query:str=None) -> pd.DataFrame:
             if 'url' in captures.groupdict():
                 new_item['platform_url'] = captures.group('url')
             new_data.append(new_item)
+
     return pd.DataFrame(new_data)

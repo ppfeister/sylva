@@ -5,6 +5,10 @@
         "github.com": {
             "wildcard_subdomain": true,
             "friendly_name": "GitHub",
+            "self": [
+                "<title>(?P<uid>.+?) \\((?P<fullname>.+?)\\)",
+                "data-bio-text=\\\"(?P<comment>.+?)\""
+            ],
             "patterns": [
                 {
                     "pattern": "anywhere\" href=\"(?P<url>https:\\/\\/www\\.linkedin\\.com\/in\/(?P<uid>.+?)\/)\">in\/",
