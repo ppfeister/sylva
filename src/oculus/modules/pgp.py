@@ -42,7 +42,7 @@ class TargetInformation:
 class PGPModule:
     def __init__(self, collector:Collector):
         self.__debug_disable_tag:str = 'pgp'
-        self.source_name:str = 'GPG'
+        self.source_name:str = 'Oculus PGP'
         self.collector:Collector = collector
         self.targets:TargetInformation = TargetInformation()
     # TODO add validation for username, email, password
@@ -62,8 +62,9 @@ class PGPModule:
         __simple_email_regex = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
         __fingerprint_regex = r'^(?:[A-Fa-f0-9]{40}(?:[A-Fa-f0-9]{24})?)$'
         __keyid_regex = r'^(?:[A-Fa-f0-9]{16})$'
+        new_data = pd.DataFrame()
         if self.__debug_disable_tag in config['Debug']['disabled_modules']:
-            return pd.DataFrame()
+            return new_data
         for target in self.targets.targets:
             sanitized_query: str = None
             if target['validation_pattern']:
@@ -114,6 +115,6 @@ class PGPModule:
                 row['platform_name'] = target['friendly_name']
                 row['platform_url'] = target['profile_url'].format(query=query)
                 row['spider_recommended'] = True
-            new_data = pd.DataFrame(raw_rows)
-            self.collector.insert(new_data)
-            return new_data
+            new_data.concat(pd.DataFrame(raw_rows))
+        self.collector.insert(new_data)
+        return new_data
