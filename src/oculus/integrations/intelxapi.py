@@ -157,7 +157,7 @@ class IntelX_API:
             if "Could not generate" in r.text:
                 return False
             return r.text
-        except:
+        except:  # noqa: E722
             return False
 
     def INTEL_SEARCH(self, term, maxresults=100, buckets=[], timeout=5, datefrom="", dateto="", sort=4, media=0, terminate=[]):
@@ -534,7 +534,7 @@ class IntelX_API:
         if(len(str(search_id)) <= 3):
             print(f"[!] intelx.INTEL_SEARCH() Received {self.get_error(search_id)}")
             sys.exit()
-        while done == False:
+        while not done:
             time.sleep(1)  # lets give the backend a chance to aggregate our data
             r = self.query_results(search_id, maxresults)
             for a in r['records']:
@@ -557,7 +557,7 @@ class IntelX_API:
         if(len(str(search_id)) <= 3):
             print(f"[!] intelx.PHONEBOOK_SEARCH() Received {self.get_error(search_id)}")
             sys.exit()
-        while done == False:
+        while not done:
             time.sleep(1)  # lets give the backend a chance to aggregate our data
             r = self.query_pb_results(search_id, maxresults)
             results.append(r)
