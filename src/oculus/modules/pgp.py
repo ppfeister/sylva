@@ -63,7 +63,7 @@ class PGPModule:
         __fingerprint_regex = r'^(?:[A-Fa-f0-9]{40}(?:[A-Fa-f0-9]{24})?)$'
         __keyid_regex = r'^(?:[A-Fa-f0-9]{16})$'
         if self.__debug_disable_tag in config['Debug']['disabled_modules']:
-            return
+            return pd.DataFrame()
         for target in self.targets.targets:
             sanitized_query: str = None
             if target['validation_pattern']:
@@ -114,4 +114,6 @@ class PGPModule:
                 row['platform_name'] = target['friendly_name']
                 row['platform_url'] = target['profile_url'].format(query=query)
                 row['spider_recommended'] = True
-            self.collector.insert(pd.DataFrame(raw_rows))
+            new_data = pd.DataFrame(raw_rows)
+            self.collector.insert(new_data)
+            return new_data

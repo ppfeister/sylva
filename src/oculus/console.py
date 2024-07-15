@@ -23,6 +23,7 @@ def search_subcommand(args:argparse.Namespace):
     args -- argparse.Namespace"""
     handler = Handler()
     handler.search_all(args.query)
+    print()
     print(handler.collector.get_data())
 
 

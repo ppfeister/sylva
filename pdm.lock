@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.2"
-content_hash = "sha256:0352ce6712dc683300c8f5c1e7d87c82fe16935d7b4ed91eab84c048af7ba8ac"
+content_hash = "sha256:a1c892b65cb123d8df71d7540f5ff9a686a838f71c42ffb1d1b4582e565d26e7"
 
 [[package]]
 name = "cachetools"

@@ -1,6 +1,11 @@
 from typing import List
 
+from colorama import Fore, Back, Style
+import pandas as pd
+
 from .collector import Collector
+from .config import config
+from .easy_logger import LogLevel, loglevel
 from .helpers.helpers import RequestError, APIKeyError
 from .integrations import (
     endato,
@@ -17,16 +22,21 @@ class Handler:
         self.collector:Collector = Collector()
         self.runners:List = [
             proxynova.ProxyNova(collector=self.collector),
-            endato.Endato(collector=self.collector),
-            intelx.IntelX(collector=self.collector),
+            endato.Endato(collector=self.collector, api_name=config['Keys']['endato-name'], api_key=config['Keys']['endato-key']),
+            #intelx.IntelX(collector=self.collector),
             pgp_module.PGPModule(collector=self.collector),
         ]
     def search_all(self, query:str):
         for runner in self.runners:
+            if loglevel >= LogLevel.INFO.value:
+                print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Searching {runner.source_name}')
             try:
-                runner.search(query=query)
+                results = len(runner.search(query=query).index) or 0
+                if loglevel >= LogLevel.SUCCESS_ONLY.value and results > 0:
+                    print(f'{Fore.LIGHTGREEN_EX}{Style.BRIGHT}[+]{Style.RESET_ALL}{Fore.RESET} Found {results} via {runner.source_name}')
             except RequestError:
                 pass
             except APIKeyError as e:
                 if e.key_not_provided:
-                    print(f'API key for {runner.source_name} not provided. Please add it to your config.')
+                    if loglevel >= LogLevel.INFO.value:
+                        print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} API key has not been provided for {runner.source_name} - {runner.source_obtain_keys_url}')

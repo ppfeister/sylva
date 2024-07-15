@@ -5,13 +5,13 @@ from typing import Dict
 import pandas as pd
 import requests
 
-from ..config import config
-from ..helpers.helpers import RequestError, IncompatibleQueryType
-from ..collector import Collector
+from ..helpers.helpers import RequestError, IncompatibleQueryType, APIKeyError
 
 
 class Endato:
-    def __init__(self, collector:Collector):
+    def __init__(self, collector:pd.DataFrame, api_name:str, api_key:str):
+        self.__api_name:str = api_name
+        self.__api_key:str = api_key
         self.__api_url:Dict[str, str] = {
             'phone': 'https://devapi.endato.com/phone/enrich',
             'pro': '',
@@ -19,12 +19,12 @@ class Endato:
         self.__debug_disable_tag:str = 'endato'
         self.__base_headers:Dict[str, str] = {
             'Accept': 'application/json',
-            'galaxy-ap-name': config['Keys']['endato-name'],
-            'galaxy-ap-password': config['Keys']['endato-key'],
+            'galaxy-ap-name': self.__api_name,
+            'galaxy-ap-password': self.__api_key,
         }
         self.source_obtain_keys_url:str = 'https://api.endato.com/Keys'
         self.source_name:str = 'Endato'
-        self.collector:Collector = collector
+        self.collector:pd.DataFrame = collector
     def _type(self, query:str) -> str:
         pattern = r'^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$'
         if re.match(pattern, query):
@@ -63,18 +63,14 @@ class Endato:
             'phone': query,
         }
         new_data = pd.DataFrame([flattened_data])
-        self.collector.insert(new_data)
+        self.collector.insert_frame(new_data)
         return new_data
     def search(self, query:str) -> pd.DataFrame:
-        if (
-            self.__debug_disable_tag in config['Debug']['disabled_modules']
-            or not config['Keys']['endato-name']
-            or not config['Keys']['endato-key']
-        ):
-            return
+        if not self.__api_name or not self.__api_key:
+            raise APIKeyError(key_not_provided=True)
         try:
             query_type = self._type(query)
         except IncompatibleQueryType:
-            return
+            return pd.DataFrame()
         if query_type == 'phone':
             return self._query_phone(query)

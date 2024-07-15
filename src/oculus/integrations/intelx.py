@@ -13,11 +13,12 @@ from .intelxapi import IntelX_API
 
 
 class IntelX:
-    def __init__(self, collector:Collector):
+    def __init__(self, collector:Collector, api_key:str):
         self.__api_url:str = 'https://3.intelx.io'
         self.__debug_disable_tag:str = 'intelx'
+        self.__api_key:str = api_key
         self.__base_headers:Dict[str, str] = {
-            'X-Key': config['Keys']['intelx-key'],
+            'X-Key': api_key,
             'User-Agent': __user_agent__,
         }
         self.source_obtain_keys_url:str = 'https://intelx.io/account?tab=developer'
