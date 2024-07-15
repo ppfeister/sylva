@@ -30,8 +30,17 @@
                 {
                     "pattern": "(?P<url>https?:\\\/\\/(?:www\\.)?.+?)\"><i class=\\\"profile-social fas fa-external",
                     "validation_type": "generic"
+                },
+                {
+                    "pattern": "(?P<url>https?:\\/\\/twitter\\.com\\/(?P<uid>.+?))\"><i class=\\\"profile-social",
+                    "validation_type": "social",
+                    "platform_name": "Twitter"
+                },
+                {
+                    "pattern": "(?P<url>https?:\\/\\/instagram\\.com\\/(?P<uid>.+?))\"><i class=\\\"profile-social",
+                    "validation_type": "social",
+                    "platform_name": "Instagram"
                 }
-
             ]
         }
     }
