@@ -19,6 +19,7 @@ from .integrations import (
 )
 from .modules import (
     pgp as pgp_module,
+    sherlock,
 )
 
 
@@ -31,6 +32,7 @@ class Handler:
             #intelx.IntelX(collector=self.collector, api_key=config['Keys']['intelx-key']),
             pgp_module.PGPModule(collector=self.collector),
             veriphone.Veriphone(collector=self.collector, api_key=config['Keys']['veriphone-key'], country='US'),
+            sherlock.Sherlock(collector=self.collector),
         ]
     def search_all(self, query:str):
         for runner in self.runners:
