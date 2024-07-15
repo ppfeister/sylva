@@ -1,0 +1,59 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Oculus Scraping Patterns",
+    "type": "object",
+    "properties": {
+        "$schema": {
+            "type": "string"
+        },
+        "version": {
+            "type": "integer",
+            "description": "Schema version (used to indicate breaking changes)"
+        },
+        "patterns": {
+            "type": "object",
+            "description": "Patterns to search for by target uri",
+            "patternProperties": {
+                "^.*$": {
+                    "type": "object",
+                    "title": "Target root domain",
+                    "properties": {
+                        "$ref": "#/$defs/target_root"
+                    }
+                }
+            }
+        }
+    },
+    "additionalProperties": false,
+    "$defs": {
+        "target_data": {
+            "wildcard_subdomain": {
+                "type": "boolean",
+                "description": "Should the pattern be applied to all subdomains?"
+            },
+            "patterns": {
+                "type": "array",
+                "description": "List of patterns to search for",
+                "properties": {
+                    "pattern": {
+                        "type": "string",
+                        "description": "Regular expression used to validate queries against the target"
+                    },
+                    "validation_type": {
+                        "type": "string",
+                        "description": "Type of validation to perform against the target, if function based",
+                        "enum": [ "fingerprint", "keyid", "encoded-email" ]
+                    }
+                }
+            }
+        },
+        "target_root": {
+            "type": "object",
+            "properties": {
+                "$ref": "#/$defs/target_data",
+                "subdomain": { "$ref": "#/$defs/target_root" },
+                "$additionalProperties": false
+            }
+        }
+    }
+}

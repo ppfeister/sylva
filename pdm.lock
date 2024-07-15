@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.2"
-content_hash = "sha256:4febdbe25e4035b2f7531e35a88a656971da200777382a43416a8ffc14a1a2d8"
+content_hash = "sha256:48b2db75e9a278985efe4e60d8702c8a35c8ea98912e3631f6e0b0b2f63b273b"
 
 [[package]]
 name = "cachetools"
@@ -205,7 +205,7 @@ name = "filelock"
 version = "3.15.4"
 requires_python = ">=3.8"
 summary = "A platform independent file lock."
-groups = ["dev"]
+groups = ["default", "dev"]
 files = [
     {file = "filelock-3.15.4-py3-none-any.whl", hash = "sha256:6ca1fffae96225dab4c6eaf1c4f4f28cd2568d3ec2a44e15a08520504de468e7"},
     {file = "filelock-3.15.4.tar.gz", hash = "sha256:2207938cbc1844345cb01a5a95524dae30f0ce089eba5b00378295a17e3e90cb"},
@@ -478,6 +478,19 @@ files = [
 ]
 
 [[package]]
+name = "requests-file"
+version = "2.1.0"
+summary = "File transport adapter for Requests"
+groups = ["default"]
+dependencies = [
+    "requests>=1.0.0",
+]
+files = [
+    {file = "requests_file-2.1.0-py2.py3-none-any.whl", hash = "sha256:cf270de5a4c5874e84599fc5778303d496c10ae5e870bfa378818f35d21bda5c"},
+    {file = "requests_file-2.1.0.tar.gz", hash = "sha256:0f549a3f3b0699415ac04d167e9cb39bccfb730cb832b4d20be3d9867356e658"},
+]
+
+[[package]]
 name = "requests-futures"
 version = "1.0.1"
 summary = "Asynchronous Python HTTP for Humans."
@@ -556,6 +569,23 @@ summary = "Stem is a Python controller library that allows applications to inter
 groups = ["default"]
 files = [
     {file = "stem-1.8.2.tar.gz", hash = "sha256:83fb19ffd4c9f82207c006051480389f80af221a7e4783000aedec4e384eb582"},
+]
+
+[[package]]
+name = "tldextract"
+version = "5.1.2"
+requires_python = ">=3.8"
+summary = "Accurately separates a URL's subdomain, domain, and public suffix, using the Public Suffix List (PSL). By default, this includes the public ICANN TLDs and their exceptions. You can optionally support the Public Suffix List's private domains as well."
+groups = ["default"]
+dependencies = [
+    "filelock>=3.0.8",
+    "idna",
+    "requests-file>=1.4",
+    "requests>=2.1.0",
+]
+files = [
+    {file = "tldextract-5.1.2-py3-none-any.whl", hash = "sha256:4dfc4c277b6b97fa053899fcdb892d2dc27295851ab5fac4e07797b6a21b2e46"},
+    {file = "tldextract-5.1.2.tar.gz", hash = "sha256:c9e17f756f05afb5abac04fe8f766e7e70f9fe387adb1859f0f52408ee060200"},
 ]
 
 [[package]]

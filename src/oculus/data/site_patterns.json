@@ -1,0 +1,38 @@
+{
+    "$schema": "site_patterns.schema.json",
+    "version": 1,
+    "patterns": {
+        "github.com": {
+            "wildcard_subdomain": true,
+            "friendly_name": "GitHub",
+            "patterns": [
+                {
+                    "pattern": "anywhere\" href=\"(?P<url>https:\\/\\/www\\.linkedin\\.com\/in\/(?P<uid>.+?)\/)\">in\/",
+                    "validation_type": "social",
+                    "platform_name": "LinkedIn"
+                }
+            ]
+        },
+        "tryhackme.com": {
+            "wildcard_subdomain": true,
+            "friendly_name": "TryHackMe",
+            "patterns": [
+                {
+                    "pattern": "(?P<url>https?:\\/\\/github\\.com\\/(?P<uid>.+?))\"><i class=\\\"profile-social",
+                    "validation_type": "social",
+                    "platform_name": "GitHub"
+                },
+                {
+                    "pattern": "(?P<url>https?:\\/\\/(?:www\\.)?linkedin\\.com\\/in\\/(?P<uid>.+?))\"><i class=\\\"profile-social",
+                    "validation_type": "social",
+                    "platform_name": "LinkedIn"
+                },
+                {
+                    "pattern": "(?P<url>https?:\\\/\\/(?:www\\.)?.+?)\"><i class=\\\"profile-social fas fa-external",
+                    "validation_type": "generic"
+                }
+
+            ]
+        }
+    }
+}

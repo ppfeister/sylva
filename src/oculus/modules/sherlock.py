@@ -8,6 +8,7 @@ from sherlock_project.notify import QueryNotify
 from sherlock_project.result import QueryStatus
 
 from ..helpers.helpers import RequestError
+from ..helpers import pattern_match
 from ..collector import Collector
 
 class Sherlock:
@@ -33,6 +34,7 @@ class Sherlock:
         )
 
         exists:List[Dict] = []
+        matched_patterns = pd.DataFrame()
         for site in sites:
             if results[site.name]['status'].status == QueryStatus.CLAIMED:
                 exists.append({
@@ -44,6 +46,26 @@ class Sherlock:
                     'username': query,
                 })
 
+                send_body:bool = True
+                if (
+                    'urlProbe' in sites_data[site.name]
+                    or sites_data[site.name]['errorType'] != 'message'
+                    or (
+                        'request_method' in sites_data[site.name]
+                        and sites_data[site.name]['request_method'] != 'GET'
+                    )
+                ):
+                    send_body = False
+
+                if send_body:
+                    matched_patterns = pd.concat([matched_patterns, pattern_match.search(url=sites_data[site.name]['url'], body=results[site.name]['response_text'].decode('utf-8'))], ignore_index=True)
+                else:
+                    matched_patterns = pd.concat([matched_patterns, pattern_match.search(url=sites_data[site.name]['url'], query=query)], ignore_index=True)
+                matched_patterns['query'] = query
+                matched_patterns['source_name'] = self.source_name
+                matched_patterns['spider_recommended'] = True
+
         new_data = pd.DataFrame(exists)
+        new_data = pd.concat([new_data, matched_patterns], ignore_index=True)
         self.collector.insert(new_data)
         return new_data
