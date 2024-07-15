@@ -10,7 +10,8 @@ from .helpers.helpers import RequestError, APIKeyError
 from .integrations import (
     endato,
     proxynova,
-    intelx,
+    #intelx,
+    veriphone,
 )
 from .modules import (
     pgp as pgp_module,
@@ -21,10 +22,11 @@ class Handler:
     def __init__(self):
         self.collector:Collector = Collector()
         self.runners:List = [
-            proxynova.ProxyNova(collector=self.collector),
+            #proxynova.ProxyNova(collector=self.collector),
             endato.Endato(collector=self.collector, api_name=config['Keys']['endato-name'], api_key=config['Keys']['endato-key']),
             #intelx.IntelX(collector=self.collector, api_key=config['Keys']['intelx-key']),
             pgp_module.PGPModule(collector=self.collector),
+            veriphone.Veriphone(collector=self.collector, api_key=config['Keys']['veriphone-key'], country='US'),
         ]
     def search_all(self, query:str):
         for runner in self.runners:

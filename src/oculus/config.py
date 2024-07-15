@@ -71,6 +71,7 @@ def update_config():
         "intelx-key": check_option(section="Keys", key="intelx-key"),
         "github-key": check_option(section="Keys", key="github-key"),
         "gitlab-key": check_option(section="Keys", key="gitlab-key"),
+        "veriphone-key": check_option(section="Keys", key="veriphone-key"),
     }
     config["Debug"] = {
         "disabled_modules": check_option(section="Debug", key="disabled_modules", default="proxynova"),

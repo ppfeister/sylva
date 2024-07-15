@@ -12,6 +12,7 @@ dependencies = [
     "pandas>=2.2.2",
     "PGPy>=0.6.0",
     "colorama>=0.4.6",
+    "phonenumbers>=8.13.40",
 ]
 requires-python = ">=3.10"
 readme = "docs/README.md"

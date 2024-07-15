@@ -115,6 +115,6 @@ class PGPModule:
                 row['platform_name'] = target['friendly_name']
                 row['platform_url'] = target['profile_url'].format(query=query)
                 row['spider_recommended'] = True
-            new_data.concat(pd.DataFrame(raw_rows))
+                pd.concat([new_data, pd.DataFrame(raw_rows)], ignore_index=True)
         self.collector.insert(new_data)
         return new_data

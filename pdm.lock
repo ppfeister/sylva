@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.2"
-content_hash = "sha256:a1c892b65cb123d8df71d7540f5ff9a686a838f71c42ffb1d1b4582e565d26e7"
+content_hash = "sha256:4febdbe25e4035b2f7531e35a88a656971da200777382a43416a8ffc14a1a2d8"
 
 [[package]]
 name = "cachetools"
@@ -334,6 +334,16 @@ dependencies = [
 ]
 files = [
     {file = "PGPy-0.6.0.tar.gz", hash = "sha256:279c2e353f4c3a319f00bd9bd582456e420f8a3ac6de2b4e9731444746828383"},
+]
+
+[[package]]
+name = "phonenumbers"
+version = "8.13.40"
+summary = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers."
+groups = ["default"]
+files = [
+    {file = "phonenumbers-8.13.40-py2.py3-none-any.whl", hash = "sha256:9582752c20a1da5ec4449f7f97542bf8a793c8e2fec0ab57f767177bb8fc0b1d"},
+    {file = "phonenumbers-8.13.40.tar.gz", hash = "sha256:f137c2848b8e83dd064b71881b65680584417efa202177fd330e2f7ff6c68113"},
 ]
 
 [[package]]

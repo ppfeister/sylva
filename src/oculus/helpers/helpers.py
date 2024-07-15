@@ -31,7 +31,7 @@ class ResultDataFrame:
                 'street',
                 'unit',
                 'city',
-                'state',
+                'region',
                 'postal_code',
                 'country',
                 'comment',
@@ -59,7 +59,7 @@ class ResultDataFrame:
             street:str = None,
             unit:str = None,
             city:str = None,
-            state:str = None,
+            region:str = None,
             postal_code:str = None,
             country:str = None,
     ) -> pd.DataFrame:
@@ -82,7 +82,7 @@ class ResultDataFrame:
             'street': street,
             'unit': unit,
             'city': city,
-            'state': state,
+            'region': region,
             'postal_code': postal_code,
             'country': country,
         }])

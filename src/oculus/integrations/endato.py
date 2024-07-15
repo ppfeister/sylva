@@ -57,13 +57,16 @@ class Endato:
             'street': json_data['person']['address']['street'],
             'unit': json_data['person']['address']['unit'],
             'city': json_data['person']['address']['city'],
-            'state': json_data['person']['address']['state'],
+            'region': json_data['person']['address']['state'],
             'zip': json_data['person']['address']['zip'],
             'email': json_data['person']['email'],
+            'source_name': self.source_name,
+            'query': query,
+            'spider_recommended': False,
             'phone': query,
         }
         new_data = pd.DataFrame([flattened_data])
-        self.collector.insert_frame(new_data)
+        self.collector.insert(new_data)
         return new_data
     def search(self, query:str) -> pd.DataFrame:
         if not self.__api_name or not self.__api_key:
