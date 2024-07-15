@@ -38,7 +38,9 @@ Oculus uses a pdm backend. Developers can run `pdm install` and source the venv 
 
 ### Packagers
 
-Do not package Oculus yet. Changes are happening quicker than most release cycles, and they aren't readily tagged. Contact for information about planned packaging.
+Do not package Oculus yet. Changes are happening at rates quicker than most release cycles allow, and they aren't readily tagged for consistent feature sets. Depending on availability, name changes are also very possible at this stage.
+
+Contact for information about planned packaging.
 
 Once ready for production, Oculus will adopt properly tagged releases for consistent downstream packaging.
 
