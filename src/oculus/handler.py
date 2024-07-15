@@ -5,7 +5,7 @@ import pandas as pd
 
 from .collector import Collector
 from .config import config
-from .easy_logger import LogLevel, loglevel
+from .easy_logger import LogLevel, loglevel, NoColor
 from .helpers.helpers import (
     IncompatibleQueryType,
     RequestError,
@@ -22,6 +22,9 @@ from .modules import (
     sherlock,
 )
 
+
+if config['General']['colorful'] == 'False': # no better way since distutils deprecation?
+    Fore = Back = Style = NoColor
 
 class Handler:
     def __init__(self):

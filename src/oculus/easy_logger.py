@@ -14,10 +14,11 @@ class LogLevel(Enum):
     DEBUG = 5
     TRACE = 6
 
-if not config['General']['colorful']:
-    class NoColor:
-        BLACK=RED=''
-    Fore = NoColor
+class NoColor:
+    BLACK = RED = GREEN = YELLOW = BLUE = MAGENTA = CYAN = WHITE = ''
+    LIGHTBLACK_EX = LIGHTRED_EX = LIGHTGREEN_EX = LIGHTYELLOW_EX = LIGHTBLUE_EX = LIGHTMAGENTA_EX = LIGHTCYAN_EX = LIGHTWHITE_EX = ''
+    DIM = NORMAL = BRIGHT = ''
+    RESET = RESET_ALL = ''
 
 loglevel = int(config['General']['log_level'])
 
