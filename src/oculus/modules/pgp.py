@@ -62,6 +62,7 @@ class PGPModule:
         return raw_rows
     
     def accepts(self, query:str) -> bool:
+        return True
         if (
             not re.match(self.__simple_email_regex, query)
             and not re.match(self.__fingerprint_regex, query)
@@ -73,7 +74,7 @@ class PGPModule:
         if not self.accepts(query):
             raise IncompatibleQueryType(f'Query type not supported by {self.source_name}')
 
-        new_data = pd.DataFrame()
+        new_data:pd.DataFrame = pd.DataFrame()
         for target in self.targets.targets:
             sanitized_query: str = None
             if target['validation_pattern']:
@@ -109,21 +110,29 @@ class PGPModule:
                 response = requests.get(target['simple_url'].format(query=sanitized_query))
             if response.status_code != 200:
                 continue
+            raw_rows:List[Dict] = []
             if target['simple_url'].startswith('https://api.github.com'):
-                emails:List[str] = []
-                raw_rows:List[Dict] = []
                 data = json.loads(response.text)
                 if data:
                     for email in data[0]['emails']:
                         raw_rows.append({'email': email['email']})
             else:
                 raw_rows = self._extract_data_from_pgp_block(response.text)
+            new_rows:List[Dict] = []
             for row in raw_rows:
+                new_rows.append({'email': row['email']} )
+                row['platform_name'] = target['friendly_name']
                 row['query'] = query
                 row['source_name'] = f"{__short_name__} PGP"
-                row['platform_name'] = target['friendly_name']
-                row['platform_url'] = target['profile_url'].format(query=query)
                 row['spider_recommended'] = True
-                pd.concat([new_data, pd.DataFrame(raw_rows)], ignore_index=True)
+
+            new_rows = pd.DataFrame(new_rows)
+            new_rows['query'] = query
+            new_rows['platform_name'] = target['friendly_name']
+            new_rows['platform_url'] = target['profile_url'].format(query=query)
+            new_rows['source_name'] = f"{__short_name__} PGP"
+            new_rows['spider_recommended'] = True
+            new_data = pd.concat([new_data, new_rows], ignore_index=True)
+
         self.collector.insert(new_data)
         return new_data
