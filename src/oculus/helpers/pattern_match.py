@@ -39,7 +39,7 @@ def search(url:str, body:str=None, query:str=None) -> pd.DataFrame:
             return pd.DataFrame()
         body = response.text
     elif not body and not query:
-        raise RequestError(f'Sherlock did not return enough information for pattern matching {pattern_data[root_domain]["friendly_name"]}')
+        raise RequestError(f'Not enough information for pattern matching {pattern_data[root_domain]["friendly_name"]}')
 
     if not pattern_data[root_domain]['wildcard_subdomain']:
         # TODO add support for subdomain differentials
@@ -50,7 +50,7 @@ def search(url:str, body:str=None, query:str=None) -> pd.DataFrame:
     if 'self' in pattern_data[root_domain]:
         self_scrape_data:Dict = {}
         for pattern in pattern_data[root_domain]['self']:
-            captures = re.search(pattern, body)
+            captures = re.search(pattern, body, re.MULTILINE)
             if captures:
                 self_scrape_data['platform_name'] = pattern_data[root_domain]['friendly_name']
                 self_scrape_data['platform_url'] = url
@@ -58,24 +58,33 @@ def search(url:str, body:str=None, query:str=None) -> pd.DataFrame:
                     self_scrape_data['username'] = captures.group('uid')
                 if 'fullname' in captures.groupdict():
                     self_scrape_data['full_name'] = captures.group('fullname')
+                if 'firstname' in captures.groupdict():
+                    self_scrape_data['first_name'] = captures.group('firstname')
+                if 'lastname' in captures.groupdict():
+                    self_scrape_data['last_name'] = captures.group('lastname')
+                if 'rawaddress' in captures.groupdict():
+                    self_scrape_data['raw_address'] = captures.group('rawaddress')
                 if 'comment' in captures.groupdict():
                     self_scrape_data['comment'] = captures.group('comment')
         if self_scrape_data:
             new_data.append(self_scrape_data)
 
+    if 'patterns' in pattern_data[root_domain]:
+        for pattern in pattern_data[root_domain]['patterns']:
+            captures = re.search(pattern['pattern'], body)
+            if captures:
+                new_item:Dict = {}
 
-    for pattern in pattern_data[root_domain]['patterns']:
-        captures = re.search(pattern['pattern'], body)
-        if captures:
-            new_item:Dict = {}
+                if pattern['validation_type'] == 'social':
+                    new_item['platform_name'] = pattern['platform_name']
+                if 'uid' in captures.groupdict():
+                    new_item['username'] = captures.group('uid')
+                if 'url' in captures.groupdict():
+                    new_item['platform_url'] = captures.group('url')
+                new_data.append(new_item)
 
-            new_item['source_name'] = "Discovered"
-            if pattern['validation_type'] == 'social':
-                new_item['platform_name'] = pattern['platform_name']
-            if 'uid' in captures.groupdict():
-                new_item['username'] = captures.group('uid')
-            if 'url' in captures.groupdict():
-                new_item['platform_url'] = captures.group('url')
-            new_data.append(new_item)
+    new_df = pd.DataFrame(new_data)
+    if new_data:
+        new_df['source_name'] = "Discovered"
 
-    return pd.DataFrame(new_data)
+    return pd.DataFrame(new_df)

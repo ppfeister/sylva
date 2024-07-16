@@ -35,6 +35,7 @@ class ResultDataFrame:
                 'region',
                 'postal_code',
                 'country',
+                'raw_address',
                 'comment',
                 ]
         )

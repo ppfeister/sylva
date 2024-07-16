@@ -152,6 +152,161 @@
                 }
             ]
         },
+        "behance.net": {
+            "wildcard_subdomain": true,
+            "friendly_name": "Behance",
+            "patterns": [
+                {
+                    "pattern": "accountContent-g6W\" href=\"(?P<url>https?:\\/\\/(?:www\\.)?instagram\\.com\\/(?P<uid>.+?))\" type=\"button",
+                    "validation_type": "social",
+                    "platform_name": "Instagram"
+                },
+                {
+                    "pattern": "accountContent-g6W\" href=\"(?P<url>https?:\\/\\/(?:www\\.)?twitter\\.com\\/(?P<uid>.+?))\" type=\"button",
+                    "validation_type": "social",
+                    "platform_name": "Twitter"
+                },
+                {
+                    "pattern": "accountContent-g6W\" href=\"(?P<url>https?:\\/\\/(?:www\\.)?linkedin\\.com\\/in\\/(?P<uid>.+?))\" type=\"button",
+                    "validation_type": "social",
+                    "platform_name": "LinkedIn"
+                },
+                {
+                    "pattern": "accountContent-g6W\" href=\"(?P<url>https?:\\/\\/(?:www\\.)?pinterest\\.com\\/(?P<uid>.+?))\" type=\"button",
+                    "validation_type": "social",
+                    "platform_name": "Pinterest"
+                }
+            ]
+        },
+        "bitbucket.org": {
+            "wildcard_subdomain": true,
+            "friendly_name": "Bitbucket",
+            "self": [
+                "\"name\": \"(?P<fullname>.+?)\"",
+                "\"slug\": \"(?P<uid>.+?)\""
+            ]
+        },
+        "bugcrowd.com": {
+            "wildcard_subdomain": true,
+            "friendly_name": "Bugcrowd",
+            "patterns": [
+                {
+                    "pattern": "&quot;(?P<url>https?:\\/\\/github\\.com\\/(?P<uid>.+?))&quot;",
+                    "validation_type": "social",
+                    "platform_name": "GitHub"
+                },
+                {
+                    "pattern": "&quot;PentesterLab - (?P<uid>.+?)&quot;",
+                    "validation_type": "social",
+                    "platform_name": "PentesterLab"
+                },
+                {
+                    "pattern": "&quot;(?P<url>https?:\\/\\/(?:www\\.)?linkedin\\.com\\/in\\/(?P<uid>.+?))&quot;",
+                    "validation_type": "social",
+                    "platform_name": "LinkedIn"
+                },
+                {
+                    "pattern": "&quot;Website&quot;,&quot;url&quot;:&quot;(?P<url>https?:\/\/.+?)&quot",
+                    "validation_type": "generic"
+                }
+            ]
+        },
+        "buymeacoffee.com": {
+            "wildcard_subdomain": true,
+            "friendly_name": "BuyMeACoffee",
+            "patterns": [
+                {
+                    "pattern": "&quot;(?P<url>https?:\\/\\/(?:www\\.)?instagram\\.com\\/(?P<uid>.+?))&quot;",
+                    "validation_type": "social",
+                    "platform_name": "Instagram"
+                },
+                {
+                    "pattern": "&quot;(?P<url>https?:\\/\\/(?:www\\.)?twitter\\.com\\/(?P<uid>.+?))&quot;",
+                    "validation_type": "social",
+                    "platform_name": "Twitter"
+                },
+                {
+                    "pattern": "&quot;(?P<url>https?:\\/\\/(?:www\\.)?linkedin\\.com\\/in\\/(?P<uid>.+?))&quot;",
+                    "validation_type": "social",
+                    "platform_name": "LinkedIn"
+                },
+                {
+                    "pattern": "&quot;(?P<url>https?:\\/\\/(?:www\\.)?github\\.com\\/(?P<uid>.+?))&quot;",
+                    "validation_type": "social",
+                    "platform_name": "GitHub"
+                },
+                {
+                    "pattern": "&quot;Website&quot;,&quot;url&quot;:&quot;(?P<url>https?:\/\/.+?)&quot",
+                    "validation_type": "generic"
+                }
+            ]
+        },
+        "codersrank.io": {
+            "wildcard_subdomain": true,
+            "friendly_name": "CodersRank",
+            "self": [
+                "fullName:\"(?P<fullname>.+?)\"",
+                "firstName:\"(?P<firstname>.+?)\"",
+                "lastName:\"(?P<lastname>.+?)\"",
+                "profile-head-position profile-head-details-row\">(?P<comment>.+?)<\\/div>"
+            ],
+            "patterns": [
+                {
+                    "pattern": "href=\"(?P<url>https?:\\/\\/github\\.com\\/(?!codersrank-org)(?P<uid>.+?))\" target=\"_blank\" rel=\"noopener noreferrer",
+                    "validation_type": "social",
+                    "platform_name": "GitHub"
+                },
+                {
+                    "pattern": "(?P<url>https?:\\/\\/(?:www\\.)?linkedin\\.com\\/in\\/(?P<uid>.+?))\\\" target=\"_blank\" rel=\"noopener noreferrer",
+                    "validation_type": "social",
+                    "platform_name": "LinkedIn"
+                },
+                {
+                    "pattern": "(?P<url>https?:\\/\\/(?:www\\.)?twitter\\.com\\/(?P<uid>.+?))\\\" target=\"_blank\" rel=\"noopener noreferrer",
+                    "validation_type": "social",
+                    "platform_name": "Twitter"
+                },
+                {
+                    "pattern": "(?P<url>https?:\\/\\/(?:www\\.)?instagram\\.com\\/(?P<uid>.+?))\\\" target=\"_blank\" rel=\"noopener noreferrer",
+                    "validation_type": "social",
+                    "platform_name": "Instagram"
+                },
+                {
+                    "pattern": "(?P<url>https?:\\/\\/(?:www\\.)?stackoverflow\\.com\\/users\\/[0-9]+?\\/(?P<uid>.+?))\" target=\"_blank\" rel=\"noopener noreferrer",
+                    "validation_type": "social",
+                    "platform_name": "StackOverflow"
+                }
+            ]
+        },
+        "coderwall.com": {
+            "wildcard_subdomain": true,
+            "friendly_name": "Coderwall",
+            "self": [
+                "<title>(?P<fullname>.+?)&#39;s profile",
+                "<h4 class='ml2 mt1'>\\n(?P<comment>.+?)$",
+                "<h4 class='ml2 mt1'>\\n.+?$\\n<div class='hide_last_child inline'>&middot;<\\/div>\\n<div class='inline'>(?P<rawaddress>.+?)<\\/div>$",
+                "<title>.+?profile \\| (?P<uid>.+?)<\\/title>"
+            ],
+            "patterns": [
+                {
+                    "pattern": "<a href=\"(?P<url>https?:\\/\\/(?:www\\.)?linkedin\\.com\\/in\\/(?P<uid>.+?))\\\" rel=\"nofollow\"",
+                    "validation_type": "social",
+                    "platform_name": "LinkedIn"
+                },
+                {
+                    "pattern": "<a href=\"(?P<url>https?:\\/\\/(?:www\\.)?stackoverflow\\.com\\/users\\/[0-9]+?\\/(?P<uid>.+?))\" rel=\"nofollow\"",
+                    "validation_type": "social",
+                    "platform_name": "StackOverflow"
+                }
+            ]
+        },
+        "crowdin.com": {
+            "wildcard_subdomain": true,
+            "friendly_name": "Crowdin",
+            "self": [
+                "<title>(?P<fullname>.+?) \\((?P<uid>.+?)\\) . Crowdin<\\/title>"
+            ]
+        },
         "github.com": {
             "wildcard_subdomain": true,
             "friendly_name": "GitHub",
