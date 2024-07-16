@@ -29,8 +29,11 @@ def search(url:str, body:str=None, query:str=None) -> pd.DataFrame:
     if root_domain not in pattern_data:
         return pd.DataFrame()
 
-    if not body and query:
-        url = url.format(query)
+    if (not body and query) or 'custom_url' in pattern_data[root_domain]:
+        if 'custom_url' in pattern_data[root_domain]:
+            url = pattern_data[root_domain]['custom_url'].format(QUERY=query)
+        else:
+            url = url.format(query)
         response = requests.get(url)
         if response.status_code != 200:
             return pd.DataFrame()
@@ -66,6 +69,7 @@ def search(url:str, body:str=None, query:str=None) -> pd.DataFrame:
         if captures:
             new_item:Dict = {}
 
+            new_item['source_name'] = "Discovered"
             if pattern['validation_type'] == 'social':
                 new_item['platform_name'] = pattern['platform_name']
             if 'uid' in captures.groupdict():

@@ -57,12 +57,17 @@ class Sherlock:
                 ):
                     send_body = False
 
+                try:
+                    body_placeholder = results[site.name]['response_text'].decode('utf-8')
+                except UnicodeDecodeError:
+                    body_placeholder = None
+                    send_body = False
+
                 if send_body:
-                    matched_patterns = pd.concat([matched_patterns, pattern_match.search(url=sites_data[site.name]['url'], body=results[site.name]['response_text'].decode('utf-8'))], ignore_index=True)
+                    matched_patterns = pd.concat([matched_patterns, pattern_match.search(url=sites_data[site.name]['url'], body=body_placeholder, query=query)], ignore_index=True)
                 else:
                     matched_patterns = pd.concat([matched_patterns, pattern_match.search(url=sites_data[site.name]['url'], query=query)], ignore_index=True)
                 matched_patterns['query'] = query
-                matched_patterns['source_name'] = self.source_name
                 matched_patterns['spider_recommended'] = True
 
         new_data = pd.DataFrame(exists)
