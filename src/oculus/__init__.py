@@ -12,3 +12,6 @@ __copyright__ = f'Copyright 2024 {__author__}'
 
 __github_raw_data_url__ = 'https://raw.githubusercontent.com/ppfeister/oculus/master/src/oculus/data/pgp.json'
 __github_raw_schema_url__ = 'https://raw.githubusercontent.com/ppfeister/oculus/master/src/oculus/data/pgp.schema.json'
+
+# Globals for normalization and similar functions
+__url_normalization_pattern__ = r'(?:www\.|\/$|\/?\?.+)' # Match www, trailing slash, and query string

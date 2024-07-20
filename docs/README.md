@@ -11,9 +11,10 @@ Oculus is undergoing rapid development. Documentation may be quickly obseleted a
 | Endato | Person data source (phone, address, cell, etc) | Req [ T \| $ ] |
 | ~~IntelX~~ | ~~Data leak source~~ | ~~Req [ T \| $ ]~~ |
 | ProxyNova | COMB API (cleartext passwords, usernames) | Native |
-| Veriphone | Phone number data source | Req [ F ] |
+| Veriphone | Phone number data source | Req [ F+ ] |
+| GitHub | User data source (no permissions) | Req [ F ] |
 
-$ : paid | T : trial | F : Freemium
+$ : paid | T : trial | F : Free | F+ : Freemium
 
 Most development was done without any paid access -- so despite some integrations requiring an account, the full experience can be attained by all without a subscription.
 

@@ -1,4 +1,5 @@
 
+import re
 from typing import Dict, List
 
 import pandas as pd
@@ -7,6 +8,7 @@ from sherlock_project.sites import SitesInformation
 from sherlock_project.notify import QueryNotify
 from sherlock_project.result import QueryStatus
 
+from .. import __url_normalization_pattern__
 from ..helpers.helpers import RequestError
 from ..helpers import pattern_match
 from ..collector import Collector
@@ -38,14 +40,14 @@ class Sherlock:
         matched_patterns = pd.DataFrame()
         for site in sites:
             if results[site.name]['status'].status == QueryStatus.CLAIMED:
-                exists.append({
+                new_item:Dict = {
                     'query': query,
                     'source_name': self.source_name,
                     'spider_recommended': True,
                     'platform_name': site.name,
-                    'platform_url': results[site.name]['url_user'],
+                    'platform_url': re.sub(__url_normalization_pattern__, '', results[site.name]['url_user']),
                     'username': query,
-                })
+                }
 
                 send_body:bool = True
                 if (
@@ -65,11 +67,16 @@ class Sherlock:
                     send_body = False
 
                 if send_body:
-                    matched_patterns = pd.concat([matched_patterns, self.pattern_match.search(url=sites_data[site.name]['url'], body=body_placeholder, query=query)], ignore_index=True)
+                    matched_patterns = pd.concat([matched_patterns, self.pattern_match.search(url=sites_data[site.name]['url'], body=body_placeholder, query=query, preexisting=self.collector.get_data())], ignore_index=True)
                 else:
-                    matched_patterns = pd.concat([matched_patterns, self.pattern_match.search(url=sites_data[site.name]['url'], query=query)], ignore_index=True)
+                    matched_patterns = pd.concat([matched_patterns, self.pattern_match.search(url=sites_data[site.name]['url'], query=query, preexisting=self.collector.get_data())], ignore_index=True)
                 matched_patterns['query'] = query
                 matched_patterns['spider_recommended'] = True
+
+                if not matched_patterns.empty and new_item['platform_url'] not in matched_patterns['platform_url'].values:
+                    exists.append(new_item)
+
+                
 
         new_data = pd.DataFrame(exists)
         new_data = pd.concat([new_data, matched_patterns], ignore_index=True)

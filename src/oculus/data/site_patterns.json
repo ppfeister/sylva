@@ -180,7 +180,7 @@
         },
         "bitbucket.org": {
             "wildcard_subdomain": true,
-            "friendly_name": "Bitbucket",
+            "friendly_name": "BitBucket",
             "self": [
                 "\"name\": \"(?P<fullname>.+?)\"",
                 "\"slug\": \"(?P<uid>.+?)\""
