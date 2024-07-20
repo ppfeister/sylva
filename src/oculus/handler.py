@@ -58,3 +58,5 @@ class Handler:
                 if e.key_not_provided:
                     if loglevel >= LogLevel.INFO.value:
                         print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} API key has not been provided for {runner.source_name} - {runner.source_obtain_keys_url}')
+            
+            self.collector.deduplicate()

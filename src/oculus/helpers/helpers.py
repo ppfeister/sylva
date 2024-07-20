@@ -46,3 +46,6 @@ class ResultDataFrame:
         return self.data
     def get_data(self) -> pd.DataFrame:
         return self.data
+    def deduplicate(self) -> pd.DataFrame:
+        self.data = self.data.drop_duplicates()
+        return self.data
