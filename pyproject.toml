@@ -14,6 +14,7 @@ dependencies = [
     "colorama>=0.4.6",
     "phonenumbers>=8.13.40",
     "tldextract>=5.1.2",
+    "BeautifulSoup4>=4.12.3",
 ]
 requires-python = ">=3.10"
 readme = "docs/README.md"

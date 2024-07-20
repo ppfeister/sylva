@@ -16,6 +16,7 @@ class Sherlock:
         self.__debug_disable_tag:str = 'sherlock'
         self.source_name:str = 'Sherlock'
         self.collector:Collector = collector
+        self.pattern_match = pattern_match.PatternMatch()
 
     def accepts(self, query:str) -> bool:
         return True
@@ -64,9 +65,9 @@ class Sherlock:
                     send_body = False
 
                 if send_body:
-                    matched_patterns = pd.concat([matched_patterns, pattern_match.search(url=sites_data[site.name]['url'], body=body_placeholder, query=query)], ignore_index=True)
+                    matched_patterns = pd.concat([matched_patterns, self.pattern_match.search(url=sites_data[site.name]['url'], body=body_placeholder, query=query)], ignore_index=True)
                 else:
-                    matched_patterns = pd.concat([matched_patterns, pattern_match.search(url=sites_data[site.name]['url'], query=query)], ignore_index=True)
+                    matched_patterns = pd.concat([matched_patterns, self.pattern_match.search(url=sites_data[site.name]['url'], query=query)], ignore_index=True)
                 matched_patterns['query'] = query
                 matched_patterns['spider_recommended'] = True
 

@@ -49,6 +49,7 @@ class Endato:
         if response.status_code != 200:
             raise RequestError(f'Failed to get results from Endato. Status code: {response.status_code}\n\n{response.text}')
         json_data:dict = json.loads(response.text)
+        print(json_data)
         flattened_data:dict = {
             'first_name': json_data['person']['name']['firstName'],
             'middle_name': json_data['person']['name']['middleName'],
