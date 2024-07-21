@@ -82,6 +82,6 @@ class Handler:
                 if new_query in queries_made:
                     continue
                 if loglevel >= LogLevel.SUCCESS_ONLY.value:
-                    print(f'{Fore.BLUE}{Style.BRIGHT}---{Style.RESET_ALL}{Fore.RESET} Spidering out to {new_query}')
+                    print(f'{Fore.BLUE}{Style.BRIGHT}[{Fore.RESET}Spider{Fore.BLUE}{Style.BRIGHT}]{Fore.RESET}{Style.RESET_ALL} {new_query}')
                 queries_made.append(new_query)
                 self.search_all(query=new_query)
