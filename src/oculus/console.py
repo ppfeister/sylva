@@ -25,6 +25,7 @@ def search_subcommand(args:argparse.Namespace):
     handler.search_all(args.query)
     print()
     print(handler.collector.get_data())
+    print(f'Unique usernames: {handler.collector.get_unique_usernames()}')
 
 
 def spider_subcommand(args:argparse.Namespace):

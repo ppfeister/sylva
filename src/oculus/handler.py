@@ -5,7 +5,7 @@ import pandas as pd
 
 from .collector import Collector
 from .config import config
-from .easy_logger import LogLevel, loglevel, NoColor
+from .easy_logger import LogLevel, loglevel, NoColor, overwrite_previous_line
 from .helpers.helpers import (
     IncompatibleQueryType,
     RequestError,
@@ -46,17 +46,23 @@ class Handler:
                 continue
 
             if loglevel >= LogLevel.INFO.value:
-                print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Searching {runner.source_name}')
+                print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Searching {runner.source_name}...')
 
             try:
                 results = len(runner.search(query=query).index)
                 if loglevel >= LogLevel.SUCCESS_ONLY.value and results > 0:
+                    overwrite_previous_line()
                     print(f'{Fore.LIGHTGREEN_EX}{Style.BRIGHT}[+]{Style.RESET_ALL}{Fore.RESET} Found {results} via {runner.source_name}')
+                elif loglevel >= LogLevel.INFO.value and results == 0:
+                    overwrite_previous_line()
+                    print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} No results found via {runner.source_name}')
+                elif loglevel >= LogLevel.SUCCESS_ONLY.value and results == 0:
+                    overwrite_previous_line()
             except RequestError:
                 pass
             except APIKeyError as e:
                 if e.key_not_provided:
                     if loglevel >= LogLevel.INFO.value:
                         print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} API key has not been provided for {runner.source_name} - {runner.source_obtain_keys_url}')
-            
-            self.collector.deduplicate()
+        
+        self.collector.deduplicate()

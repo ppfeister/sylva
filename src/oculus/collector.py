@@ -1,3 +1,4 @@
+from typing import List
 import pandas as pd
 
 from .helpers.helpers import ResultDataFrame
@@ -17,3 +18,7 @@ class Collector:
 
     def deduplicate(self) -> pd.DataFrame:
         return self.__data.deduplicate()
+    
+
+    def get_unique_usernames(self) -> List[str]:
+        return self.__data.get_data()['username'].unique().tolist()

@@ -20,7 +20,13 @@ class NoColor:
     DIM = NORMAL = BRIGHT = ''
     RESET = RESET_ALL = ''
 
+_LINE_UP = '\033[1A'
+_LINE_CLEAR = '\x1b[2L'
+
 loglevel = int(config['General']['log_level'])
+
+def overwrite_previous_line():
+    print(_LINE_UP, end=_LINE_CLEAR)
 
 def info(message:str):
     if loglevel < LogLevel.INFO.value:
