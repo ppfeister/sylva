@@ -68,20 +68,25 @@ class Handler:
         if not no_deduplicate:
             self.collector.deduplicate()
 
-    def spider_all(self, query:str, depth:int=1, no_deduplicate:bool=False):
-        queries_made:List[str] = [f'{query}']
+    def spider_all(self, query: str, depth: int = 1, no_deduplicate: bool = False):
+        queries_made: set = {query}
         self.search_all(query=query)
-        for iteration in range(depth):
-            new_queries:List[str] = []
-            new_queries.extend(self.collector.get_unique_usernames(spiderable_only=True))
-            new_queries.extend(self.collector.get_unique_emails(spiderable_only=True))
-            new_queries.extend(self.collector.get_unique_phones(spiderable_only=True))
-            new_queries.extend(self.collector.get_unique_fullnames(spiderable_only=True))
-            new_queries = list(set(new_queries)) # deduplication (for some reason set .update was problematic)
+
+        for i in range(depth):
+            new_queries: set = set()
+
+            new_queries.update(self.collector.get_unique_usernames(spiderable_only=True))
+            new_queries.update(self.collector.get_unique_emails(spiderable_only=True))
+            new_queries.update(self.collector.get_unique_phones(spiderable_only=True))
+            new_queries.update(self.collector.get_unique_fullnames(spiderable_only=True))
+
+            new_queries -= queries_made
+            queries_made.update(new_queries)
+
             for new_query in new_queries:
-                if new_query in queries_made:
-                    continue
                 if loglevel >= LogLevel.SUCCESS_ONLY.value:
                     print(f'{Fore.BLUE}{Style.BRIGHT}[{Fore.RESET}Spider{Fore.BLUE}{Style.BRIGHT}]{Fore.RESET}{Style.RESET_ALL} {new_query}')
-                queries_made.append(new_query)
                 self.search_all(query=new_query)
+
+            if not no_deduplicate:
+                self.collector.deduplicate()
