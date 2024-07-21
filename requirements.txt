@@ -1,0 +1,6 @@
+pandas
+colorama
+platformdirs
+sherlock_project
+phonenumbers
+tldextract
