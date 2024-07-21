@@ -58,7 +58,7 @@ def new_config():
 def update_config():
     config["General"] = {
         "debug": check_option(section="General", key="debug", default="False"),
-        "log_level": check_option(section="General", key="log_level", default="4"),
+        "log_level": check_option(section="General", key="log_level", default="3"),
         "colorful": check_option(section="General", key="colorful", default="True"),
     }
     config["Cache"] = {

@@ -37,7 +37,7 @@ class Handler:
             veriphone.Veriphone(collector=self.collector, api_key=config['Keys']['veriphone-key'], country='US'),
             sherlock.Sherlock(collector=self.collector),
         ]
-    def search_all(self, query:str):
+    def search_all(self, query:str, no_deduplicate:bool=False):
         for runner in self.runners:
 
             if not runner.accepts(query):
@@ -45,7 +45,7 @@ class Handler:
                     print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} Query type not supported by {runner.source_name}')
                 continue
 
-            if loglevel >= LogLevel.INFO.value:
+            if loglevel >= LogLevel.SUCCESS_ONLY.value:
                 print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Searching {runner.source_name}...')
 
             try:
@@ -65,4 +65,23 @@ class Handler:
                     if loglevel >= LogLevel.INFO.value:
                         print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} API key has not been provided for {runner.source_name} - {runner.source_obtain_keys_url}')
         
-        self.collector.deduplicate()
+        if not no_deduplicate:
+            self.collector.deduplicate()
+
+    def spider_all(self, query:str, depth:int=1, no_deduplicate:bool=False):
+        queries_made:List[str] = [f'{query}']
+        self.search_all(query=query)
+        for iteration in range(depth):
+            new_queries:List[str] = []
+            new_queries.extend(self.collector.get_unique_usernames(spiderable_only=True))
+            new_queries.extend(self.collector.get_unique_emails(spiderable_only=True))
+            new_queries.extend(self.collector.get_unique_phones(spiderable_only=True))
+            new_queries.extend(self.collector.get_unique_fullnames(spiderable_only=True))
+            new_queries = list(set(new_queries)) # deduplication (for some reason set .update was problematic)
+            for new_query in new_queries:
+                if new_query in queries_made:
+                    continue
+                if loglevel >= LogLevel.SUCCESS_ONLY.value:
+                    print(f'{Fore.BLUE}{Style.BRIGHT}---{Style.RESET_ALL}{Fore.RESET} Spidering out to {new_query}')
+                queries_made.append(new_query)
+                self.search_all(query=new_query)

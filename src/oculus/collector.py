@@ -20,5 +20,28 @@ class Collector:
         return self.__data.deduplicate()
     
 
-    def get_unique_usernames(self) -> List[str]:
-        return self.__data.get_data()['username'].unique().tolist()
+    def get_unique_queries(self, spiderable_only:bool=False) -> List[str]:
+        df = self.__data.get_data()
+        if spiderable_only:
+            df = df[df['spider_recommended'] == True]
+        return df['query'].dropna().unique().tolist()
+    def get_unique_usernames(self, spiderable_only:bool=False) -> List[str]:
+        df = self.__data.get_data()
+        if spiderable_only:
+            df = df[df['spider_recommended'] == True]
+        return df['username'].dropna().unique().tolist()
+    def get_unique_emails(self, spiderable_only:bool=False) -> List[str]:
+        df = self.__data.get_data()
+        if spiderable_only:
+            df = df[df['spider_recommended'] == True]
+        return df['email'].dropna().unique().tolist()
+    def get_unique_phones(self, spiderable_only:bool=False) -> List[str]:
+        df = self.__data.get_data()
+        if spiderable_only:
+            df = df[df['spider_recommended'] == True]
+        return df['phone'].dropna().unique().tolist()
+    def get_unique_fullnames(self, spiderable_only:bool=False) -> List[str]:
+        df = self.__data.get_data()
+        if spiderable_only:
+            df = df[df['spider_recommended'] == True]
+        return df['full_name'].dropna().unique().tolist()

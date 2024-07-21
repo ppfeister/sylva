@@ -39,6 +39,7 @@ class ResultDataFrame:
                 'comment',
                 ]
         )
+        pd.set_option('display.max_rows', None)
     def __str__(self) -> str:
         return self.data.__str__()
     def insert_frame(self, new_data:pd.DataFrame) -> pd.DataFrame:

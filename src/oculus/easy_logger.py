@@ -9,8 +9,8 @@ class LogLevel(Enum):
     FATAL = 0
     ERROR = 1
     WARNING = 2
-    SUCCESS_ONLY = 3
-    INFO = 4 # Default
+    SUCCESS_ONLY = 3 # Default
+    INFO = 4
     DEBUG = 5
     TRACE = 6
 

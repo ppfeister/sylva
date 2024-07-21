@@ -25,11 +25,14 @@ def search_subcommand(args:argparse.Namespace):
     handler.search_all(args.query)
     print()
     print(handler.collector.get_data())
-    print(f'Unique usernames: {handler.collector.get_unique_usernames()}')
 
 
 def spider_subcommand(args:argparse.Namespace):
-    pass
+    handler = Handler()
+    handler.spider_all(args.query, depth=args.spider_depth)
+    print()
+    print(handler.collector.get_data())
+    print(f'Unique usernames: {handler.collector.get_unique_usernames()}')
 
 
 def interactive_setup_subcommand(args:argparse.Namespace):
@@ -46,7 +49,7 @@ def interactive():
 
     parser_spider = subparsers.add_parser('spider', help='Recursively search based on discovered identities')
     parser_spider.add_argument('query', help='The query to search for')
-    parser_spider.add_argument('-d', '--depth', type=int, default=1, dest='spider_depth', metavar='123', help='The depth to search')
+    parser_spider.add_argument('-d', '--depth', type=int, default=3, dest='spider_depth', metavar='123', help='The depth to search')
     parser_spider.add_argument('-a', '--show-all', dest='no_deduplicate', action='store_true', default=False, help='Do not deduplicate results')
     parser_spider.set_defaults(func=spider_subcommand)
 
