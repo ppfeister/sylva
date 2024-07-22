@@ -28,6 +28,8 @@ class Endato:
         self.source_obtain_keys_url:str = 'https://api.endato.com/Keys'
         self.source_name:str = 'Endato'
         self.collector:pd.DataFrame = collector
+
+
     def _type(self, query:str) -> str:
         try:
             phonenumbers.is_valid_number(phonenumbers.parse(query, self.__country))
@@ -36,6 +38,8 @@ class Endato:
             pass
 
         raise IncompatibleQueryType(f'Query type not supported by {self.source_name}')
+    
+
     def accepts(self, query:str, query_type:QueryType=QueryType.TEXT) -> bool:
         if self.__country != 'US':
             # Not sure if Endato supports queries for non-US information
@@ -50,6 +54,8 @@ class Endato:
             return False
         else:
             return True
+        
+
     def _query_phone(self, query:str) -> pd.DataFrame:
         e164_query = phonenumbers.format_number(phonenumbers.parse(query, self.__country), phonenumbers.PhoneNumberFormat.E164)
         readable_query = phonenumbers.format_number(phonenumbers.parse(query, self.__country), phonenumbers.PhoneNumberFormat.NATIONAL)
@@ -85,6 +91,8 @@ class Endato:
         new_data = pd.DataFrame([flattened_data])
         self.collector.insert(new_data)
         return new_data
+
+
     def search(self, query:str, in_recursion:bool=False, query_type:QueryType=QueryType.TEXT) -> pd.DataFrame:
         if in_recursion and not config['Target Options']['endato-spider-in']:
             return pd.DataFrame()

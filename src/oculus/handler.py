@@ -72,6 +72,8 @@ class Handler:
                     print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} No results found via {runner.source_name}')
                 elif loglevel >= LogLevel.SUCCESS_ONLY.value and results == 0:
                     overwrite_previous_line()
+                else:
+                    print("Something weird happened.")
             except RequestError:
                 pass
             except APIKeyError as e:
@@ -83,7 +85,13 @@ class Handler:
             self.collector.deduplicate()
 
     def spider_all(self, query: str, depth: int = 1, no_deduplicate: bool = False):
+        # TODO Any way to pretty this up? Avoid re-running queries against all on raw input
         queries_made: set = set((QueryDataItem(query=query, type=QueryType.TEXT),))
+        queries_made.add(QueryDataItem(query=query, type=QueryType.USERNAME))
+        queries_made.add(QueryDataItem(query=query, type=QueryType.EMAIL))
+        queries_made.add(QueryDataItem(query=query, type=QueryType.PHONE))
+        queries_made.add(QueryDataItem(query=query, type=QueryType.FULLNAME))
+        queries_made.add(QueryDataItem(query=query, type=QueryType.FIRSTNAME_LASTNAME))
         self.search_all(query=query)
 
         try:
