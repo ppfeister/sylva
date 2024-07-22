@@ -12,7 +12,6 @@ from .helpers.helpers import (
     QueryType,
     RequestError,
     APIKeyError,
-    QueryDataItem,
 )
 from .integrations import (
     endato,
@@ -24,6 +23,11 @@ from .modules import (
     pgp as pgp_module,
     sherlock,
 )
+
+
+class QueryDataItem(NamedTuple):
+    query: str
+    type: QueryType
 
 
 if config['General']['colorful'] == 'False': # no better way since distutils deprecation?
