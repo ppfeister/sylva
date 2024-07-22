@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 from colorama import Fore, Back, Style
 import pandas as pd
@@ -8,6 +8,7 @@ from .config import config
 from .easy_logger import LogLevel, loglevel, NoColor, overwrite_previous_line
 from .helpers.helpers import (
     IncompatibleQueryType,
+    QueryType,
     RequestError,
     APIKeyError,
 )
@@ -31,16 +32,17 @@ class Handler:
         self.collector:Collector = Collector()
         self.runners:List = [
             proxynova.ProxyNova(collector=self.collector),
-            endato.Endato(collector=self.collector, api_name=config['Keys']['endato-name'], api_key=config['Keys']['endato-key']),
+            endato.Endato(collector=self.collector, api_name=config['Keys']['endato-name'], api_key=config['Keys']['endato-key'], country='US'),
             #intelx.IntelX(collector=self.collector, api_key=config['Keys']['intelx-key']),
             pgp_module.PGPModule(collector=self.collector),
             veriphone.Veriphone(collector=self.collector, api_key=config['Keys']['veriphone-key'], country='US'),
             sherlock.Sherlock(collector=self.collector),
         ]
-    def search_all(self, query:str, no_deduplicate:bool=False):
+        self.__in_recursion = False
+    def search_all(self, query:str|Tuple, query_type:QueryType=QueryType.TEXT, no_deduplicate:bool=False):
         for runner in self.runners:
 
-            if not runner.accepts(query):
+            if not runner.accepts(query=query, query_type=query_type):
                 if loglevel >= LogLevel.DEBUG.value:
                     print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} Query type not supported by {runner.source_name}')
                 continue
@@ -49,7 +51,7 @@ class Handler:
                 print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Searching {runner.source_name}...')
 
             try:
-                results = len(runner.search(query=query).index)
+                results = len(runner.search(query=query, in_recursion=self.__in_recursion).index)
                 if loglevel >= LogLevel.SUCCESS_ONLY.value and results > 0:
                     overwrite_previous_line()
                     print(f'{Fore.LIGHTGREEN_EX}{Style.BRIGHT}[+]{Style.RESET_ALL}{Fore.RESET} Found {results} via {runner.source_name}')
@@ -72,6 +74,8 @@ class Handler:
         queries_made: set = {query}
         self.search_all(query=query)
 
+        self.__in_recursion = True # Passed to runners so they can self-skip if spider-in disabled
+
         for i in range(depth):
             new_queries: set = set()
 
@@ -85,7 +89,7 @@ class Handler:
 
             for new_query in new_queries:
                 if loglevel >= LogLevel.SUCCESS_ONLY.value:
-                    print(f'{Fore.BLUE}{Style.BRIGHT}[{Fore.RESET}Spider{Fore.BLUE}{Style.BRIGHT}]{Fore.RESET}{Style.RESET_ALL} {new_query}')
+                    print(f'{Fore.BLUE}{Style.BRIGHT}[{Fore.RESET}Depth {i+1} Query{Fore.BLUE}{Style.BRIGHT}]{Fore.RESET}{Style.RESET_ALL} {new_query}')
                 self.search_all(query=new_query)
 
             if not no_deduplicate:

@@ -26,9 +26,13 @@ class IntelX:
         self.source_obtain_keys_url:str = 'https://intelx.io/account?tab=developer'
         self.source_name:str = 'IntelX'
         self.collector:Collector = collector
-    def search(self, query:str, limit:int=2, buckets=["leaks.public", "leaks.private", "pastes", "darknet"], timeout:int=5, datefrom:str=None, dateto:str=None, sort:int=2, media:int=24, terminate=[]) -> pd.DataFrame:
+    def search(self, query:str, limit:int=2, buckets=["leaks.public", "leaks.private", "pastes", "darknet"], timeout:int=5, datefrom:str=None, dateto:str=None, sort:int=2, media:int=24, terminate=[], in_recursion:bool=False) -> pd.DataFrame:
+        if in_recursion and not config['Target Options']['intelx-spider-in']:
+            return pd.DataFrame()
+        
         if (not config['Keys']['intelx-key']):
             raise APIKeyError(key_not_provided=True)
+        
         intelxapi = IntelX_API(key=config['Keys']['intelx-key'], ua=__user_agent__)
         capabilities = intelxapi.GET_CAPABILITIES()
         queried_buckets:List[str] = []

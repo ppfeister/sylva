@@ -5,8 +5,9 @@ import pandas as pd
 import requests
 import phonenumbers
 
-from ..helpers.helpers import IncompatibleQueryType, RequestError
+from ..helpers.helpers import IncompatibleQueryType, QueryType, RequestError
 from ..collector import Collector
+from ..config import config
 
 
 class Veriphone:
@@ -19,15 +20,21 @@ class Veriphone:
         self.source_obtain_keys_url:str = 'https://veriphone.io/cp'
         self.collector:Collector = collector
     # TODO add validation for username, email, password
-    def accepts(self, query:str) -> bool:
+    def accepts(self, query:str, query_type:QueryType=QueryType.TEXT) -> bool:
         try:
             return phonenumbers.is_valid_number(phonenumbers.parse(query, self.__country))
         except phonenumbers.phonenumberutil.NumberParseException:
             return False
-    def search(self, query:str) -> pd.DataFrame:
+    def search(self, query:str, in_recursion:bool=False) -> pd.DataFrame:
+        if in_recursion and not config['Target Options']['veriphone-spider-in']:
+            return pd.DataFrame()
+
         if not self.accepts(query):
             raise IncompatibleQueryType(f'Query unable to be parsed as phone number')
-        sanitized_query = requests.utils.requote_uri(query)
+        
+        e164_query = phonenumbers.format_number(phonenumbers.parse(query, self.__country), phonenumbers.PhoneNumberFormat.E164)
+
+        sanitized_query = requests.utils.requote_uri(e164_query)
         response = requests.get(self.__api_url.format(KEY=self.__api_key, COUNTRY=self.__country, PHONE=sanitized_query))
         if response.status_code != 200:
             raise RequestError(f'Failed to get results from ProxyNova. Status code: {response.status_code}')
@@ -38,7 +45,7 @@ class Veriphone:
                 'phone': json_data.get('e164', None),
                 'country': json_data.get('country', None),
                 'region': json_data.get('phone_region', None),
-                'query': query,
+                'query': e164_query,
                 'source_name': self.source_name,
                 'spider_recommended': False,
             }

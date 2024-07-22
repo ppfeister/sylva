@@ -77,11 +77,11 @@ def update_config():
         "disabled_modules": check_option(section="Debug", key="disabled_modules", default="proxynova"),
     }
     config["Target Options"] = {
-        "proxycheck-default-limit": check_option(section="Target Options", key="proxycheck-default-limit", default="5"),
-        "proxycheck-spider-in": check_option(section="Target Options", key="proxycheck-spider-in", default="False"),
-        "proxycheck-spider-out": check_option(section="Target Options", key="proxycheck-spider-out", default="False"),
+        "proxynova-default-limit": check_option(section="Target Options", key="proxynova-default-limit", default="5"),
+        "proxynova-spider-in": check_option(section="Target Options", key="proxynova-spider-in", default="True"),
+        "proxynova-spider-out": check_option(section="Target Options", key="proxynova-spider-out", default="True"),
         "endato-limit-queries": check_option(section="Target Options", key="endato-limit-queries", default="True"),
-        "endato-spider-in": check_option(section="Target Options", key="endato-spider-in", default="False"),
+        "endato-spider-in": check_option(section="Target Options", key="endato-spider-in", default="True"),
         "endato-spider-out": check_option(section="Target Options", key="endato-spider-out", default="True"),
     }
     with open(__config_path, "w") as configfile:

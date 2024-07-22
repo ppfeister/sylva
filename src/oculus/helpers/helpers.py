@@ -1,3 +1,6 @@
+from enum import Enum
+from typing import Tuple
+
 import pandas as pd
 
 class RequestError(Exception):
@@ -8,6 +11,18 @@ class APIKeyError(Exception):
     def __init__(self, message:str=None, key_not_provided:bool=False):
         super().__init__(message)
         self.key_not_provided = key_not_provided
+
+
+class QueryType(Enum):
+    TEXT = 0
+    EMAIL = 1
+    PHONE = 2
+    USERNAME = 3
+    FULLNAME = 4
+    FIRSTNAME = 5
+    LASTNAME = 6
+    FIRSTNAME_LASTNAME = 7
+    
 
 class ResultDataFrame:
     def __init__(self):

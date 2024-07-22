@@ -9,7 +9,7 @@ import requests
 
 from .. import __github_raw_data_url__, __short_name__
 from ..config import config
-from ..helpers.helpers import IncompatibleQueryType, RequestError
+from ..helpers.helpers import IncompatibleQueryType, QueryType, RequestError
 from ..collector import Collector
 
 
@@ -61,8 +61,9 @@ class PGPModule:
             })
         return raw_rows
     
-    def accepts(self, query:str) -> bool:
+    def accepts(self, query:str, query_type:QueryType=QueryType.TEXT) -> bool:
         return True
+        # TODO Adapt to properly support fingerprint queries against keyservers
         if (
             not re.match(self.__simple_email_regex, query)
             and not re.match(self.__fingerprint_regex, query)
@@ -70,7 +71,7 @@ class PGPModule:
         ):
             return False
 
-    def search(self, query:str) -> pd.DataFrame:
+    def search(self, query:str, in_recursion:bool=False) -> pd.DataFrame:
         if not self.accepts(query):
             raise IncompatibleQueryType(f'Query type not supported by {self.source_name}')
 

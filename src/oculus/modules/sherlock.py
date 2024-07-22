@@ -9,9 +9,10 @@ from sherlock_project.notify import QueryNotify
 from sherlock_project.result import QueryStatus
 
 from .. import __url_normalization_pattern__
-from ..helpers.helpers import RequestError
+from ..helpers.helpers import QueryType, RequestError
 from ..helpers import pattern_match
 from ..collector import Collector
+from ..config import config
 
 class Sherlock:
     def __init__(self, collector:Collector):
@@ -20,10 +21,15 @@ class Sherlock:
         self.collector:Collector = collector
         self.pattern_match = pattern_match.PatternMatch()
 
-    def accepts(self, query:str) -> bool:
-        return True
+    def accepts(self, query:str, query_type:QueryType=QueryType.TEXT) -> bool:
+        if (
+            query_type == QueryType.TEXT
+            or query_type == QueryType.USERNAME
+        ):
+            return True
+        return False
     
-    def search(self, query:str, timeout:int=3) -> pd.DataFrame:
+    def search(self, query:str, timeout:int=3, in_recursion:bool=False) -> pd.DataFrame:
         try:
             sites = SitesInformation()
         except FileNotFoundError as e:

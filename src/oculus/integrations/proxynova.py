@@ -3,7 +3,7 @@ import pandas as pd
 import requests
 
 from ..config import config
-from ..helpers.helpers import RequestError
+from ..helpers.helpers import IncompatibleQueryType, QueryType, RequestError
 from ..collector import Collector
 
 
@@ -14,11 +14,19 @@ class ProxyNova:
         self.source_name:str = 'ProxyNova'
         self.collector:Collector = collector
 
-    def accepts(self, query:str) -> bool:
+    def accepts(self, query:str, query_type:QueryType=QueryType.TEXT) -> bool:
         # TODO add validation for username, email, password
-        return True
+        if isinstance(query, str):
+            return True
+        return False
 
-    def search(self, query:str, start:int=0, end:int=config['Target Options']['proxycheck-default-limit']) -> pd.DataFrame:
+    def search(self, query:str, start:int=0, end:int=config['Target Options']['proxynova-default-limit'], in_recursion:bool=False, query_type:QueryType=QueryType.TEXT) -> pd.DataFrame:
+        if in_recursion and not config['Target Options']['proxynova-spider-in']:
+            return pd.DataFrame()
+        
+        if not self.accepts(query=query):
+            raise IncompatibleQueryType(f'Query type not supported by {self.source_name}')
+        
         sanitized_query = requests.utils.requote_uri(query)
         response = requests.get(self.__api_url.format(QUERY=sanitized_query, START=start, END=end))
         if response.status_code != 200:
@@ -28,6 +36,6 @@ class ProxyNova:
         new_data = pd.DataFrame(rows[:1], columns=['email', 'password'])
         new_data['query'] = query
         new_data['source_name'] = self.source_name
-        new_data['spider_recommended'] = config['Target Options']['proxycheck-spider-out']
+        new_data['spider_recommended'] = bool(config['Target Options']['proxynova-spider-out'])
         self.collector.insert(new_data)
         return new_data
