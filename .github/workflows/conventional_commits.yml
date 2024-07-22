@@ -1,0 +1,13 @@
+name: Commitlint
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+  push:
+
+jobs:
+    commitlint:
+        runs-on: ubuntu-latest
+        name: Commitlint
+        steps:
+            - uses: opensource-nepal/commitlint@v1
