@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, NamedTuple, Tuple
 
 from colorama import Fore, Back, Style
 import pandas as pd
