@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Tuple
+from typing import NamedTuple, Tuple
 
 import pandas as pd
 
@@ -22,6 +22,11 @@ class QueryType(Enum):
     FIRSTNAME = 5
     LASTNAME = 6
     FIRSTNAME_LASTNAME = 7
+
+
+class QueryDataItem(NamedTuple):
+    query: str
+    type: QueryType
     
 
 class ResultDataFrame:

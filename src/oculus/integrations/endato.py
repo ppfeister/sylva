@@ -6,6 +6,7 @@ import pandas as pd
 import phonenumbers
 import requests
 
+from ..config import config
 from ..helpers.helpers import QueryType, RequestError, IncompatibleQueryType, APIKeyError
 
 
@@ -40,6 +41,9 @@ class Endato:
             # Not sure if Endato supports queries for non-US information
             return False
         
+        if query_type != QueryType.PHONE and query_type != QueryType.TEXT:
+            return False
+        
         try:
             self._type(query)
         except IncompatibleQueryType:
@@ -57,7 +61,7 @@ class Endato:
             'Page': 1,
             'ResultsPerPage': 3,
         }
-        
+
         response = requests.post(self.__api_url['phone'], headers=headers, data=values)
         if response.status_code != 200:
             raise RequestError(f'Failed to get results from Endato. Status code: {response.status_code}\n\n{response.text}')
@@ -75,13 +79,13 @@ class Endato:
             'email': json_data['person']['email'],
             'source_name': self.source_name,
             'query': e164_query,
-            'spider_recommended': False,
+            'spider_recommended': True,
             'phone': e164_query,
         }
         new_data = pd.DataFrame([flattened_data])
         self.collector.insert(new_data)
         return new_data
-    def search(self, query:str, in_recursion:bool=False) -> pd.DataFrame:
+    def search(self, query:str, in_recursion:bool=False, query_type:QueryType=QueryType.TEXT) -> pd.DataFrame:
         if in_recursion and not config['Target Options']['endato-spider-in']:
             return pd.DataFrame()
         

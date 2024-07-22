@@ -29,7 +29,7 @@ class Sherlock:
             return True
         return False
     
-    def search(self, query:str, timeout:int=3, in_recursion:bool=False) -> pd.DataFrame:
+    def search(self, query:str, timeout:int=3, in_recursion:bool=False, query_type:QueryType=QueryType.TEXT) -> pd.DataFrame:
         try:
             sites = SitesInformation()
         except FileNotFoundError as e:

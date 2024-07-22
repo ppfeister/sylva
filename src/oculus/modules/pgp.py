@@ -62,6 +62,8 @@ class PGPModule:
         return raw_rows
     
     def accepts(self, query:str, query_type:QueryType=QueryType.TEXT) -> bool:
+        if query_type != QueryType.TEXT:
+            return False
         return True
         # TODO Adapt to properly support fingerprint queries against keyservers
         if (
@@ -71,7 +73,7 @@ class PGPModule:
         ):
             return False
 
-    def search(self, query:str, in_recursion:bool=False) -> pd.DataFrame:
+    def search(self, query:str, in_recursion:bool=False, query_type:QueryType=QueryType.TEXT) -> pd.DataFrame:
         if not self.accepts(query):
             raise IncompatibleQueryType(f'Query type not supported by {self.source_name}')
 

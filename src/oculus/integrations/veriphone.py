@@ -21,13 +21,17 @@ class Veriphone:
         self.collector:Collector = collector
     # TODO add validation for username, email, password
     def accepts(self, query:str, query_type:QueryType=QueryType.TEXT) -> bool:
+        if query_type != QueryType.PHONE and query_type != QueryType.TEXT:
+            return False
+
         try:
             return phonenumbers.is_valid_number(phonenumbers.parse(query, self.__country))
         except phonenumbers.phonenumberutil.NumberParseException:
             return False
-    def search(self, query:str, in_recursion:bool=False) -> pd.DataFrame:
-        if in_recursion and not config['Target Options']['veriphone-spider-in']:
-            return pd.DataFrame()
+    def search(self, query:str, in_recursion:bool=False, query_type:QueryType=QueryType.TEXT) -> pd.DataFrame:
+        # TODO Should this integreation have a toggle for spidering?
+        #if in_recursion and not config['Target Options']['veriphone-spider-in']:
+        #    return pd.DataFrame()
 
         if not self.accepts(query):
             raise IncompatibleQueryType(f'Query unable to be parsed as phone number')
@@ -47,7 +51,7 @@ class Veriphone:
                 'region': json_data.get('phone_region', None),
                 'query': e164_query,
                 'source_name': self.source_name,
-                'spider_recommended': False,
+                'spider_recommended': True,
             }
         ]
         self.collector.insert(pd.DataFrame(raw_rows))

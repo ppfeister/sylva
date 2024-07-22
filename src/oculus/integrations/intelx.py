@@ -7,7 +7,7 @@ import requests
 
 from ..__init__ import __user_agent__
 from ..config import config
-from ..helpers.helpers import APIKeyError, RequestError, IncompatibleQueryType
+from ..helpers.helpers import APIKeyError, QueryType, RequestError, IncompatibleQueryType
 from ..collector import Collector
 from .intelxapi import IntelX_API
 
@@ -26,7 +26,7 @@ class IntelX:
         self.source_obtain_keys_url:str = 'https://intelx.io/account?tab=developer'
         self.source_name:str = 'IntelX'
         self.collector:Collector = collector
-    def search(self, query:str, limit:int=2, buckets=["leaks.public", "leaks.private", "pastes", "darknet"], timeout:int=5, datefrom:str=None, dateto:str=None, sort:int=2, media:int=24, terminate=[], in_recursion:bool=False) -> pd.DataFrame:
+    def search(self, query:str, limit:int=2, buckets=["leaks.public", "leaks.private", "pastes", "darknet"], timeout:int=5, datefrom:str=None, dateto:str=None, sort:int=2, media:int=24, terminate=[], in_recursion:bool=False, query_type:QueryType=QueryType.TEXT) -> pd.DataFrame:
         if in_recursion and not config['Target Options']['intelx-spider-in']:
             return pd.DataFrame()
         

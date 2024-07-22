@@ -45,3 +45,10 @@ class Collector:
         if spiderable_only:
             df = df[df['spider_recommended'] == True]
         return df['full_name'].dropna().unique().tolist()
+    def get_unique_firstname_middlename_lastname_groups(self, spiderable_only:bool=False) -> set[tuple[str, str, str]]:
+        df = self.__data.get_data()
+        if spiderable_only:
+            df = df[df['spider_recommended'] == True]
+        filtered_df = df.dropna(subset=['first_name', 'last_name'])
+        filtered_data = set(zip(filtered_df['first_name'], filtered_df['middle_name'], filtered_df['last_name']))
+        return filtered_data

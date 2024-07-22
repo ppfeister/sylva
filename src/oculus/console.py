@@ -32,7 +32,6 @@ def spider_subcommand(args:argparse.Namespace):
     handler.spider_all(args.query, depth=args.spider_depth)
     print()
     print(handler.collector.get_data())
-    print(f'Unique usernames: {handler.collector.get_unique_usernames()}')
 
 
 def interactive_setup_subcommand(args:argparse.Namespace):

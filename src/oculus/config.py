@@ -82,7 +82,6 @@ def update_config():
         "proxynova-spider-out": check_option(section="Target Options", key="proxynova-spider-out", default="True"),
         "endato-limit-queries": check_option(section="Target Options", key="endato-limit-queries", default="True"),
         "endato-spider-in": check_option(section="Target Options", key="endato-spider-in", default="True"),
-        "endato-spider-out": check_option(section="Target Options", key="endato-spider-out", default="True"),
     }
     with open(__config_path, "w") as configfile:
         config.write(configfile)
