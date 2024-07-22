@@ -5,7 +5,7 @@ import pandas as pd
 import requests
 import phonenumbers
 
-from ..helpers.helpers import IncompatibleQueryType, QueryType, RequestError
+from ..helpers.generic import IncompatibleQueryType, QueryType, RequestError
 from ..collector import Collector
 from ..config import config
 

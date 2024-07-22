@@ -7,7 +7,7 @@ import phonenumbers
 from .collector import Collector
 from .config import config
 from .easy_logger import LogLevel, loglevel, NoColor, overwrite_previous_line
-from .helpers.helpers import (
+from .helpers.generic import (
     IncompatibleQueryType,
     QueryType,
     RequestError,

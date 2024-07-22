@@ -9,7 +9,7 @@ from sherlock_project.notify import QueryNotify
 from sherlock_project.result import QueryStatus
 
 from .. import __url_normalization_pattern__
-from ..helpers.helpers import QueryType, RequestError
+from ..helpers.generic import QueryType, RequestError
 from ..helpers import pattern_match
 from ..collector import Collector
 from ..config import config

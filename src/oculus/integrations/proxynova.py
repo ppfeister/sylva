@@ -3,7 +3,7 @@ import pandas as pd
 import requests
 
 from ..config import config
-from ..helpers.helpers import IncompatibleQueryType, QueryType, RequestError
+from ..helpers.generic import IncompatibleQueryType, QueryType, RequestError
 from ..collector import Collector
 
 

@@ -12,7 +12,7 @@ import tldextract
 from .. import __url_normalization_pattern__
 from ..config import config
 from ..easy_logger import LogLevel, loglevel, NoColor
-from ..helpers.helpers import RequestError
+from .generic import RequestError
 
 
 if config['General']['colorful'] == 'False': # no better way since distutils deprecation?

@@ -7,7 +7,7 @@ import phonenumbers
 import requests
 
 from ..config import config
-from ..helpers.helpers import QueryType, RequestError, IncompatibleQueryType, APIKeyError
+from ..helpers.generic import QueryType, RequestError, IncompatibleQueryType, APIKeyError
 
 
 class Endato:

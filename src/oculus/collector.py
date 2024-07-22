@@ -1,7 +1,7 @@
 from typing import List
 import pandas as pd
 
-from .helpers.helpers import ResultDataFrame
+from .helpers.generic import ResultDataFrame
 
 class Collector:
     def __init__(self):
