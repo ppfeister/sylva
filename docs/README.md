@@ -12,7 +12,7 @@ Oculus is undergoing rapid development. Documentation may be quickly obseleted a
 | ~~IntelX~~ | ~~Data leak source~~ | ~~Req [ T \| $ ]~~ |
 | ProxyNova | COMB API (cleartext passwords, usernames) | Native |
 | Veriphone | Phone number data source | Req [ F+ ] |
-| GitHub | User data source (no permissions) | Req [ F ] |
+| GitHub | User data source (no permissions needed) | Req [ F ] |
 
 $ : paid | T : trial | F : Free | F+ : Freemium
 
@@ -45,4 +45,11 @@ Contact for information about planned packaging.
 
 Once ready for production, Oculus will adopt properly tagged releases for consistent downstream packaging.
 
+## Contributing
+
+Contributors should refer to our [contributing guidelines][contributing] for information on how to contribute to the project. Note that since the project is still in its infancy, there isn't yet a formal roadmap.
+
+Contributors opening a pull request are assumed to have read and agreed.
+
+[contributing]: CONTRIBUTING.md
 [sherlock]: https://github.com/sherlock-project/sherlock
