@@ -12,7 +12,7 @@ Oculus is undergoing rapid development. Documentation may be quickly obseleted a
 | ~~IntelX~~ | ~~Data leak source~~ | ~~Req [ T \| $ ]~~ |
 | ProxyNova | COMB API (cleartext passwords, usernames) | Native |
 | Veriphone | Phone number lookup | Req [ F+ ] |
-| GitHub | See detail below | Req [ F ] |
+| GitHub | See detail below | Opt [ F ] |
 
 $ : paid | T : trial | F : Free | F+ : Freemium
 
@@ -20,7 +20,9 @@ Most development was done without any paid access -- so despite some integration
 
 #### GitHub Integration
 
-The GitHub integration queries GitHub for any known PGP keys, and scrapes the oldest and most recent 1000 authored commits (up to 2000 commits total) for any leaked identifying information.
+Query GitHub for any known PGP keys, and scrape both the oldest and most recently authored commits (up to 2000 commits total) for any leaked identifying information.
+
+Personal Access Token (PAT) authentication is required for PGP scraping, but is __not__ required for commit scraping. If a PAT is provided, commit scraping will have a higher rate limit. PAT does not require any permissions whatsoever.
 
 ### Built-in modules
 

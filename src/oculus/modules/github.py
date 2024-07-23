@@ -29,9 +29,11 @@ class GitHub:
         self.__api_endpoint:str = 'https://api.github.com/search/commits?sort=author-date&order={ORDER}&per_page={PAGE_LEN}&q=author:{USERNAME}&page=<PAGE>'
         self.__generic_headers:Dict[str, str] = {
             'Accept': 'application/vnd.github+json',
-            'Authorization': f'Bearer {api_key}',
             'X-GitHub-Api-Version': '2022-11-28',
         }
+
+        if api_key != '':
+            self.__generic_headers['Authorization'] = f'Bearer {api_key}'
 
     
     async def __get_page(self, session:aiohttp.ClientSession, url:str, headers:Dict[str, str]):
