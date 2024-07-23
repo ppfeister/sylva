@@ -41,7 +41,9 @@ class GitHub:
             if response.status == 200:
                 return await response.json()
             else:
-                print(f'Failed to get results from GitHub. Status code: {response.status}')
+                if response.status == 422: # username not found
+                    return None
+                # TODO status code specific handling? is that needed?
                 return None
             
     async def __get_pages(self, url:str):
