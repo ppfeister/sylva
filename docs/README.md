@@ -20,9 +20,9 @@ Most development was done without any paid access -- so despite some integration
 
 #### GitHub Integration
 
-Query GitHub for any known PGP keys, and scrape both the oldest and most recently authored commits (up to 2000 commits total) for any leaked identifying information.
+Query GitHub for any known PGP keys, scrape both the oldest and newest 1000 commit authorships (2000 total) for leaked identifying information, and search for identities based on full name, email, or username.
 
-Personal Access Token (PAT) authentication is required for PGP scraping, but is __not__ required for commit scraping. If a PAT is provided, commit scraping will have a higher rate limit. PAT does not require any permissions whatsoever.
+Personal Access Token (PAT) is requried for PGP scraping, but all other functions work out of the box. PAT is _recommended_ for higher rate limits on other functions. PAT does not require any permissions assigned to it whatsoever.
 
 ### Built-in modules
 
