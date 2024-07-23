@@ -11,12 +11,16 @@ Oculus is undergoing rapid development. Documentation may be quickly obseleted a
 | Endato | Person data source (phone, address, cell, etc) | Req [ T \| $ ] |
 | ~~IntelX~~ | ~~Data leak source~~ | ~~Req [ T \| $ ]~~ |
 | ProxyNova | COMB API (cleartext passwords, usernames) | Native |
-| Veriphone | Phone number data source | Req [ F+ ] |
-| GitHub | User data source (no permissions needed) | Req [ F ] |
+| Veriphone | Phone number lookup | Req [ F+ ] |
+| GitHub | See detail below | Req [ F ] |
 
 $ : paid | T : trial | F : Free | F+ : Freemium
 
 Most development was done without any paid access -- so despite some integrations requiring an account, the full experience can be attained by all without a subscription.
+
+#### GitHub Integration
+
+The GitHub integration queries GitHub for any known PGP keys, and scrapes the oldest and most recent 1000 authored commits (up to 2000 commits total) for any leaked identifying information.
 
 ### Built-in modules
 

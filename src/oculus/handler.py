@@ -15,13 +15,14 @@ from .helpers.generic import (
 )
 from .integrations import (
     endato,
-    proxynova,
+    #proxynova, FIXME problems on certain queries that have multiple results
     #intelx,
     veriphone,
 )
 from .modules import (
     pgp as pgp_module,
     sherlock,
+    github,
 )
 
 
@@ -38,12 +39,13 @@ class Handler:
         self.collector:Collector = Collector()
         self.__default_country:str = 'US'
         self.runners:List = [
-            proxynova.ProxyNova(collector=self.collector),
+            #proxynova.ProxyNova(collector=self.collector),
             endato.Endato(collector=self.collector, api_name=config['Keys']['endato-name'], api_key=config['Keys']['endato-key'], country=self.__default_country),
             #intelx.IntelX(collector=self.collector, api_key=config['Keys']['intelx-key']),
             pgp_module.PGPModule(collector=self.collector),
             veriphone.Veriphone(collector=self.collector, api_key=config['Keys']['veriphone-key'], country=self.__default_country),
             sherlock.Sherlock(collector=self.collector),
+            github.GitHub(collector=self.collector, api_key=config['Keys']['github-key']),
         ]
         self.__in_recursion = False
     def search_all(self, query:str|QueryDataItem, no_deduplicate:bool=False):
