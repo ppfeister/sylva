@@ -1,5 +1,6 @@
 import asyncio
 import re
+import time
 from typing import Dict, List, NamedTuple
 
 import aiohttp
@@ -51,6 +52,8 @@ class GitHub:
                 return None
             
     async def __get_pages(self, url:str):
+        # TODO Check for number of actually populated pages if account < maximum_query_depth values
+        # Without this check, rate limit may be exceeded more quickly
         async with aiohttp.ClientSession() as session:
             tasks = []
 
@@ -177,7 +180,24 @@ class GitHub:
                 # TODO Should we process organizational accounts?
                 continue
             profile_data_url = item['url']
-            profile_data = requests.get(profile_data_url).json()
+
+            for attempt in range(3):
+                profile_data = requests.get(profile_data_url)
+                if profile_data.status_code == 200:
+                    break
+                if (
+                    profile_data.status_code == 429
+                    or (
+                        profile_data.status_code == 403
+                        and profile_data.json()['message'].startswith('API rate limit exceeded')
+                    )
+                ):
+                    # TODO Header X-RateLimit-Reset may be worth investigating (epoch time)
+                    time.sleep(5)
+            else:
+                continue
+
+            profile_data = profile_data.json()
             email_found = profile_data['email'] if email is None else email
             new_data.add(IdentItem(
                 full_name = profile_data['name'],
@@ -211,7 +231,8 @@ class GitHub:
             if query_type == QueryType.FIRSTNAME_LASTNAME:
                 query = query.join(' ')
             results_by_fullname: pd.DataFrame = self.search_accounts_by_keyword(full_name=query)
-            all_new_data = pd.concat([all_new_data, results_by_fullname], ignore_index=True)
+            if len(results_by_fullname.index) < 2: # Generic "full name" searches can be noisy
+                all_new_data = pd.concat([all_new_data, results_by_fullname], ignore_index=True)
 
         self.collector.insert(all_new_data)
 

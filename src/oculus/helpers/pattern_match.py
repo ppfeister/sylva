@@ -44,7 +44,8 @@ class PatternMatch:
             {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?stackoverflow\\.com\\/users\\/[0-9]+?\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'StackOverflow'},
             {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?crowdin\\.com\\/profile\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'Crowdin'},
         ]
-        self._known_redirects_by_query_string:List[Dict] = [
+        self._known_redirects_by_query_string:List[str] = [
+            r'https?:\/\/(?:www\.)youtube\.com\/redirect\?.+?q=(?P<url>https?%3A%2F%2F.+)' # YouTube has problems.. FIXME?
         ]
     def search(self, url:str, body:str=None, query:str=None, preexisting:pd.DataFrame=None, recursion_depth: int=0) -> pd.DataFrame:
         """Searches for patterns in the given URL and body.
@@ -217,13 +218,10 @@ class PatternMatch:
                     new_data.append(_search_desirables(url=a['href']))
             
         for known_redirect_pattern in self._known_redirects_by_query_string:
-            for a in soup.find_all('a', href=re.compile(known_redirect_pattern['pattern'])):
-                matched_groups = re.search(known_redirect_pattern['pattern'], a['href'])
+            for a in soup.find_all('a', href=re.compile(known_redirect_pattern)):
+                matched_groups = re.search(known_redirect_pattern, a['href'])
                 if 'url' in matched_groups.groupdict():
-                    new_data.append(_search_desirables(url=matched_groups.group('url')))
-            for a in soup.find_all('a', url=re.compile(known_redirect_pattern['pattern'])):
-                matched_groups = re.search(known_redirect_pattern['pattern'], a['href'])
-                if 'url' in matched_groups.groupdict():
+                    print(f'Found redirect {matched_groups.group("url")}\n\n')
                     new_data.append(_search_desirables(url=matched_groups.group('url')))
 
         return pd.DataFrame(new_data)
