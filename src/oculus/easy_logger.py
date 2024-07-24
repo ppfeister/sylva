@@ -26,6 +26,10 @@ _LINE_CLEAR = '\x1b[2L'
 loglevel = int(config['General']['log_level'])
 
 def overwrite_previous_line():
+    # Line up then clear only yields a not so pretty result while waiting for the next output
+    # Therefore, line up, erase with new line, then line up again for next output
+    print(_LINE_UP, end=_LINE_CLEAR)
+    print()
     print(_LINE_UP, end=_LINE_CLEAR)
 
 def info(message:str):
