@@ -44,6 +44,8 @@ class PatternMatch:
             {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?stackoverflow\\.com\\/users\\/[0-9]+?\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'StackOverflow'},
             {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?crowdin\\.com\\/profile\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'Crowdin'},
         ]
+        self._known_redirects_by_query_string:List[Dict] = [
+        ]
     def search(self, url:str, body:str=None, query:str=None, preexisting:pd.DataFrame=None) -> pd.DataFrame:
         """Searches for patterns in the given URL and body.
 
@@ -84,6 +86,39 @@ class PatternMatch:
                 print(f'MATHCING: Already discovered {url}')
                 return True
             return False
+        
+
+        def _search_desirables(url:str) -> Dict[str, str]:
+            # Normalize the URL by removing www, tailing slash, and query string
+            target_url = re.sub(__url_normalization_pattern__, '', a['href'])
+
+            if 'validation_string' in desired_target or 'validation_pattern' in desired_target:
+                target_body = requests.get(target_url).text
+
+            if 'validation_string' in desired_target:
+                if desired_target['validation_string'] not in target_body:
+                    return {}
+            if 'validation_pattern' in desired_target:
+                if not re.match(desired_target['validation_pattern'], target_body):
+                    return {}
+
+            found_desirable: Dict[str, str] = {
+                'platform_name': desired_target['platform_name'],
+                'platform_url': target_url,
+                'source_name': "Discovered",
+            }
+
+            captured_groups = re.search(desired_target['pattern'], target_url)
+            if 'uid' in captured_groups.groupdict():
+                # Skip if username is too similar to the domain is was discovered on
+                # TODO Matching can likely be improved with some secondary library
+                similarity = SequenceMatcher(None, split_url.domain, captured_groups.group('uid')).ratio()
+                if similarity >= 0.75:
+                    return {}
+
+                found_desirable['username'] = captured_groups.group('uid')
+            
+            return found_desirable
 
 
         if _already_discovered(url):
@@ -101,7 +136,14 @@ class PatternMatch:
                 url = self.pattern_data[root_domain]['custom_url'].format(QUERY=query)
             else:
                 url = url.format(query)
-            response = requests.get(url)
+
+            headers: Dict[str, str] = {}
+            if 'headers' in self.pattern_data[root_domain]:
+                for header, value in self.pattern_data[root_domain]['headers'].items():
+                    # Must iterate so as to not overwrite possibly pre-existing headers
+                    headers[header] = value
+
+            response = requests.get(url=url, headers=headers)
             if response.status_code != 200:
                 return pd.DataFrame()
             body = response.text
@@ -156,39 +198,29 @@ class PatternMatch:
             for pattern in self.pattern_data[root_domain]['patterns']:
                 _search_patterns(pattern)
         
+        soup = BeautifulSoup(body, 'html.parser')
+
+        testing = soup.find_all('a', class_='yt-core-attributed-string__link')
+        if split_url.domain == 'youtube':
+            print(testing)
+            print()
+            print(soup.attrs)
+            print()
+            print(soup.prettify())
+
         for desired_target in self._generic_desirables:
-            soup = BeautifulSoup(body, 'html.parser')
             for a in soup.find_all('a', href=re.compile(desired_target['pattern'])):
-
-                # Normalize the URL by removing www, tailing slash, and query string
-                target_url = re.sub(__url_normalization_pattern__, '', a['href'])
-
-                target_body = requests.get(target_url).text
-                if 'validation_string' in desired_target:
-                    if desired_target['validation_string'] not in target_body:
-                        continue
-                if 'validation_pattern' in desired_target:
-                    if not re.match(desired_target['validation_pattern'], target_body):
-                        continue
-
-                found_desirable: Dict[str, str] = {
-                    'platform_name': desired_target['platform_name'],
-                    'platform_url': target_url,
-                    'source_name': "Discovered",
-                }
-
-                captured_groups = re.search(desired_target['pattern'], target_url)
-                if 'uid' in captured_groups.groupdict():
-                    # Skip if username is too similar to the domain is was discovered on
-                    # TODO Matching can likely be improved with some secondary library
-                    similarity = SequenceMatcher(None, split_url.domain, captured_groups.group('uid')).ratio()
-                    if similarity >= 0.75:
-                        continue
-
-                    found_desirable['username'] = captured_groups.group('uid')
-                
-                new_data.append(found_desirable)
-
+                new_data.append(_search_desirables(url=a['href']))
+            
+        for known_redirect_pattern in self._known_redirects_by_query_string:
+            for a in soup.find_all('a', href=re.compile(known_redirect_pattern['pattern'])):
+                matched_groups = re.search(known_redirect_pattern['pattern'], a['href'])
+                if 'url' in matched_groups.groupdict():
+                    new_data.append(_search_desirables(url=matched_groups.group('url')))
+            for a in soup.find_all('a', url=re.compile(known_redirect_pattern['pattern'])):
+                matched_groups = re.search(known_redirect_pattern['pattern'], a['href'])
+                if 'url' in matched_groups.groupdict():
+                    new_data.append(_search_desirables(url=matched_groups.group('url')))
 
         new_df = pd.DataFrame(new_data)
 
