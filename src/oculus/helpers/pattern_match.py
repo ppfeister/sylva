@@ -27,7 +27,7 @@ class PatternMatch:
             {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?dribbble\\.com\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'Dribbble'},
             {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?flickr\\.com\\/people\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'Flickr'},
             {'pattern': '^(?P<url>https?:\\/\\/(?P<uid>.+?)\\.tumblr\\.com\\/?)$', 'platform_name': 'Tumblr'},
-            {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?youtube\\.com\\/channel\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'YouTube'},
+            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?youtube\.com\/channel\/(?:@(?P<uid>[^\s]+?)|.+?))(?:\/.*)?$', 'platform_name': 'YouTube', 'scrape_to_resolve': True},
             {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?vimeo\\.com\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'Vimeo'},
             {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?soundcloud\\.com\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'SoundCloud'},
             {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?linkedin\\.com\\/in\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'LinkedIn'},
@@ -46,7 +46,7 @@ class PatternMatch:
         ]
         self._known_redirects_by_query_string:List[Dict] = [
         ]
-    def search(self, url:str, body:str=None, query:str=None, preexisting:pd.DataFrame=None) -> pd.DataFrame:
+    def search(self, url:str, body:str=None, query:str=None, preexisting:pd.DataFrame=None, recursion_depth: int=0) -> pd.DataFrame:
         """Searches for patterns in the given URL and body.
 
         Keyword Arguments:
@@ -54,6 +54,7 @@ class PatternMatch:
             body {str} -- The body of the URL to search for patterns in (default: {None})
             query {str} -- The query to search for (default: {None})
             preexisting {pd.DataFrame} -- Optional dataframe containing alreayd scraped items to avoid duplicate results (read only) (default: {None})
+            recursion_depth {int} -- The new recursion depth (default: {0}) - Rarely used, normally to avoid infinite recursion
         Returns:
             pd.DataFrame -- A DataFrame containing the results of the search
         """
@@ -93,7 +94,10 @@ class PatternMatch:
             target_url = re.sub(__url_normalization_pattern__, '', a['href'])
 
             if 'validation_string' in desired_target or 'validation_pattern' in desired_target:
-                target_body = requests.get(target_url).text
+                target_response = requests.get(target_url)
+                if target_response.status_code != 200:
+                    return {}
+                target_body = target_response.text
 
             if 'validation_string' in desired_target:
                 if desired_target['validation_string'] not in target_body:
@@ -109,7 +113,7 @@ class PatternMatch:
             }
 
             captured_groups = re.search(desired_target['pattern'], target_url)
-            if 'uid' in captured_groups.groupdict():
+            if 'uid' in captured_groups.groupdict() and captured_groups.group('uid') is not None:
                 # Skip if username is too similar to the domain is was discovered on
                 # TODO Matching can likely be improved with some secondary library
                 similarity = SequenceMatcher(None, split_url.domain, captured_groups.group('uid')).ratio()
@@ -202,7 +206,15 @@ class PatternMatch:
 
         for desired_target in self._generic_desirables:
             for a in soup.find_all('a', href=re.compile(desired_target['pattern'])):
-                new_data.append(_search_desirables(url=a['href']))
+                if (
+                    'scrape_to_resolve' in desired_target
+                    and desired_target['scrape_to_resolve']
+                    and not recursion_depth
+                ):
+                    scraped_data:List[Dict] = self.search(url=a['href'], query='filler data to pass checks', recursion_depth=recursion_depth+1).to_dict(orient='records')
+                    new_data.extend(scraped_data)
+                else:
+                    new_data.append(_search_desirables(url=a['href']))
             
         for known_redirect_pattern in self._known_redirects_by_query_string:
             for a in soup.find_all('a', href=re.compile(known_redirect_pattern['pattern'])):
