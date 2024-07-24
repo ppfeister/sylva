@@ -15,6 +15,7 @@ class IdentItem(NamedTuple):
     email: str
     source_name: str
     query: str
+    username: str
     spider_recommended: bool
     platform_name: str
     platform_url: str
@@ -123,7 +124,8 @@ class GitHub:
                 data.add(IdentItem(
                     full_name = item['commit']['author']['name'],
                     email = item['commit']['author']['email'],
-                    source_name = self.source_name,
+                    source_name = 'GitHub Commits',
+                    username = username,
                     query = username,
                     spider_recommended = True,
                     platform_name = 'GitHub',
@@ -179,6 +181,7 @@ class GitHub:
             email_found = profile_data['email'] if email is None else email
             new_data.add(IdentItem(
                 full_name = profile_data['name'],
+                username = profile_data['login'],
                 email = email_found,
                 source_name = self.source_name,
                 query = query,

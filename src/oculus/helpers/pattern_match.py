@@ -1,22 +1,18 @@
+import calendar
+from difflib import SequenceMatcher
 import json
 import pathlib
 import re
 from typing import Dict, List
 
 from bs4 import BeautifulSoup
-from colorama import Fore, Back, Style
 import pandas as pd
 import requests
 import tldextract
 
 from .. import __url_normalization_pattern__
-from ..config import config
-from ..easy_logger import LogLevel, loglevel, NoColor
 from .generic import RequestError
 
-
-if config['General']['colorful'] == 'False': # no better way since distutils deprecation?
-    Fore = Back = Style = NoColor
 
 class PatternMatch:
     def __init__(self):
@@ -27,6 +23,13 @@ class PatternMatch:
             self.pattern_data = json.load(f)
         self.pattern_data = self.pattern_data['patterns']
         self._generic_desirables:List[Dict] = [
+            {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?behance\\.net\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'Behance'},
+            {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?dribbble\\.com\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'Dribbble'},
+            {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?flickr\\.com\\/people\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'Flickr'},
+            {'pattern': '^(?P<url>https?:\\/\\/(?P<uid>.+?)\\.tumblr\\.com\\/?)$', 'platform_name': 'Tumblr'},
+            {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?youtube\\.com\\/channel\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'YouTube'},
+            {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?vimeo\\.com\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'Vimeo'},
+            {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?soundcloud\\.com\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'SoundCloud'},
             {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?linkedin\\.com\\/in\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'LinkedIn'},
             {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?github\\.com\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'GitHub', 'validation_string': 'itemprop="additionalName"'},
             {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?(?:twitter|x)\\.com\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'Twitter'},
@@ -37,7 +40,7 @@ class PatternMatch:
             {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?snapchat\\.com\\/add\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'Snapchat'},
             {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?telegram\\.me\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'Telegram'},
             {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?gitlab\\.com\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'GitLab'},
-            {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?pinterest\\.com\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'Pintrest'},
+            {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?pinterest\\.(?:com|fr)\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'Pintrest'},
             {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?stackoverflow\\.com\\/users\\/[0-9]+?\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'StackOverflow'},
             {'pattern': '^(?P<url>https?:\\/\\/(?:www\\.)?crowdin\\.com\\/profile\\/(?P<uid>[^\\/\\s]+\\/?))$', 'platform_name': 'Crowdin'},
         ]
@@ -130,6 +133,21 @@ class PatternMatch:
                         self_scrape_data['raw_address'] = captures.group('rawaddress')
                     if 'comment' in captures.groupdict():
                         self_scrape_data['comment'] = captures.group('comment')
+                    if 'country' in captures.groupdict():
+                        self_scrape_data['country'] = captures.group('country')
+                    if 'birth_day' in captures.groupdict():
+                        self_scrape_data['birth_day'] = captures.group('birth_day')
+                    if 'birth_month' in captures.groupdict():
+                        birth_month = captures.group('birth_month')
+                        if birth_month in calendar.month_name:
+                            self_scrape_data['birth_month'] = str(list(calendar.month_name).index(birth_month))
+                        elif birth_month in calendar.month_abbr:
+                            self_scrape_data['birth_month'] = str(list(calendar.month_abbr).index(birth_month))
+                        elif birth_month.isdigit():
+                            if int(birth_month) in range(1, 13):
+                                self_scrape_data['birth_month'] = birth_month
+                    if 'birth_year' in captures.groupdict():
+                        self_scrape_data['birth_year'] = captures.group('birth_year')
                     self_scrape_data['source_name'] = "Scraped"
             if self_scrape_data:
                 new_data.append(self_scrape_data)
@@ -142,7 +160,7 @@ class PatternMatch:
             soup = BeautifulSoup(body, 'html.parser')
             for a in soup.find_all('a', href=re.compile(desired_target['pattern'])):
 
-                # Normalize the URL by removing 
+                # Normalize the URL by removing www, tailing slash, and query string
                 target_url = re.sub(__url_normalization_pattern__, '', a['href'])
 
                 target_body = requests.get(target_url).text
@@ -152,7 +170,24 @@ class PatternMatch:
                 if 'validation_pattern' in desired_target:
                     if not re.match(desired_target['validation_pattern'], target_body):
                         continue
-                pass
+
+                found_desirable: Dict[str, str] = {
+                    'platform_name': desired_target['platform_name'],
+                    'platform_url': target_url,
+                    'source_name': "Discovered",
+                }
+
+                captured_groups = re.search(desired_target['pattern'], target_url)
+                if 'uid' in captured_groups.groupdict():
+                    # Skip if username is too similar to the domain is was discovered on
+                    # TODO Matching can likely be improved with some secondary library
+                    similarity = SequenceMatcher(None, split_url.domain, captured_groups.group('uid')).ratio()
+                    if similarity >= 0.75:
+                        continue
+
+                    found_desirable['username'] = captured_groups.group('uid')
+                
+                new_data.append(found_desirable)
 
 
         new_df = pd.DataFrame(new_data)

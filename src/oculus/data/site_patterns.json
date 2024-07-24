@@ -305,6 +305,38 @@
             "friendly_name": "Crowdin",
             "self": [
                 "<title>(?P<fullname>.+?) \\((?P<uid>.+?)\\) . Crowdin<\\/title>"
+            ],
+            "patterns": [
+                {
+                    "pattern": "a href=\\\"(?P<url>https?:\\/\\/(?:www\\.)?.+?)\\\" target=\"_blank\\\" rel=\\\"noopener me \\\" class=\\\"profile-header__meta__item",
+                    "validation_type": "generic"
+                }
+            ]
+        },
+        "dev.com": {
+            "wildcard_subdomain": true,
+            "friendly_name": "DEV Community",
+            "self": [
+                "<title>(?P<fullname>.+?) - DEV Community<",
+                "<meta name=\\\"description\\\" content=\\\"(?P<comment>.+?)\\\">\n"
+            ]
+        },
+        "deviantart.com": {
+            "wildcard_subdomain": true,
+            "friendly_name": "DeviantArt",
+            "self": [
+                "\\\\\"tagline\\\\\":\\\\\"(?P<comment>.+?)\\\\\"",
+                "\\\\\"widgets\\.aboutMe\\.country\\.pl\\\\\":\\\\\"(?P<country>.+?)\\\\\"",
+                "<link rel=\"canonical\" href=\"https:\\/\\/www\\.deviantart\\.com\\/(?P<uid>.+?)\"\\/>",
+                "<span class=\"_2cHeo\">(?P<birth_month>\\w{3}) (?P<birth_day>\\d{1,2})<\\/span>"
+            ]
+        },
+        "discogs.com": {
+            "wildcard_subdomain": true,
+            "friendly_name": "Discogs",
+            "self": [
+                "<span class=\"real_name\" title=\"(?P<fullname>.+?)\">",
+                "no_style profile_bio\">\n *<li>(?<rawaddress>.+?)<\\/li>\n"
             ]
         },
         "github.com": {
