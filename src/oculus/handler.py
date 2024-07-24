@@ -48,12 +48,14 @@ class Handler:
             github.GitHub(collector=self.collector, api_key=config['Keys']['github-key']),
         ]
         self.__in_recursion = False
-    def search_all(self, query:str|QueryDataItem, no_deduplicate:bool=False):
+    def search_all(self, query:str|QueryDataItem, no_deduplicate:bool=False) -> int:
         if isinstance(query, QueryDataItem):
             query_type:QueryType = query.type
             query:str = query.query
         else:
             query_type = QueryType.TEXT
+
+        total_discovered: int = 0
 
         for runner in self.runners:
             if not runner.accepts(query=query, query_type=query_type):
@@ -76,6 +78,7 @@ class Handler:
                     overwrite_previous_line()
                 else:
                     print("Something weird happened.")
+                total_discovered += results
             except RequestError:
                 pass
             except APIKeyError as e:
@@ -85,6 +88,8 @@ class Handler:
         
         if not no_deduplicate:
             self.collector.deduplicate()
+
+        return total_discovered
 
     def spider_all(self, query: str, depth: int = 1, no_deduplicate: bool = False):
         # TODO Any way to pretty this up? Avoid re-running queries against all on raw input
@@ -120,7 +125,8 @@ class Handler:
             for new_query in new_queries:
                 if loglevel >= LogLevel.SUCCESS_ONLY.value:
                     print(f'{Fore.BLUE}{Style.BRIGHT}[{Fore.RESET}Depth {i+1}{Fore.BLUE}{Style.BRIGHT}]{Fore.RESET}{Style.RESET_ALL} {new_query.query}')
-                self.search_all(query=new_query)
+                if not self.search_all(query=new_query):
+                    overwrite_previous_line()
 
             if not no_deduplicate:
                 self.collector.deduplicate()
