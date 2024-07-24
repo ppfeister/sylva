@@ -200,14 +200,6 @@ class PatternMatch:
         
         soup = BeautifulSoup(body, 'html.parser')
 
-        testing = soup.find_all('a', class_='yt-core-attributed-string__link')
-        if split_url.domain == 'youtube':
-            print(testing)
-            print()
-            print(soup.attrs)
-            print()
-            print(soup.prettify())
-
         for desired_target in self._generic_desirables:
             for a in soup.find_all('a', href=re.compile(desired_target['pattern'])):
                 new_data.append(_search_desirables(url=a['href']))
@@ -222,6 +214,4 @@ class PatternMatch:
                 if 'url' in matched_groups.groupdict():
                     new_data.append(_search_desirables(url=matched_groups.group('url')))
 
-        new_df = pd.DataFrame(new_data)
-
-        return pd.DataFrame(new_df)
+        return pd.DataFrame(new_data)
