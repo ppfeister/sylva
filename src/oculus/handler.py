@@ -18,6 +18,7 @@ from .integrations import (
     #proxynova, FIXME problems on certain queries that have multiple results
     #intelx,
     veriphone,
+    hibp,
 )
 from .modules import (
     pgp as pgp_module,
@@ -46,6 +47,7 @@ class Handler:
             veriphone.Veriphone(collector=self.collector, api_key=config['Keys']['veriphone-key'], country=self.__default_country),
             sherlock.Sherlock(collector=self.collector),
             github.GitHub(collector=self.collector, api_key=config['Keys']['github-key']),
+            hibp.HIBP(collector=self.collector, api_key=config['Keys']['hibp-key'], country=self.__default_country),
         ]
         self.__in_recursion = False
     def search_all(self, query:str|QueryDataItem, no_deduplicate:bool=False) -> int:
