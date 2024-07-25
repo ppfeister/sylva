@@ -2,7 +2,7 @@ import argparse
 import sys
 
 from . import __short_name__, __long_name__, __version__, __author__, __forge_url__
-from .config import config, InteractiveConfig
+from .config import InteractiveConfig
 from .handler import Handler
 
 def config_subcommand(args:argparse.Namespace):

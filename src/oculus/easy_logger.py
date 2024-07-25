@@ -1,8 +1,7 @@
 from enum import Enum
 
-from colorama import Fore, Back, Style
+from colorama import Fore, Style
 
-from . import __short_name__, __long_name__, __version__
 from .config import config
 
 class LogLevel(Enum):

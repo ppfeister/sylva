@@ -12,7 +12,6 @@ from .. import __url_normalization_pattern__
 from ..helpers.generic import QueryType, RequestError
 from ..helpers import pattern_match
 from ..collector import Collector
-from ..config import config
 
 class Sherlock:
     def __init__(self, collector:Collector):

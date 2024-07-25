@@ -7,7 +7,6 @@ import phonenumbers
 
 from ..helpers.generic import IncompatibleQueryType, QueryType, RequestError
 from ..collector import Collector
-from ..config import config
 
 
 class Veriphone:
@@ -34,7 +33,7 @@ class Veriphone:
         #    return pd.DataFrame()
 
         if not self.accepts(query):
-            raise IncompatibleQueryType(f'Query unable to be parsed as phone number')
+            raise IncompatibleQueryType('Query unable to be parsed as phone number')
         
         e164_query = phonenumbers.format_number(phonenumbers.parse(query, self.__country), phonenumbers.PhoneNumberFormat.E164)
 

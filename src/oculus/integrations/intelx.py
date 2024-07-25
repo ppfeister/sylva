@@ -1,13 +1,10 @@
-import json
-import re
 from typing import Dict, List
 
 import pandas as pd
-import requests
 
 from ..__init__ import __user_agent__
 from ..config import config
-from ..helpers.generic import APIKeyError, QueryType, RequestError, IncompatibleQueryType
+from ..helpers.generic import APIKeyError, QueryType
 from ..collector import Collector
 from .intelxapi import IntelX_API
 

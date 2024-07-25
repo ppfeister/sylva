@@ -1,14 +1,12 @@
-from typing import List, NamedTuple, Tuple
+from typing import List, NamedTuple
 
 from colorama import Fore, Back, Style
-import pandas as pd
 import phonenumbers
 
 from .collector import Collector
 from .config import config
 from .easy_logger import LogLevel, loglevel, NoColor, overwrite_previous_line
 from .helpers.generic import (
-    IncompatibleQueryType,
     QueryType,
     RequestError,
     APIKeyError,
