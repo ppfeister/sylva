@@ -1,6 +1,6 @@
 [project]
 name = "Oculus"
-version = "0.1.0-alpha"
+dynamic = ["version"]
 description = "OSINT Simplified"
 authors = [
     {name = "Paul Pfeister", email = "code@pfeister.dev"},
@@ -31,6 +31,11 @@ build-backend = "pdm.backend"
 
 [tool.pdm]
 distribution = true
+
+[tool.pdm.version]
+source = "scm"
+write_to = "oculus/data/__scm_version__.py"
+write_template = "__version__ = '{}'"
 
 [tool.pdm.dev-dependencies]
 dev = [
