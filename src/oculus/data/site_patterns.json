@@ -354,6 +354,30 @@
                 }
             ]
         },
+        "ppy.sh": {
+            "wildcard_subdomain": false,
+            "friendly_name": "ppy.sh",
+            "subdomains": {
+                "osu": {
+                    "friendly_name": "osu!",
+                    "wildcard_subdomain": true,
+                    "self": [
+                        "&quot;country&quot.+?name&quot;:&quot;(?P<country>.+?)&quot;}",
+                        "&quot;username&quot;:&quot;(?P<uid>.+?)&quot;"
+                    ],
+                    "patterns": [
+                        {
+                            "sequence": {
+                                "1": "&quot;previous_usernames&quot;:\\[(?P<next>.+?)\\]",
+                                "2": "&quot;(?P<uid>.+?)&quot;"
+                            },
+                            "validation_type": "social",
+                            "platform_name": "osu!"
+                        }
+                    ]
+                }
+            }
+        },
         "tryhackme.com": {
             "wildcard_subdomain": true,
             "friendly_name": "TryHackMe",
