@@ -75,15 +75,21 @@ class Sherlock:
                     matched_patterns = pd.concat([matched_patterns, self.pattern_match.search(url=sites_data[site.name]['url'], body=body_placeholder, query=query, preexisting=self.collector.get_data())], ignore_index=True)
                 else:
                     matched_patterns = pd.concat([matched_patterns, self.pattern_match.search(url=sites_data[site.name]['url'], query=query, preexisting=self.collector.get_data())], ignore_index=True)
-                matched_patterns['query'] = query
-                matched_patterns['spider_recommended'] = True
 
-                if not matched_patterns.empty and new_item['platform_url'] not in matched_patterns['platform_url'].values:
+                if not matched_patterns.empty:
+                    matched_patterns['query'] = query
+                    matched_patterns['spider_recommended'] = True
+
+                if (
+                    matched_patterns.empty
+                    or new_item['platform_url'] not in matched_patterns['platform_url'].values
+                ):
                     exists.append(new_item)
 
-                
-
         new_data = pd.DataFrame(exists)
-        new_data = pd.concat([new_data, matched_patterns], ignore_index=True)
+
+        if not matched_patterns.empty:
+            new_data = pd.concat([new_data, matched_patterns], ignore_index=True)
+
         self.collector.insert(new_data)
         return new_data
