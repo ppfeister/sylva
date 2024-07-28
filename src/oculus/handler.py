@@ -6,6 +6,7 @@ import phonenumbers
 from .collector import Collector
 from .config import config
 from .easy_logger import LogLevel, loglevel, NoColor, overwrite_previous_line
+from .helpers.proxy import ProxySvc
 from .helpers.generic import (
     QueryType,
     RequestError,
@@ -36,6 +37,8 @@ class Handler:
     def __init__(self):
         self.collector:Collector = Collector()
         self.__default_country:str = 'US'
+        self.__in_recursion = False
+        self.__proxy_svc:ProxySvc = ProxySvc()
         self.runners:List = [
             #proxynova.ProxyNova(collector=self.collector),
             endato.Endato(collector=self.collector, api_name=config['Keys']['endato-name'], api_key=config['Keys']['endato-key'], country=self.__default_country),
@@ -45,7 +48,14 @@ class Handler:
             sherlock.Sherlock(collector=self.collector),
             github.GitHub(collector=self.collector, api_key=config['Keys']['github-key']),
         ]
-        self.__in_recursion = False
+
+        self.__proxy_svc.start()
+
+
+    def __del__(self):
+        self.__proxy_svc.stop()
+
+
     def search_all(self, query:str|QueryDataItem, no_deduplicate:bool=False) -> int:
         if isinstance(query, QueryDataItem):
             query_type:QueryType = query.type
