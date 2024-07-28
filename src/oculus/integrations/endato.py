@@ -92,7 +92,7 @@ class Endato:
         return new_data
 
 
-    def search(self, query:str, in_recursion:bool=False, query_type:QueryType=QueryType.TEXT) -> pd.DataFrame:
+    def search(self, query:str, in_recursion:bool=False, query_type:QueryType=QueryType.TEXT, proxy_url:str|None=None) -> pd.DataFrame:
         if in_recursion and not config['Target Options']['endato-spider-in']:
             return pd.DataFrame()
         

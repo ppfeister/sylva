@@ -22,6 +22,7 @@ from .modules import (
     pgp as pgp_module,
     sherlock,
     github,
+    voter,
 )
 
 
@@ -46,12 +47,13 @@ class Handler:
             veriphone.Veriphone(collector=self.collector, api_key=config['Keys']['veriphone-key'], country=self.__default_country),
             sherlock.Sherlock(collector=self.collector),
             github.GitHub(collector=self.collector, api_key=config['Keys']['github-key']),
+            voter.Voter(collector=self.collector),
         ]
 
         self.__proxy_svc:ProxySvc = ProxySvc()
-
         if config['General']['flaresolverr'] == 'True':
             self.__proxy_svc.start()
+        self.__proxy_url:str = f'http://{self.__proxy_svc.server_host}:{self.__proxy_svc.server_port}/'
 
 
     def __del__(self):
@@ -77,7 +79,9 @@ class Handler:
                 print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Searching {runner.source_name}...')
 
             try:
-                results = len(runner.search(query=query, in_recursion=self.__in_recursion, query_type=query_type).index)
+                # Each runner should return a DataFrame, but since that data is already
+                # added to the collector, all we care about is the number of new rows.
+                results = len(runner.search(query=query, in_recursion=self.__in_recursion, query_type=query_type, proxy_url=self.__proxy_url).index)
                 if loglevel >= LogLevel.SUCCESS_ONLY.value and results > 0:
                     overwrite_previous_line()
                     print(f'{Fore.LIGHTGREEN_EX}{Style.BRIGHT}[+]{Style.RESET_ALL}{Fore.RESET} Found {results} via {runner.source_name}')
@@ -140,3 +144,5 @@ class Handler:
 
             if not no_deduplicate:
                 self.collector.deduplicate()
+
+        self.__proxy_svc.stop()

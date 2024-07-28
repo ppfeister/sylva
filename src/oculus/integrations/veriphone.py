@@ -27,7 +27,7 @@ class Veriphone:
             return phonenumbers.is_valid_number(phonenumbers.parse(query, self.__country))
         except phonenumbers.phonenumberutil.NumberParseException:
             return False
-    def search(self, query:str, in_recursion:bool=False, query_type:QueryType=QueryType.TEXT) -> pd.DataFrame:
+    def search(self, query:str, in_recursion:bool=False, query_type:QueryType=QueryType.TEXT, proxy_url:str|None=None) -> pd.DataFrame:
         # TODO Should this integreation have a toggle for spidering?
         #if in_recursion and not config['Target Options']['veriphone-spider-in']:
         #    return pd.DataFrame()
