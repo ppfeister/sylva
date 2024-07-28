@@ -28,8 +28,21 @@ Personal Access Token (PAT) is requried for PGP scraping, but all other function
 
 | Name | Description |
 | --- | --- |
-| PGP Spider | Query common keyservers for undiscovered uids |
-| Sherlock (extended) | [__Sherlock__][sherlock] extended for discovery of additional identities and spidering
+| PGP Search | Search for identities through discovered PGP keys |
+| [__Sherlock__][sherlock] | Sherlock extended for discovery of additional identities and spidering
+
+
+### Integrated utilities
+
+| Name | Description |
+| --- | --- |
+| [__FlareSolverr__][flaresolverr] | Proxy server to add support for additional target types |
+
+> [!NOTE]
+> FlareSolverr is packaged with Oculus by default, but it bears two dependencies that may require manual installation. Automating this process is on my todo list. __Many users already have both of these installed.__
+> - [xorg-x11-server-Xvfb][xorg-x11-server-Xvfb] or your distribution's equivalent
+> - Either Chome or Chromium (used headlessly to solve captchas)
+
 
 ## Usage
 
@@ -59,3 +72,6 @@ Contributors opening a pull request are assumed to have read and agreed.
 
 [contributing]: CONTRIBUTING.md
 [sherlock]: https://github.com/sherlock-project/sherlock
+[flaresolverr]: https://github.com/flaresolverr/flaresolverr
+
+[xorg-x11-server-Xvfb]: https://packages.fedoraproject.org/pkgs/xorg-x11-server/xorg-x11-server-Xvfb/
