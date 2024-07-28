@@ -8,7 +8,7 @@ authors = [
 dependencies = [
     "sherlock-project>=0.15.0",
     "platformdirs>=4.2.2",
-    "requests>=2.32.3",
+    "requests>=2.32.0",
     "pandas>=2.2.2",
     "PGPy>=0.6.0",
     "colorama>=0.4.6",
@@ -16,6 +16,7 @@ dependencies = [
     "tldextract>=5.1.2",
     "BeautifulSoup4>=4.12.3",
     "aiohttp>=3.9.5",
+    "flaresolverr>=3.3.21rc0",
 ]
 requires-python = ">=3.10"
 readme = "docs/README.md"
