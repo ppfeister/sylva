@@ -38,7 +38,6 @@ class Handler:
         self.collector:Collector = Collector()
         self.__default_country:str = 'US'
         self.__in_recursion = False
-        self.__proxy_svc:ProxySvc = ProxySvc()
         self.runners:List = [
             #proxynova.ProxyNova(collector=self.collector),
             endato.Endato(collector=self.collector, api_name=config['Keys']['endato-name'], api_key=config['Keys']['endato-key'], country=self.__default_country),
@@ -49,7 +48,10 @@ class Handler:
             github.GitHub(collector=self.collector, api_key=config['Keys']['github-key']),
         ]
 
-        self.__proxy_svc.start()
+        self.__proxy_svc:ProxySvc = ProxySvc()
+
+        if config['General']['flaresolverr'] == 'True':
+            self.__proxy_svc.start()
 
 
     def __del__(self):

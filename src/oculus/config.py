@@ -60,6 +60,7 @@ def update_config():
         "debug": check_option(section="General", key="debug", default="False"),
         "log_level": check_option(section="General", key="log_level", default="3"),
         "colorful": check_option(section="General", key="colorful", default="True"),
+        "flaresolverr": check_option(section="General", key="flaresolverr", default="True"),
     }
     config["Cache"] = {
         "enabled": check_option(section="Cache", key="enabled", default="True"),
