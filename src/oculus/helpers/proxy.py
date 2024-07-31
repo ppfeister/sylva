@@ -5,6 +5,7 @@ import time
 
 from colorama import Fore, Style, Back
 from flaresolverr.flaresolverr import run
+import requests
 
 from oculus.config import config
 from oculus.easy_logger import LogLevel, loglevel, NoColor
@@ -12,6 +13,24 @@ from oculus.easy_logger import LogLevel, loglevel, NoColor
 
 if config['General']['colorful'] == 'False': # no better way since distutils deprecation?
     Fore = Back = Style = NoColor
+
+
+def test_if_flaresolverr_online(proxy_url:str) -> bool:
+    """Test if the FlareSolverr proxy server is online
+    
+    Keyword Arguments:
+        proxy_url {str} -- The URL of the proxy server to test
+    
+    Returns:
+        bool -- True if the proxy server is online, False otherwise
+    """
+    test_headers:dict = {'Accept': 'application/json',}
+    flaresolverr_response_test = requests.get(url=f'{proxy_url}', headers=test_headers)
+    if flaresolverr_response_test.status_code != 200:
+        return False
+    if flaresolverr_response_test.json()['msg'] != 'FlareSolverr is ready!':
+        return False
+    return True
 
 
 class ProxySvc:

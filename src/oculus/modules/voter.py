@@ -1,3 +1,4 @@
+from typing import Dict
 import pandas as pd
 import requests
 
@@ -31,7 +32,17 @@ class Voter:
         if flaresolverr_response_test.json()['msg'] != 'FlareSolverr is ready!':
             return pd.DataFrame()
 
-        USA.search(full_name=query, flaresolverr_proxy_url=proxy_url)
+        new_data:Dict[str, str|bool] = USA.search(full_name=query, flaresolverr_proxy_url=proxy_url)
+        new_df:pd.DataFrame = None
 
-        return pd.DataFrame()
+        if new_data is None or new_data == {}:
+            return pd.DataFrame()
+
+        new_data['query'] = query
+        new_data['source_name'] = self.source_name
+
+        new_df = pd.DataFrame([new_data])
+        self.collector.insert(new_df)
+
+        return new_df
         

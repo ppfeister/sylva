@@ -13,6 +13,7 @@ Oculus is undergoing rapid development. Documentation may be quickly obseleted a
 | ProxyNova | COMB API (cleartext passwords, usernames) | Native |
 | Veriphone | Phone number lookup | Req [ F+ ] |
 | GitHub | See detail below | Opt [ F ] |
+| VoterRecords.com | Geographical and age lookup in 18 US States | Native |
 
 $ : paid | T : trial | F : Free | F+ : Freemium
 
@@ -24,7 +25,7 @@ Query GitHub for any known PGP keys, scrape both the oldest and newest 1000 comm
 
 Personal Access Token (PAT) is requried for PGP scraping, but all other functions work out of the box. PAT is _recommended_ for higher rate limits on other functions. PAT does not require any permissions assigned to it whatsoever.
 
-### Built-in modules
+### Generic modules
 
 | Name | Description |
 | --- | --- |
@@ -32,7 +33,7 @@ Personal Access Token (PAT) is requried for PGP scraping, but all other function
 | [__Sherlock__][sherlock] | Sherlock extended for discovery of additional identities and spidering
 
 
-### Integrated utilities
+### Helpers and utilities
 
 | Name | Description |
 | --- | --- |

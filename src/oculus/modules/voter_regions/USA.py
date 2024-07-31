@@ -1,4 +1,5 @@
 from datetime import datetime
+import re
 from typing import Dict, List
 import urllib.parse
 
@@ -35,7 +36,7 @@ __base_proxy_headers:Dict[str, str] = {
 
 
 
-__voter_data_url:str = 'https://voterrecords.com/voters'
+__voter_data_url:str = 'https://voterrecords.com'
 
 def search(
         flaresolverr_proxy_url:str,
@@ -46,7 +47,7 @@ def search(
         state:str|None=None,
         city:str|None=None,
         age:int|None=None,
-) -> pd.DataFrame:
+) -> Dict[str, str|bool]:
     """Search for voter information in the United States
     
     Keyword Arguments:
@@ -70,7 +71,7 @@ def search(
         and last_name is None
         and full_name is None
     ):
-        return pd.DataFrame()
+        return {}
     
     if (
         (
@@ -135,7 +136,7 @@ def search(
         elif birth_year <= 1930:
             birth_year_range = 'before+1930'
 
-    query_url:str = __voter_data_url
+    query_url:str = f'{__voter_data_url}/voters'
     
     if location:
         query_url += f'/{location}'
@@ -150,20 +151,49 @@ def search(
     request_data:dict = {
         'cmd': 'request.get',
         'url': query_url,
-        'maxTimeout': 60000,
+        'maxTimeout': 120000,
     }
 
-    print("AAAA\n")
     response = requests.post(url=f'{flaresolverr_proxy_url}v1', json=request_data, headers=__base_proxy_headers)
-    print("BBBB\n")
 
     if response.status_code != 200:
-        print(response.status_code, response.text)
-        print("FEGWG\n\n")
-        return pd.DataFrame()
+        # FlareSolverr proxy failed directly
+        return {}
     
-    print(response.json())
-    print("CCCC\n")
+    if response.json()['solution']['status'] != 200:
+        # FlareSolverr proxy failed to get a valid response from target
+        return {}
+    
+    # Matching expected indicator or new rows (shown below). More than one is low confidence.
+    # <tr data-href="/voter/<id number>/<name>" itemscope itemtype="http://schema.org/Person">
+    if response.text.count('tr data-href') != 1:
+        return {}
+    
+    urlpart_pattern = r'tr data-href="(?P<URL_PART>\/voter\/\d+\/[a-z\-]+)\" itemscope'
+    fullname_pattern = r'span itemprop="name">(?P<FULLNAME>.+?) ?<\/span>'
+    rawaddr_pattern = r'span itemprop="address">(?P<ADDRESS>.+?)<\/span>'
+    age_pattern = r'<strong>Age:&nbsp;<\/strong>(?P<AGE>\d{1,3})<br\/>'
 
-    return pd.DataFrame()
+    try:
+        # TODO First name, middle initial, and last name can be guessed based on values on the profile's page (compare with/without middle initial)
+        urlpart: str = re.search(urlpart_pattern, response.json()['solution']['response']).group('URL_PART')
+        profile_url: str = f'{__voter_data_url}{urlpart}'
+        fullname: str = re.search(fullname_pattern, response.json()['solution']['response']).group('FULLNAME')
+        rawaddr: str = re.search(rawaddr_pattern, response.json()['solution']['response']).group('ADDRESS')
+        age: int = int(re.search(age_pattern, response.json()['solution']['response']).group('AGE'))
+    except KeyError as e:
+        # Important expected data not found. Possibly a false positive.
+        # TODO Make this better for handling redacted/excluded data
+        return {}
+    
+    new_data:Dict = {
+            'spider_recommended': True,
+            'platform_name': "VoterRecords.com",
+            'platform_url': profile_url,
+            'full_name': fullname,
+            'raw_address': rawaddr,
+            'age': age,
+        }
+
+    return new_data
     
