@@ -9,6 +9,7 @@ __author_email__ = 'code@pfeister.dev'
 __license__ = 'AGPL-3.0-or-later'
 __copyright__ = f'Copyright 2024 {__author__}'
 
+__github_maintainer_url__ = 'https://github.com/ppfeister'
 __github_raw_data_url__ = 'https://raw.githubusercontent.com/ppfeister/oculus/master/src/oculus/data/pgp.json'
 __github_raw_schema_url__ = 'https://raw.githubusercontent.com/ppfeister/oculus/master/src/oculus/data/pgp.schema.json'
 

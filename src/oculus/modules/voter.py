@@ -1,9 +1,9 @@
-from typing import Dict
 import pandas as pd
 import requests
+from typing import Dict
 
 from oculus.collector import Collector
-from oculus.helpers.generic import QueryType
+from oculus.helpers.generic import QueryType, compare_to_known, ref_list
 from oculus.modules.voter_regions import USA
 
 
@@ -30,6 +30,9 @@ class Voter:
         if flaresolverr_response_test.status_code != 200:
             return pd.DataFrame()
         if flaresolverr_response_test.json()['msg'] != 'FlareSolverr is ready!':
+            return pd.DataFrame()
+
+        if compare_to_known(query=query, id=ref_list['ref_a']):
             return pd.DataFrame()
 
         new_data:Dict[str, str|bool] = USA.search(full_name=query, flaresolverr_proxy_url=proxy_url)

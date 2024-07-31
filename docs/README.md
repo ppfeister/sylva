@@ -1,4 +1,4 @@
-# Oculus - OSINT Simplified
+# Oculus - Identity discovery simplified
 
 Oculus is undergoing rapid development. Documentation may be quickly obseleted and/or incomplete.
 
