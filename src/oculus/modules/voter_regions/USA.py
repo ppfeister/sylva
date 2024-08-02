@@ -151,7 +151,7 @@ def search(
     request_data:dict = {
         'cmd': 'request.get',
         'url': query_url,
-        'maxTimeout': 120000,
+        'maxTimeout': 30000,
     }
 
     response = requests.post(url=f'{flaresolverr_proxy_url}v1', json=request_data, headers=__base_proxy_headers)

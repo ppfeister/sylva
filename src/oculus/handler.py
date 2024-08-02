@@ -1,3 +1,4 @@
+import time
 from typing import List, NamedTuple
 
 from colorama import Fore, Back, Style
@@ -6,7 +7,7 @@ import phonenumbers
 from .collector import Collector
 from .config import config
 from .easy_logger import LogLevel, loglevel, NoColor, overwrite_previous_line
-from .helpers.proxy import ProxySvc
+from .helpers.proxy import ProxySvc, test_if_flaresolverr_online
 from .helpers.generic import (
     QueryType,
     RequestError,
@@ -53,10 +54,14 @@ class Handler:
         self.__proxy_svc:ProxySvc = ProxySvc()
         if config['General']['flaresolverr'] == 'True':
             self.__proxy_svc.start()
+            self.__proxy_svc.start_primary_session()
+
         self.__proxy_url:str = f'http://{self.__proxy_svc.server_host}:{self.__proxy_svc.server_port}/'
 
 
     def __del__(self):
+        if test_if_flaresolverr_online(proxy_url=self.__proxy_svc.primary_proxy_url):
+            self.__proxy_svc.destroy_all_sessions()
         self.__proxy_svc.stop()
 
 

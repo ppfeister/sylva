@@ -2,13 +2,24 @@ import os
 import multiprocessing
 import sys
 import time
+from urllib.parse import urlparse, urlunparse
 
 from colorama import Fore, Style, Back
 from flaresolverr.flaresolverr import run
 import requests
 
+from oculus import __user_agent__
 from oculus.config import config
 from oculus.easy_logger import LogLevel, loglevel, NoColor
+
+
+_primary_scrape_session_id: str|None = None
+
+flaresolverr_base_headers:dict[str, str] = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'User-Agent': __user_agent__,
+}
 
 
 if config['General']['colorful'] == 'False': # no better way since distutils deprecation?
@@ -24,12 +35,19 @@ def test_if_flaresolverr_online(proxy_url:str) -> bool:
     Returns:
         bool -- True if the proxy server is online, False otherwise
     """
-    test_headers:dict = {'Accept': 'application/json',}
-    flaresolverr_response_test = requests.get(url=f'{proxy_url}', headers=test_headers)
+    parsed_url = urlparse(proxy_url)
+    proxy_url = urlunparse((parsed_url.scheme, parsed_url.netloc, '', '', '', ''))
+
+    try:
+        flaresolverr_response_test = requests.get(url=proxy_url, headers=flaresolverr_base_headers)
+    except requests.exceptions.ConnectionError:
+        return False
+
     if flaresolverr_response_test.status_code != 200:
         return False
     if flaresolverr_response_test.json()['msg'] != 'FlareSolverr is ready!':
         return False
+    
     return True
 
 
@@ -41,9 +59,12 @@ class ProxySvc:
         self.__server_process: multiprocessing.Process = multiprocessing.Process(
             target=self._start_async_server, args=(self.__stop_event,)
         )
+        self.primary_proxy_url: str|None = None
+
 
     def __del__(self):
         self.stop()
+
 
     def _start_async_server(self, stop_event):
         """
@@ -61,6 +82,7 @@ class ProxySvc:
         else:
             if loglevel >= LogLevel.INFO.value:
                 print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} Started FlareSolverr on {self.server_host}:{self.server_port}')
+
 
     def stop(self):
         """
@@ -81,6 +103,7 @@ class ProxySvc:
             if loglevel >= LogLevel.DEBUG.value:
                 print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} Attempted to stop FlareSolverr, but it was not running')
 
+
     def start(self):
         """
         Start the server process.
@@ -91,3 +114,63 @@ class ProxySvc:
                 target=self._start_async_server, args=(self.__stop_event,)
             )
             self.__server_process.start()
+            self.server_host = self.server_host if self.server_host != '0.0.0.0' else '127.0.0.1'
+            self.primary_proxy_url = f'http://{self.server_host}:{self.server_port}/v1'
+
+            for i in range(5):
+                if test_if_flaresolverr_online(proxy_url=self.primary_proxy_url):
+                    break
+                time.sleep(2)
+            else:
+                raise Exception('Failed to start primary FlareSolverr session')
+
+
+    def start_primary_session(self) -> str:
+        if not test_if_flaresolverr_online(proxy_url=self.primary_proxy_url):
+            raise Exception('FlareSolverr is not online')
+        
+        global _primary_scrape_session_id
+        if _primary_scrape_session_id:
+            return _primary_scrape_session_id
+        response = requests.post(
+            url=self.primary_proxy_url,
+            json={
+                'cmd': 'sessions.create',
+            },
+        )
+
+        if response.status_code != 200 or 'message' not in response.json():
+            raise Exception('Unable to properly communicate with FlareSolverr')
+        if response.json()['message'] != 'Session created successfully.':
+            raise Exception('Failed to create primary session')
+
+        _primary_scrape_session_id = response.json()['session']
+
+
+    def destroy_all_sessions(self):
+        if not test_if_flaresolverr_online(proxy_url=self.primary_proxy_url):
+            raise Exception('FlareSolverr is not online')
+
+        response = requests.post(
+            url=self.primary_proxy_url,
+            json={
+                'cmd': 'sessions.list',
+            },
+        )
+        if response.status_code != 200:
+            raise Exception('Unable to properly communicate with FlareSolverr')
+
+        sessions: list[str] = response.json()['sessions']
+
+        for session in sessions:
+            response = requests.post(
+                url=self.primary_proxy_url,
+                json={
+                    'cmd': 'sessions.destroy',
+                    'session': session,
+                },
+            )
+            if response.status_code != 200:
+                raise Exception('Unable to properly communicate with FlareSolverr')
+            if response.json()['msg'] != 'Session destroyed successfully.':
+                raise Exception('Failed to destroy primary session')

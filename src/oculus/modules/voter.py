@@ -5,6 +5,7 @@ from typing import Dict
 from oculus.collector import Collector
 from oculus.helpers.generic import QueryType, compare_to_known, ref_list
 from oculus.modules.voter_regions import USA
+from oculus.helpers.proxy import test_if_flaresolverr_online
 
 
 class Voter:
@@ -25,11 +26,7 @@ class Voter:
         if proxy_url is None:
             return pd.DataFrame()
 
-        test_headers:dict = {'Accept': 'application/json',}
-        flaresolverr_response_test = requests.get(url=f'{proxy_url}', headers=test_headers)
-        if flaresolverr_response_test.status_code != 200:
-            return pd.DataFrame()
-        if flaresolverr_response_test.json()['msg'] != 'FlareSolverr is ready!':
+        if not test_if_flaresolverr_online(proxy_url):
             return pd.DataFrame()
 
         if compare_to_known(query=query, id=ref_list['ref_a']):
