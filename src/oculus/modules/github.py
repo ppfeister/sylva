@@ -213,7 +213,7 @@ class GitHub:
         return pd.DataFrame(new_data)
 
 
-    def search(self, query:str, in_recursion:bool=False, query_type:str|None=None, proxy_url:str|None=None) -> pd.DataFrame:
+    def search(self, query:str, in_recursion:bool=False, query_type:str|None=None, proxy_data:dict[str, str]|None=None) -> pd.DataFrame:
         if query_type is None or query_type == QueryType.TEXT:
             query_type = self.__type(query)
 

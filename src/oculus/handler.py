@@ -56,8 +56,6 @@ class Handler:
             self.__proxy_svc.start()
             self.__proxy_svc.start_primary_session()
 
-        self.__proxy_url:str = f'http://{self.__proxy_svc.server_host}:{self.__proxy_svc.server_port}/'
-
 
     def __del__(self):
         if test_if_flaresolverr_online(proxy_url=self.__proxy_svc.primary_proxy_url):
@@ -83,10 +81,15 @@ class Handler:
             if loglevel >= LogLevel.SUCCESS_ONLY.value:
                 print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Searching {runner.source_name}...')
 
+            proxy_data:dict[str, str] = {
+                'proxy_url': self.__proxy_svc.primary_proxy_url,
+                'flaresolverr_session_id': self.__proxy_svc.primary_session_id,
+            }
+
             try:
                 # Each runner should return a DataFrame, but since that data is already
                 # added to the collector, all we care about is the number of new rows.
-                results = len(runner.search(query=query, in_recursion=self.__in_recursion, query_type=query_type, proxy_url=self.__proxy_url).index)
+                results = len(runner.search(query=query, in_recursion=self.__in_recursion, query_type=query_type, proxy_data=proxy_data).index)
                 if loglevel >= LogLevel.SUCCESS_ONLY.value and results > 0:
                     overwrite_previous_line()
                     print(f'{Fore.LIGHTGREEN_EX}{Style.BRIGHT}[+]{Style.RESET_ALL}{Fore.RESET} Found {results} via {runner.source_name}')

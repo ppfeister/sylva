@@ -13,8 +13,6 @@ from oculus.config import config
 from oculus.easy_logger import LogLevel, loglevel, NoColor
 
 
-_primary_scrape_session_id: str|None = None
-
 flaresolverr_base_headers:dict[str, str] = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
@@ -60,6 +58,7 @@ class ProxySvc:
             target=self._start_async_server, args=(self.__stop_event,)
         )
         self.primary_proxy_url: str|None = None
+        self.primary_session_id: str|None = None
 
 
     def __del__(self):
@@ -129,9 +128,9 @@ class ProxySvc:
         if not test_if_flaresolverr_online(proxy_url=self.primary_proxy_url):
             raise Exception('FlareSolverr is not online')
         
-        global _primary_scrape_session_id
-        if _primary_scrape_session_id:
-            return _primary_scrape_session_id
+        if self.primary_session_id:
+            return self.primary_session_id
+
         response = requests.post(
             url=self.primary_proxy_url,
             json={
@@ -144,7 +143,9 @@ class ProxySvc:
         if response.json()['message'] != 'Session created successfully.':
             raise Exception('Failed to create primary session')
 
-        _primary_scrape_session_id = response.json()['session']
+        self.primary_session_id = response.json()['session']
+
+        return self.primary_session_id
 
 
     def destroy_all_sessions(self):

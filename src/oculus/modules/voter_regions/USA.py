@@ -39,7 +39,7 @@ __base_proxy_headers:Dict[str, str] = {
 __voter_data_url:str = 'https://voterrecords.com'
 
 def search(
-        flaresolverr_proxy_url:str,
+        proxy_data:dict[str, str],
         first_name:str|None=None,
         middle_name:str|None=None,
         last_name:str|None=None,
@@ -151,10 +151,11 @@ def search(
     request_data:dict = {
         'cmd': 'request.get',
         'url': query_url,
+        'session': proxy_data['flaresolverr_session_id'],
         'maxTimeout': 30000,
     }
 
-    response = requests.post(url=f'{flaresolverr_proxy_url}v1', json=request_data, headers=__base_proxy_headers)
+    response = requests.post(url=proxy_data["proxy_url"], json=request_data, headers=__base_proxy_headers)
 
     if response.status_code != 200:
         # FlareSolverr proxy failed directly

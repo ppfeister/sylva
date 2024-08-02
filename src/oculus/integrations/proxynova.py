@@ -20,7 +20,7 @@ class ProxyNova:
             return True
         return False
 
-    def search(self, query:str, start:int=0, end:int=config['Target Options']['proxynova-default-limit'], in_recursion:bool=False, query_type:QueryType=QueryType.TEXT, proxy_url:str|None=None) -> pd.DataFrame:
+    def search(self, query:str, start:int=0, end:int=config['Target Options']['proxynova-default-limit'], in_recursion:bool=False, query_type:QueryType=QueryType.TEXT, proxy_data:dict[str, str]|None=None) -> pd.DataFrame:
         if in_recursion and not config['Target Options']['proxynova-spider-in']:
             return pd.DataFrame()
         

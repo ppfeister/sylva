@@ -19,20 +19,20 @@ class Voter:
         return True
 
 
-    def search(self, query:str, in_recursion:bool=False, query_type:QueryType=QueryType.TEXT, proxy_url:str|None=None) -> pd.DataFrame:
+    def search(self, query:str, in_recursion:bool=False, query_type:QueryType=QueryType.TEXT, proxy_data:dict[str, str]|None=None) -> pd.DataFrame:
         if query_type != QueryType.FULLNAME:
             return pd.DataFrame()
         
-        if proxy_url is None:
+        if proxy_data is None or 'proxy_url' not in proxy_data or proxy_data['proxy_url'] is None:
             return pd.DataFrame()
 
-        if not test_if_flaresolverr_online(proxy_url):
+        if not test_if_flaresolverr_online(proxy_url=proxy_data['proxy_url']):
             return pd.DataFrame()
 
         if compare_to_known(query=query, id=ref_list['ref_a']):
             return pd.DataFrame()
 
-        new_data:Dict[str, str|bool] = USA.search(full_name=query, flaresolverr_proxy_url=proxy_url)
+        new_data:Dict[str, str|bool] = USA.search(full_name=query, proxy_data=proxy_data)
         new_df:pd.DataFrame = None
 
         if new_data is None or new_data == {}:
