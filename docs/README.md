@@ -1,6 +1,12 @@
-# Sylva - Identity discovery made easy
+<p align="center">
+<img width="144" height="144" src="https://img.icons8.com/pulsar-gradient/144/tree.png" alt="tree"/>
+</p>
 
-Sylva is undergoing rapid development. Documentation may be quickly obseleted and/or incomplete.
+<h1 align="center">Sylva identity discovery</h1>
+
+<p align="center">
+Note that Sylva is undergoing rapid development and documentation may be quickly obseleted and/or incomplete.
+</p>
 
 ## Summary
 
