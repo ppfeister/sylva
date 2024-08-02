@@ -1,10 +1,10 @@
-# Sylva - Identity discovery simplified
+# Sylva - Identity discovery made easy
 
 Sylva is undergoing rapid development. Documentation may be quickly obseleted and/or incomplete.
 
 ## Summary
 
-### Integrations
+### Useful Integrations
 
 | Name | Description | API Key |
 | --- | --- | --- |
@@ -13,11 +13,10 @@ Sylva is undergoing rapid development. Documentation may be quickly obseleted an
 | ProxyNova | COMB API (cleartext passwords, usernames) | Native |
 | Veriphone | Phone number lookup | Req [ F+ ] |
 | GitHub | See detail below | Opt [ F ] |
-| VoterRecords.com | Geographical and age lookup in 18 US States | Native |
 
 $ : paid | T : trial | F : Free | F+ : Freemium
 
-Most development was done without any paid access -- so despite some integrations requiring an account, the full experience can be attained by all without a subscription.
+Most development was done without any paid access -- so despite some integrations requiring an account, the full experience can be attained without any subscriptions.
 
 #### GitHub Integration
 
@@ -25,12 +24,13 @@ Query GitHub for any known PGP keys, scrape both the oldest and newest 1000 comm
 
 Personal Access Token (PAT) is requried for PGP scraping, but all other functions work out of the box. PAT is _recommended_ for higher rate limits on other functions. PAT does not require any permissions assigned to it whatsoever.
 
-### Generic modules
+### Native modules
 
 | Name | Description |
 | --- | --- |
 | PGP Search | Search for identities through discovered PGP keys |
 | [__Sherlock__][sherlock] | Sherlock extended for discovery of additional identities and spidering
+| Voter Records | Geographical, relation, and age lookup in 18 US States |
 
 
 ### Helpers and utilities
@@ -55,15 +55,16 @@ Personal Access Token (PAT) is requried for PGP scraping, but all other function
 
 ## Installation
 
-Sylva uses a pdm backend. Developers can run `pdm install` and source the venv for a live development and testing environment.
+> [!TIP]
+> Users who prefer `pip` over `pipx` can simply substitute the command for PyPI.
+
+| Method | Command | Officially supported |
+| --- | --- | --- |
+| PyPI | `pipx install sylva` | ✅ |
 
 ### Packagers
 
-Do not package Sylva yet. Changes are happening at rates quicker than most release cycles allow, and they aren't readily tagged for consistent feature sets. Depending on availability, name changes are also very possible at this stage.
-
-Contact for information about planned packaging.
-
-Once ready for production, Sylva will adopt properly tagged releases for consistent downstream packaging.
+It's recommended that you don't package Sylva yet. Changes are happening at rates quicker than most release cycles allow. If you'd like to package Sylva, feel free to reach out for info!
 
 ## Contributing
 
