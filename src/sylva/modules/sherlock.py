@@ -48,7 +48,7 @@ class Sherlock:
                 new_item:Dict = {
                     'query': query,
                     'source_name': self.source_name,
-                    'spider_recommended': True,
+                    'branch_recommended': True,
                     'platform_name': site.name,
                     'platform_url': re.sub(__url_normalization_pattern__, '', results[site.name]['url_user']),
                     'username': query,
@@ -78,7 +78,7 @@ class Sherlock:
 
                 if not matched_patterns.empty:
                     matched_patterns['query'] = query
-                    matched_patterns['spider_recommended'] = True
+                    matched_patterns['branch_recommended'] = True
 
                 if (
                     matched_patterns.empty

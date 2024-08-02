@@ -42,7 +42,7 @@ class ResultDataFrame:
             columns=[
                 'query',
                 'source_name',
-                'spider_recommended',
+                'branch_recommended',
                 'platform_name',
                 'platform_url',
                 'username',

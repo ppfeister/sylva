@@ -17,7 +17,7 @@ class IdentItem(NamedTuple):
     source_name: str
     query: str
     username: str
-    spider_recommended: bool
+    branch_recommended: bool
     platform_name: str
     platform_url: str
 
@@ -130,7 +130,7 @@ class GitHub:
                     source_name = 'GitHub Commits',
                     username = username,
                     query = username,
-                    spider_recommended = True,
+                    branch_recommended = True,
                     platform_name = 'GitHub',
                     platform_url = f'https://github.com/{username}',
                 ))
@@ -205,7 +205,7 @@ class GitHub:
                 email = email_found,
                 source_name = self.source_name,
                 query = query,
-                spider_recommended = True,
+                branch_recommended = True,
                 platform_name = 'GitHub',
                 platform_url = profile_data['html_url'],
             ))

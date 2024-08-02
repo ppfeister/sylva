@@ -84,7 +84,7 @@ class Endato:
             'email': json_data['person']['email'],
             'source_name': self.source_name,
             'query': e164_query,
-            'spider_recommended': True,
+            'branch_recommended': True,
             'phone': e164_query,
         }
         new_data = pd.DataFrame([flattened_data])
@@ -93,7 +93,7 @@ class Endato:
 
 
     def search(self, query:str, in_recursion:bool=False, query_type:QueryType=QueryType.TEXT, proxy_data:dict[str, str]|None=None) -> pd.DataFrame:
-        if in_recursion and not config['Target Options']['endato-spider-in']:
+        if in_recursion and not config['Target Options']['endato-branch-in']:
             return pd.DataFrame()
         
         if not self.__api_name or not self.__api_key:

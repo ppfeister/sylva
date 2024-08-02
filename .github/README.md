@@ -35,7 +35,7 @@ Personal Access Token (PAT) is requried for PGP scraping, but all other function
 | Name | Description |
 | --- | --- |
 | PGP Search | Search for identities through discovered PGP keys |
-| [__Sherlock__][sherlock] | Sherlock extended for discovery of additional identities and spidering
+| [__Sherlock__][sherlock] | Sherlock extended for discovery of additional identities and branching
 | Voter Records | Geographical, relation, and age lookup in 18 US States |
 
 
@@ -55,7 +55,7 @@ Personal Access Token (PAT) is requried for PGP scraping, but all other function
 
 `sylva search <query>` will search all available modules for the given query.
 
-`sylva spider <query>` will search all available modules for the given query, merge and deduplicate results, and resume searching with the newly found identities up to a certain depth. Some modules, particularly those with low API limits, may be spider disabled by default.
+`sylva branch <query>` will search all available modules for the given query, merge and deduplicate results, and resume searching with the newly found identities up to a certain depth. Some modules, particularly those with low API limits, may be branch disabled by default.
 
 `sylva config --edit` to edit the configuration file (including API keys).
 

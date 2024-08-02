@@ -79,10 +79,10 @@ def update_config():
     }
     config["Target Options"] = {
         "proxynova-default-limit": check_option(section="Target Options", key="proxynova-default-limit", default="5"),
-        "proxynova-spider-in": check_option(section="Target Options", key="proxynova-spider-in", default="True"),
-        "proxynova-spider-out": check_option(section="Target Options", key="proxynova-spider-out", default="True"),
+        "proxynova-branch-in": check_option(section="Target Options", key="proxynova-branch-in", default="True"),
+        "proxynova-branch-out": check_option(section="Target Options", key="proxynova-branch-out", default="True"),
         "endato-limit-queries": check_option(section="Target Options", key="endato-limit-queries", default="True"),
-        "endato-spider-in": check_option(section="Target Options", key="endato-spider-in", default="True"),
+        "endato-branch-in": check_option(section="Target Options", key="endato-branch-in", default="True"),
     }
     with open(__config_path, "w") as configfile:
         config.write(configfile)

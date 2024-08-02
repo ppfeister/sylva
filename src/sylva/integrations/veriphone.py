@@ -28,8 +28,8 @@ class Veriphone:
         except phonenumbers.phonenumberutil.NumberParseException:
             return False
     def search(self, query:str, in_recursion:bool=False, query_type:QueryType=QueryType.TEXT, proxy_data:dict[str, str]|None=None) -> pd.DataFrame:
-        # TODO Should this integreation have a toggle for spidering?
-        #if in_recursion and not config['Target Options']['veriphone-spider-in']:
+        # TODO Should this integreation have a toggle for branching?
+        #if in_recursion and not config['Target Options']['veriphone-branch-in']:
         #    return pd.DataFrame()
 
         if not self.accepts(query):
@@ -50,7 +50,7 @@ class Veriphone:
                 'region': json_data.get('phone_region', None),
                 'query': e164_query,
                 'source_name': self.source_name,
-                'spider_recommended': True,
+                'branch_recommended': True,
             }
         ]
         self.collector.insert(pd.DataFrame(raw_rows))

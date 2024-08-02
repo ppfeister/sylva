@@ -14,7 +14,7 @@ ___
 
 ___
 
-::: sylva.console.spider_subcommand
+::: sylva.console.branch_subcommand
     options:
         show_source: false
 

@@ -24,7 +24,7 @@ class IntelX:
         self.source_name:str = 'IntelX'
         self.collector:Collector = collector
     def search(self, query:str, limit:int=2, buckets=["leaks.public", "leaks.private", "pastes", "darknet"], timeout:int=5, datefrom:str=None, dateto:str=None, sort:int=2, media:int=24, terminate=[], in_recursion:bool=False, query_type:QueryType=QueryType.TEXT, proxy_data:dict[str, str]|None=None) -> pd.DataFrame:
-        if in_recursion and not config['Target Options']['intelx-spider-in']:
+        if in_recursion and not config['Target Options']['intelx-branch-in']:
             return pd.DataFrame()
         
         if (not config['Keys']['intelx-key']):

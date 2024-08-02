@@ -27,9 +27,9 @@ def search_subcommand(args:argparse.Namespace):
     print(handler.collector.get_data())
 
 
-def spider_subcommand(args:argparse.Namespace):
+def branch_subcommand(args:argparse.Namespace):
     handler = Handler()
-    handler.spider_all(args.query, depth=args.spider_depth)
+    handler.branch_all(args.query, depth=args.branch_depth)
     print()
     print(handler.collector.get_data())
 
@@ -46,11 +46,11 @@ def interactive():
     parser_search.add_argument('query', help='The query to search for')
     parser_search.set_defaults(func=search_subcommand)
 
-    parser_spider = subparsers.add_parser('spider', help='Recursively search based on discovered identities')
-    parser_spider.add_argument('query', help='The query to search for')
-    parser_spider.add_argument('-d', '--depth', type=int, default=3, dest='spider_depth', metavar='123', help='The depth to search')
-    parser_spider.add_argument('-a', '--show-all', dest='no_deduplicate', action='store_true', default=False, help='Do not deduplicate results')
-    parser_spider.set_defaults(func=spider_subcommand)
+    parser_branch = subparsers.add_parser('branch', help='Recursively search based on discovered identities')
+    parser_branch.add_argument('query', help='The query to search for')
+    parser_branch.add_argument('-d', '--depth', type=int, default=3, dest='branch_depth', metavar='123', help='The depth to search')
+    parser_branch.add_argument('-a', '--show-all', dest='no_deduplicate', action='store_true', default=False, help='Do not deduplicate results')
+    parser_branch.set_defaults(func=branch_subcommand)
 
     parser_interactive = subparsers.add_parser('interactive', help='Launch the query builder (mutliple parameters allowed)')
     parser_interactive.set_defaults(func=interactive_setup_subcommand)

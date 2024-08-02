@@ -127,14 +127,14 @@ class PGPModule:
                 row['platform_name'] = target['friendly_name']
                 row['query'] = query
                 row['source_name'] = f"{__short_name__} PGP"
-                row['spider_recommended'] = True
+                row['branch_recommended'] = True
 
             new_rows = pd.DataFrame(new_rows)
             new_rows['query'] = query
             new_rows['platform_name'] = target['friendly_name']
             new_rows['platform_url'] = target['profile_url'].format(query=query)
             new_rows['source_name'] = f"{__short_name__} PGP"
-            new_rows['spider_recommended'] = True
+            new_rows['branch_recommended'] = True
             new_data = pd.concat([new_data, new_rows], ignore_index=True)
 
         self.collector.insert(new_data)

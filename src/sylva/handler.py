@@ -30,7 +30,8 @@ from .modules import (
 class QueryDataItem(NamedTuple):
     """Query value and typographical data.
 
-    The QueryDataItem is a simple dataclass that holds the query itself and the enumerated type. This helps make the distinction between simple strings, identitical dicts, and similar, more apparent to Sylva."""
+    The QueryDataItem is a simple dataclass that holds the query itself and the enumerated type.
+    This helps make the distinction between simple strings, identitical dicts, and similar, more apparent to Sylva."""
     query: str
     type: QueryType
 
@@ -116,7 +117,7 @@ class Handler:
 
         return total_discovered
 
-    def spider_all(self, query: str, depth: int = 1, no_deduplicate: bool = False):
+    def branch_all(self, query: str, depth: int = 1, no_deduplicate: bool = False):
         # TODO Any way to pretty this up? Avoid re-running queries against all on raw input
         queries_made: set = set((QueryDataItem(query=query, type=QueryType.TEXT),))
         queries_made.add(QueryDataItem(query=query, type=QueryType.USERNAME))
@@ -133,16 +134,16 @@ class Handler:
         except (phonenumbers.phonenumberutil.NumberParseException, AttributeError):
             pass
 
-        self.__in_recursion = True # Passed to runners so they can self-skip if spider-in disabled
+        self.__in_recursion = True # Passed to runners so they can self-skip if branch-in disabled
 
         for i in range(depth):
             new_queries: set = set()
 
-            new_queries.update(QueryDataItem(query=query, type=QueryType.USERNAME) for query in self.collector.get_unique_usernames(spiderable_only=True))
-            new_queries.update(QueryDataItem(query=query, type=QueryType.EMAIL) for query in self.collector.get_unique_emails(spiderable_only=True))
-            new_queries.update(QueryDataItem(query=query, type=QueryType.PHONE) for query in self.collector.get_unique_phones(spiderable_only=True))
-            new_queries.update(QueryDataItem(query=query, type=QueryType.FULLNAME) for query in self.collector.get_unique_fullnames(spiderable_only=True))
-            new_queries.update(QueryDataItem(query=query, type=QueryType.FIRSTNAME_LASTNAME) for query in self.collector.get_unique_firstname_middlename_lastname_groups(spiderable_only=True))
+            new_queries.update(QueryDataItem(query=query, type=QueryType.USERNAME) for query in self.collector.get_unique_usernames(branchable_only=True))
+            new_queries.update(QueryDataItem(query=query, type=QueryType.EMAIL) for query in self.collector.get_unique_emails(branchable_only=True))
+            new_queries.update(QueryDataItem(query=query, type=QueryType.PHONE) for query in self.collector.get_unique_phones(branchable_only=True))
+            new_queries.update(QueryDataItem(query=query, type=QueryType.FULLNAME) for query in self.collector.get_unique_fullnames(branchable_only=True))
+            new_queries.update(QueryDataItem(query=query, type=QueryType.FIRSTNAME_LASTNAME) for query in self.collector.get_unique_firstname_middlename_lastname_groups(branchable_only=True))
 
             new_queries -= queries_made
             queries_made.update(new_queries)

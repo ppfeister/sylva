@@ -188,7 +188,7 @@ def search(
         return {}
     
     new_data:Dict = {
-            'spider_recommended': True,
+            'branch_recommended': True,
             'platform_name': "VoterRecords.com",
             'platform_url': profile_url,
             'full_name': fullname,
