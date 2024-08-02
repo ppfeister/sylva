@@ -41,7 +41,7 @@ plugins:
   - minify:
       minify_html: true
   - privacy
-  #- git-revision-date
+  - git-revision-date
 
 extra:
   social:
