@@ -1,9 +1,9 @@
 import pandas as pd
 import requests
 
-from oculus.collector import Collector
-from oculus.helpers.generic import QueryType
-from oculus.helpers.proxy import test_if_flaresolverr_online
+from sylva.collector import Collector
+from sylva.helpers.generic import QueryType
+from sylva.helpers.proxy import test_if_flaresolverr_online
 
 
 class Voter:

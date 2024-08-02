@@ -1,6 +1,6 @@
-# Oculus - Identity discovery simplified
+# Sylva - Identity discovery simplified
 
-Oculus is undergoing rapid development. Documentation may be quickly obseleted and/or incomplete.
+Sylva is undergoing rapid development. Documentation may be quickly obseleted and/or incomplete.
 
 ## Summary
 
@@ -40,30 +40,30 @@ Personal Access Token (PAT) is requried for PGP scraping, but all other function
 | [__FlareSolverr__][flaresolverr] | Proxy server to add support for additional target types |
 
 > [!NOTE]
-> FlareSolverr is packaged with Oculus by default, but it bears two dependencies that may require manual installation. Automating this process is on my todo list. __Many users already have both of these installed.__
+> FlareSolverr is packaged with Sylva by default, but it bears two dependencies that may require manual installation. Automating this process is on my todo list. __Many users already have both of these installed.__
 > - [xorg-x11-server-Xvfb][xorg-x11-server-Xvfb] or your distribution's equivalent
 > - Either Chome or Chromium (used headlessly to solve captchas)
 
 
 ## Usage
 
-`oculus search <query>` will search all available modules for the given query.
+`sylva search <query>` will search all available modules for the given query.
 
-`oculus spider <query>` will search all available modules for the given query, merge and deduplicate results, and resume searching with the newly found identities up to a certain depth. Some modules, particularly those with low API limits, may be spider disabled by default.
+`sylva spider <query>` will search all available modules for the given query, merge and deduplicate results, and resume searching with the newly found identities up to a certain depth. Some modules, particularly those with low API limits, may be spider disabled by default.
 
-`oculus config --edit` to edit the configuration file (including API keys).
+`sylva config --edit` to edit the configuration file (including API keys).
 
 ## Installation
 
-Oculus uses a pdm backend. Developers can run `pdm install` and source the venv for a live development and testing environment.
+Sylva uses a pdm backend. Developers can run `pdm install` and source the venv for a live development and testing environment.
 
 ### Packagers
 
-Do not package Oculus yet. Changes are happening at rates quicker than most release cycles allow, and they aren't readily tagged for consistent feature sets. Depending on availability, name changes are also very possible at this stage.
+Do not package Sylva yet. Changes are happening at rates quicker than most release cycles allow, and they aren't readily tagged for consistent feature sets. Depending on availability, name changes are also very possible at this stage.
 
 Contact for information about planned packaging.
 
-Once ready for production, Oculus will adopt properly tagged releases for consistent downstream packaging.
+Once ready for production, Sylva will adopt properly tagged releases for consistent downstream packaging.
 
 ## Contributing
 

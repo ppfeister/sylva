@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "title": "Oculus Scraping Patterns",
+    "title": "Sylva Scraping Patterns",
     "type": "object",
     "properties": {
         "$schema": {

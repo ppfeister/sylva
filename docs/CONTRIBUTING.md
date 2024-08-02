@@ -1,4 +1,4 @@
-# Contributing to Oculus
+# Contributing to Sylva
 
 The purpose of these guidelines is twofold:
 - To streamline the review process, allowing us to merge your contributions more quickly and efficiently.
@@ -11,7 +11,7 @@ Note that these are just guidelines, and reasonable deviation is often acceptabl
 > [!NOTE]
 > The keywords __MUST__, __MUST NOT__, __SHOULD__, __SHOULD NOT__, and __MAY__ are to be interpreted as described in [RFC 2119][rfc2119].
 
-[good_first_issue]: https://github.com/ppfeister/oculus/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22
+[good_first_issue]: https://github.com/ppfeister/sylva/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22
 [rfc2119]: https://www.ietf.org/rfc/rfc2119.txt
 
 ## General Guidelines
@@ -21,8 +21,8 @@ Note that these are just guidelines, and reasonable deviation is often acceptabl
 - Contributors __SHOULD__ open an [issue][issues] or [discussion][discussions] prior to starting work on a new feature or large refactor, to ensure the work is in line with the project's goals.
 
 [conventional_commits_spec]: https://conventionalcommits.org/
-[issues]: https://github.com/ppfeister/oculus/issues
-[discussions]: https://github.com/ppfeister/oculus/discussions
+[issues]: https://github.com/ppfeister/sylva/issues
+[discussions]: https://github.com/ppfeister/sylva/discussions
 
 ## License
 

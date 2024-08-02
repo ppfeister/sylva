@@ -1,7 +1,7 @@
 [project]
-name = "Oculus"
+name = "sylva"
 dynamic = ["version"]
-description = "OSINT Simplified"
+description = "Identity discovery simplified"
 authors = [
     {name = "Paul Pfeister", email = "code@pfeister.dev"},
 ]
@@ -23,7 +23,7 @@ readme = "docs/README.md"
 license = {text = "AGPL-3.0-or-later"}
 
 [project.scripts]
-oculus = "oculus.console:interactive"
+sylva = "sylva.console:interactive"
 
 [build-system]
 requires = ["pdm-backend"]
@@ -35,7 +35,7 @@ distribution = true
 
 [tool.pdm.version]
 source = "scm"
-write_to = "oculus/data/__scm_version__.py"
+write_to = "sylva/data/__scm_version__.py"
 write_template = "__version__ = '{}'"
 
 [tool.pdm.dev-dependencies]

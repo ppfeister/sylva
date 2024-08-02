@@ -7,8 +7,8 @@ import aiohttp
 import pandas as pd
 import requests
 
-from oculus.helpers.generic import IncompatibleQueryType, QueryType
-from oculus.collector import Collector
+from sylva.helpers.generic import IncompatibleQueryType, QueryType
+from sylva.collector import Collector
 
 
 class IdentItem(NamedTuple):

@@ -2,10 +2,10 @@ import pandas as pd
 import requests
 from typing import Dict
 
-from oculus.collector import Collector
-from oculus.helpers.generic import QueryType, compare_to_known, ref_list
-from oculus.modules.voter_regions import USA
-from oculus.helpers.proxy import test_if_flaresolverr_online
+from sylva.collector import Collector
+from sylva.helpers.generic import QueryType, compare_to_known, ref_list
+from sylva.modules.voter_regions import USA
+from sylva.helpers.proxy import test_if_flaresolverr_online
 
 
 class Voter:

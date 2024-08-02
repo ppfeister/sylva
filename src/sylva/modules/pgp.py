@@ -42,7 +42,7 @@ class TargetInformation:
 class PGPModule:
     def __init__(self, collector:Collector):
         self.__debug_disable_tag:str = 'pgp'
-        self.source_name:str = 'Oculus PGP'
+        self.source_name:str = 'Sylva PGP'
         self.collector:Collector = collector
         self.targets:TargetInformation = TargetInformation()
         self.__simple_email_regex = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
