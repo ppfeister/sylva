@@ -19,7 +19,7 @@ dependencies = [
     "flaresolverr>=3.3.21rc0",
 ]
 requires-python = ">=3.10"
-readme = "docs/README.md"
+readme = ".github/README.md"
 license = {text = "AGPL-3.0-or-later"}
 
 [project.scripts]
