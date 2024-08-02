@@ -25,6 +25,6 @@ jobs:
           restore-keys: |
             mkdocs-material-
       - run: |
-          pip install mkdocs-material
-          pip install 'mkdocstrings[python]'
+          pip install pdm
+          pdm install --no-self --no-default --group mkdocs
       - run: mkdocs gh-deploy --force
