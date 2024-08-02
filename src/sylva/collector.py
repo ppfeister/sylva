@@ -4,6 +4,22 @@ import pandas as pd
 from .helpers.generic import ResultDataFrame
 
 class Collector:
+    """Result collector object to store results
+
+    This object should rarely be interacted with directly. Rather, developers
+        are more likely to interact with this object via sylva.handler.Handler objects.
+
+    Methods:
+        insert: Insert a new ResultDataFrame into the collector
+        get_data: Returns a Pandas DataFrame of the collected results
+        deduplicate: Deduplicate the collected results
+        get_unique_queries: Returns a list of unique queries
+        get_unique_usernames: Returns a list of unique usernames
+        get_unique_emails: Returns a list of unique emails
+        get_unique_phones: Returns a list of unique phone numbers
+        get_unique_fullnames: Returns a list of unique full names
+        get_unique_firstname_middlename_lastname_groups: Returns a list of unique firstname, middlename, and lastname groups
+    """
     def __init__(self):
         self.__data:ResultDataFrame = ResultDataFrame()
 

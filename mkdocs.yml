@@ -7,7 +7,9 @@ site_description: Novel identity discovery utility
 repo_name: ppfeister/sylva
 repo_url: https://github.com/ppfeister/sylva
 
-copyright: Copyright &copy; 2024 Paul Pfeister
+copyright: >
+  Copyright &copy; 2024 <a href="https://pfeister.dev/" target="_blank">Paul Pfeister</a> &nbsp;–&nbsp;
+  <a href="#__consent">Change cookie settings</a>
 
 theme:
   name: material
@@ -28,15 +30,18 @@ plugins:
       default_handler: python
       handlers:
         python:
+          selection:
+            filters:
+              - "!^_"  # exclude all members starting with _
           options:
             show_root_heading: true
-            show_source: true
+            show_source: false
             heading_level: 4
             merge_init_into_class: true
             show_root_full_path: true
             show_root_toc_entry: false
-            show_if_no_docstring: true
-            show_signature_annotations: true
+            show_if_no_docstring: false
+            show_signature_annotations: false
             separate_signature: true
   - minify:
       minify_html: true
@@ -57,8 +62,8 @@ extra:
       find what they're searching for. With your consent, you're helping us to
       make our documentation better.
       <br><br>
-      Ultimately, we don't get paid to maintain this project, and we'd like to
-      know where to direct our limited resources.
+      Ultimately, this isn't a commercial project, and we'd like to know where
+      to direct our limited resources.
   analytics:
     provider: google
     property: G-8HJW3DB3RW
@@ -86,7 +91,7 @@ nav:
     - Universal (pip): install.md
   - API Reference:
       - Interactive Console: reference/interactive.md
-      - Request Handler: reference/handler.md
-      - Collector: reference/collector.md
+      - Request Handling: reference/handler.md
+      - Response Collector: reference/collector.md
       - Resultant Frames: reference/resultdf.md
       - Generic Errors: reference/generic_errors.md

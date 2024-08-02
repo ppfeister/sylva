@@ -40,6 +40,37 @@ if config['General']['colorful'] == 'False': # no better way since distutils dep
     Fore = Back = Style = NoColor
 
 class Handler:
+    """Request handler with built-in helpers and proxy services
+    
+    Attributes:
+        collector (Collector): Collector object to store results
+        runners (List[Runner]): List of search modules to execute queries
+
+    Example: Executing a simple string-based search
+        ```python
+        from sylva.handler import Handler
+
+        handler = Handler()
+        handler.branch_all('username')
+        results = handler.collector.get_data() # Returns a DataFrame
+
+        print(results)
+        ```
+
+    Example: Executing a search using a QueryDataItem
+        ```python
+        from sylva.handler import Handler, QueryDataItem
+        from sylva.helpers.generic import QueryType
+
+        handler = Handler()
+
+        query = QueryDataItem(query='username', type=QueryType.USERNAME)
+        handler.branch_all(query)
+        results = handler.collector.get_data() # Returns a DataFrame
+
+        print(results)
+        ```
+    """
     def __init__(self):
         self.collector:Collector = Collector()
         self.__default_country:str = 'US'
@@ -68,6 +99,20 @@ class Handler:
 
 
     def search_all(self, query:str|QueryDataItem, no_deduplicate:bool=False) -> int:
+        """Search all available modules for the given query
+
+        Runs a single-depth search for a given query across all available modules and
+            integrations, automatically deduplicating the results. Results are added to
+            the object's collector.
+
+        Args:
+            query (str|QueryDataItem): The query to search for
+            no_deduplicate (bool, optional): Skip deduplication for manual processing.
+                Defaults to False.
+
+        Returns:
+            int: The number of identities discovered
+        """
         if isinstance(query, QueryDataItem):
             query_type:QueryType = query.type
             query:str = query.query
@@ -118,6 +163,18 @@ class Handler:
         return total_discovered
 
     def branch_all(self, query: str, depth: int = 1, no_deduplicate: bool = False):
+        """Recursively search all available modules for the given query
+
+        Runs a variable-depth search for a given query across all available modules and
+            integrations, automatically deduplicating the results. Results are added to
+            the object's collector.
+
+        Args:
+            query (str): The query to search for
+            depth (int, optional): The depth to search. Defaults to 1.
+            no_deduplicate (bool, optional): Skip deduplication for manual processing.
+                Defaults to False.
+        """
         # TODO Any way to pretty this up? Avoid re-running queries against all on raw input
         queries_made: set = set((QueryDataItem(query=query, type=QueryType.TEXT),))
         queries_made.add(QueryDataItem(query=query, type=QueryType.USERNAME))

@@ -37,6 +37,19 @@ ref_list: Dict[str, str] = {
     
 
 class ResultDataFrame:
+    """Prestructured DataFrame for result handling
+
+    This object should rarely be interacted with directly, but the structure is
+        valuable knowledge to have as returned DataFrames will be of this type.
+    
+    Attributes:
+        data (pd.DataFrame): The internal DataFrame object
+
+    Methods:
+        insert_frame: Insert a new DataFrame into the collector
+        get_data: Returns a Pandas DataFrame of the collected results
+        deduplicate: Deduplicate the collected results
+    """
     def __init__(self):
         self.data = pd.DataFrame(
             columns=[

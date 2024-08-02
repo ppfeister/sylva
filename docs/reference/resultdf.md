@@ -1,3 +1,3 @@
 ::: sylva.helpers.generic.ResultDataFrame
     options:
-        show_source: false
+        show_source: true
