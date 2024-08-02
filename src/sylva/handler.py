@@ -28,6 +28,9 @@ from .modules import (
 
 
 class QueryDataItem(NamedTuple):
+    """Query value and typographical data.
+
+    The QueryDataItem is a simple dataclass that holds the query itself and the enumerated type. This helps make the distinction between simple strings, identitical dicts, and similar, more apparent to Sylva."""
     query: str
     type: QueryType
 
