@@ -1,0 +1,92 @@
+# yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
+site_name: Sylva
+site_url: https://sylva.pfei.cc
+site_author: Paul Pfeister
+site_description: Novel identity discovery utility
+
+repo_name: ppfeister/sylva
+repo_url: https://github.com/ppfeister/sylva
+
+copyright: Copyright &copy; 2024 Paul Pfeister
+
+theme:
+  name: material
+  favicon: assets/favicon.png
+  logo: assets/logo.png
+  features:
+    - navigation.tracking
+    - navigation.tabs
+    # - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.top
+  font:
+    text: Roboto
+    code: Roboto Mono
+
+plugins:
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            show_root_heading: true
+            show_source: true
+            heading_level: 4
+            merge_init_into_class: true
+            show_root_full_path: true
+            show_root_toc_entry: false
+            show_if_no_docstring: true
+            show_signature_annotations: true
+            separate_signature: true
+  - minify:
+      minify_html: true
+  - privacy
+  #- git-revision-date
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/ppfeister
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/sylva
+  consent:
+    title: Cookie consent
+    description: >-
+      We use cookies to recognize your repeated visits and preferences, as well
+      as to measure the effectiveness of our documentation and whether users
+      find what they're searching for. With your consent, you're helping us to
+      make our documentation better.
+      <br><br>
+      Ultimately, we don't get paid to maintain this project, and we'd like to
+      know where to direct our limited resources.
+  analytics:
+    provider: google
+    property: G-8HJW3DB3RW
+    feedback:
+      title: Was this page helpful?
+      ratings:
+        - icon: material/heart
+          name: This page was helpful
+          data: 1
+          note: >-
+            Thanks for your feedback!
+        - icon: material/heart-broken
+          name: This page could be improved
+          data: 0
+          note: >-
+            Thanks for your feedback! Help us improve this page by
+            opening a discussion on our <a href="https://github.com/ppfeister/sylva/issues/new/?title=[MkDocs]+{title}+-+{url}" target="_blank" rel="noopener">repository</a>.
+
+markdown_extensions:
+  - attr_list
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Universal (pip): install.md
+  - API Reference:
+      - Interactive Console: reference/interactive.md
+      - Request Handler: reference/handler.md
+      - Collector: reference/collector.md
+      - Resultant Frames: reference/resultdf.md
+      - Generic Errors: reference/generic_errors.md

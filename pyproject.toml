@@ -25,6 +25,14 @@ license = {text = "AGPL-3.0-or-later"}
 [project.scripts]
 sylva = "sylva.console:interactive"
 
+[project.optional-dependencies]
+mkdocs = [
+    "mkdocs-material>=9.5.30",
+    "mkdocs-minify-plugin>=0.8.0",
+    "mkdocs-git-revision-date-plugin>=0.3.2",
+    "mkdocstrings[python]>=0.25.2",
+]
+
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
