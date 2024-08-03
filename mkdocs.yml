@@ -21,6 +21,9 @@ theme:
     # - navigation.tabs.sticky
     - navigation.sections
     - navigation.top
+    - search.suggest
+    - search.highlight
+    - search.share
   font:
     text: Roboto
     code: Roboto Mono
@@ -68,6 +71,7 @@ plugins:
       minify_html: true
   - privacy
   - git-revision-date
+  - search
 
 extra:
   social:
