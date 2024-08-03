@@ -1,4 +1,4 @@
-FROM python:3.12-slim-bullseye AS cli-builder
+FROM python:3.12-slim-bookworm AS cli-builder
 
 # Repository information (for versioning)
 COPY .git/ /app/.git/
@@ -38,7 +38,13 @@ RUN pdm install --check --prod --no-editable --verbose
 
 #####################################
 
-FROM python:3.12-slim-bullseye AS cli-prod
+FROM python:3.12-slim-bookworm AS cli-prod
+
+# Dependencies not found in package
+RUN apt-get update
+RUN apt-get install -y chromium
+RUN apt-get install -y xvfb
+RUN apt-get clean
 
 # Installation
 COPY --from=cli-builder /app/.venv /app/.venv
