@@ -38,7 +38,7 @@ RUN pdm install --check --prod --no-editable --verbose
 
 #####################################
 
-FROM python:3.12-slim-bullseye AS cli
+FROM python:3.12-slim-bullseye AS cli-prod
 
 # Installation
 COPY --from=cli-builder /app/.venv /app/.venv
