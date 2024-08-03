@@ -62,7 +62,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and push Sylva CLI to Docker Hub (stable)
+      - name: Build and push Sylva CLI to registries (stable)
         uses: docker/build-push-action@v6
         with:
           push: true
@@ -75,7 +75,7 @@ jobs:
             ghcr.io/${{ vars.DOCKERHUB_USERNAME }}/sylva:${{ env.TAG_VERSION }}
         if: ${{ env.RELEASE_TYPE == 'release' }}
 
-      - name: Build and push Sylva CLI to Docker Hub (preview)
+      - name: Build and push Sylva CLI to registries (preview)
         uses: docker/build-push-action@v6
         with:
           push: true
