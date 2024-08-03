@@ -84,14 +84,19 @@ extra:
 
 markdown_extensions:
   - attr_list
+  - admonition
 
 nav:
   - Home: index.md
   - Getting Started:
     - Universal (pip): install.md
   - API Reference:
-      - Interactive Console: reference/interactive.md
-      - Request Handling: reference/handler.md
-      - Response Collector: reference/collector.md
-      - Resultant Frames: reference/resultdf.md
-      - Generic Errors: reference/generic_errors.md
+    - Interactive Console: reference/interactive.md
+    - Request Handling: reference/handler.md
+    - Response Collector: reference/collector.md
+    - Resultant Frames: reference/resultdf.md
+    - Generic Errors: reference/generic_errors.md
+  - Contributing:
+    - Introduction: contributing/introduction.md
+    - Documentation: contributing/documentation.md
+  - Sponsor: https://github.com/sponsors/ppfeister
