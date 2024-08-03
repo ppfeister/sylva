@@ -9,14 +9,20 @@ Sylva performs best as a Docker container, but several other methods are and wil
     The default image reflects the latest tagged release. To fetch the HEAD of `master`, use `ppfeister/sylva:preview`.
 
 ```bash
-docker run --rm ppfeister/sylva sylva search <query>
+docker run --rm ppfeister/sylva sylva search <query> #(1)!
 ```
+
+1.  Sylva can be found on both [Docker Hub][dockerhub]{:target="_blank"} and [GitHub Container Registry][ghcr]{:target="_blank"}.
+    Users who prefer the latter can opt for `ghcr.io/ppfeister/sylva` instead.
 
 ```bash
 # Alternatively...
-docker run --rm -it ppfeister/sylva bash
+docker run --rm -it ppfeister/sylva bash #(1)!
 sylva search <query>
 ```
+
+1.  Sylva can be found on both [Docker Hub][dockerhub]{:target="_blank"} and [GitHub Container Registry][ghcr]{:target="_blank"}.
+    Users who prefer the latter can opt for `ghcr.io/ppfeister/sylva` instead.
 
 ___
 
@@ -26,8 +32,12 @@ ___
 services:
   sylva:
     container_name: sylva
-    image: 'ppfeister/sylva'
+    image: 'ppfeister/sylva' #(1)!
 ```
+
+1.  Sylva can be found on both [Docker Hub][dockerhub]{:target="_blank"} and [GitHub Container Registry][ghcr]{:target="_blank"}.
+    Users who prefer the latter can opt for `ghcr.io/ppfeister/sylva` instead.
+
 ```bash
 docker compose run --rm sylva sylva search <query>
 ```
