@@ -89,7 +89,8 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Getting Started:
-    - Universal (pip): install.md
+    - Install Sylva (simple): install.md
+    - Install Sylva (advanced): install-adv.md
   - API Reference:
     - Interactive Console: reference/interactive.md
     - Request Handling: reference/handler.md
