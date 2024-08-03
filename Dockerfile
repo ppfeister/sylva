@@ -50,6 +50,5 @@ COPY LICENSE /app/
 
 ENV PATH="/app/.venv/bin:$PATH"
 ENV SYLVA_ENV="docker"
-ENV EDITOR="nano"
 
 CMD ["sylva"]
