@@ -27,6 +27,7 @@ jobs:
     needs: check-eligible
     if: needs.check-eligible.outputs.is-prerelease == 'false'
     name: Build and publish to PyPI
+    environment: deploy-pypi
     runs-on: ubuntu-latest
     permissions:
       id-token: write
