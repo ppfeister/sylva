@@ -46,7 +46,7 @@ ___
 
 ## PyPI (pip)
 
-!!! warning
+!!! warning "You should know..."
     This method requires the installation of additional dependencies for full functionality.
     It is not fully self-contained.
 

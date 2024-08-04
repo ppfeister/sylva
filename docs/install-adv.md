@@ -14,6 +14,11 @@ __not__ be raised for this missing file.
 ## Prerequisites
 
 - [Install PDM according to their documentation][pdm-install]{:target="_blank"}
+- Chrome or Chromium
+- [xorg-x11-server-Xvfb][xvfb-fed]{:target="_blank"} (Fedora), [xvfb][xvfb-deb]{:target="_blank"} (Debian), or your distribution's equivalent
+
+[xvfb-fed]: https://packages.fedoraproject.org/pkgs/xorg-x11-server/xorg-x11-server-Xvfb/
+[xvfb-deb]: https://packages.debian.org/sid/xvfb
 
 ## Installing Sylva for development
 
@@ -57,6 +62,29 @@ cd sylva
 pdm install --global --prod
 ```
 
+## Building the Docker image
+
+Sylva provides both the latest release (semver tagged and as latest) and the current state of
+`master` (as preview) as a Docker image, available on both [Docker Hub][dockerhub]{:target="_blank"}
+and the [GitHub Container Registry][ghcr]{:target="_blank"}.
+
+If you'd rather build your own image, such as for development use or validation, you can do so with
+the provided multi-stage [Dockerfile]{:target="_blank"}. The prerequisites mentioned earlier can be
+skipped you're *only* building the Docker image.
+
+Build target `cli-prod` is the standard command line target. Future targets may include web
+interfaces, or other added functionality.
+
+```bash
+git clone https://github.com/ppfeister/sylva.git
+cd sylva
+docker build --target cli-prod -t ppfeister/sylva .
+```
+
 
 [PDM]: https://pdm-project.org
 [pdm-install]: https://pdm-project.org/en/latest/#installation
+[dockerhub]: https://hub.docker.com/r/ppfeister/sylva
+[ghcr]: https://github.com/ppfeister/sylva/pkgs/container/sylva
+[semver]: https://semver.org
+[Dockerfile]: https://github.com/ppfeister/sylva/blob/master/Dockerfile
