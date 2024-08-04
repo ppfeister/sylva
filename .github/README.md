@@ -45,11 +45,6 @@ Personal Access Token (PAT) is requried for PGP scraping, but all other function
 | --- | --- |
 | [__FlareSolverr__][flaresolverr] | Proxy server to add support for additional target types |
 
-> [!NOTE]
-> FlareSolverr is packaged with Sylva by default, but it bears two dependencies that may require manual installation. Automating this process is on my todo list. __Many users already have both of these installed.__
-> - [xorg-x11-server-Xvfb][xorg-x11-server-Xvfb] or your distribution's equivalent
-> - Either Chome or Chromium (used headlessly to solve captchas)
-
 
 ## Usage
 
@@ -61,12 +56,13 @@ Personal Access Token (PAT) is requried for PGP scraping, but all other function
 
 ## Installation
 
-> [!TIP]
-> Users who prefer `pip` over `pipx` can simply substitute the command for PyPI.
+Docker is the preferred method of installation, providing the most consistent experience.
 
-| Method | Command | Officially supported |
-| --- | --- | --- |
-| PyPI | `pipx install sylva` | ✅ |
+```bash
+docker run --rm ppfeister/sylva sylva search <query>
+```
+
+Other installation methods are described on the [__Sylva Wiki__][wiki-install].
 
 ### Packagers
 
@@ -74,11 +70,13 @@ It's recommended that you don't package Sylva yet. Changes are happening at rate
 
 ## Contributing
 
-Contributors should refer to our [contributing guidelines][contributing] for information on how to contribute to the project. Note that since the project is still in its infancy, there isn't yet a formal roadmap.
+Contributors should refer to our [contributing guidelines][wiki-contributing] for information on how to contribute to the project. Note that since the project is still in its infancy, there isn't yet a formal roadmap.
 
-Contributors opening a pull request are assumed to have read and agreed.
+Contributors opening a pull request are assumed to have read and agreed to the guidelines.
 
-[contributing]: CONTRIBUTING.md
+[wiki-install]: https://sylva.pfeister.dev/install/
+[wiki-contributing]: https://sylva.pfeister.dev/contributing/introduction/
+
 [sherlock]: https://github.com/sherlock-project/sherlock
 [flaresolverr]: https://github.com/flaresolverr/flaresolverr
 
