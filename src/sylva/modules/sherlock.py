@@ -8,10 +8,11 @@ from sherlock_project.sites import SitesInformation
 from sherlock_project.notify import QueryNotify
 from sherlock_project.result import QueryStatus
 
-from .. import __url_normalization_pattern__
-from ..helpers.generic import QueryType, RequestError
-from ..helpers import pattern_match
-from ..collector import Collector
+from sylva import __url_normalization_pattern__
+from sylva.errors import RequestError
+from sylva.types import QueryType
+from sylva.collector import Collector
+from sylva.helpers import pattern_match
 
 class Sherlock:
     def __init__(self, collector:Collector):
@@ -27,7 +28,7 @@ class Sherlock:
         ):
             return True
         return False
-    
+
     def search(self, query:str, timeout:int=3, in_recursion:bool=False, query_type:QueryType=QueryType.TEXT, proxy_data:dict[str, str]|None=None) -> pd.DataFrame:
         try:
             sites = SitesInformation()

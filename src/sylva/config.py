@@ -5,7 +5,7 @@ import subprocess
 
 import platformdirs
 
-from . import __short_name__
+from sylva import __short_name__
 
 __config_dir = platformdirs.user_config_dir(__short_name__.lower())
 __config_path = f"{__config_dir}/config.ini"
@@ -41,7 +41,7 @@ def get_config_path() -> str:
 
 def check_option(section:str, key:str, default:str='') -> str:
     """Check the value of a config option.
-    
+
     Returns the value of the option if it exists, otherwise returns an empty
     string or the value of 'default' if it is provided."""
     try:

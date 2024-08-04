@@ -5,8 +5,9 @@ import pandas as pd
 import requests
 import phonenumbers
 
-from ..helpers.generic import IncompatibleQueryType, QueryType, RequestError
-from ..collector import Collector
+from sylva.errors import IncompatibleQueryType, RequestError
+from sylva.types import QueryType
+from sylva.collector import Collector
 
 
 class Veriphone:
@@ -34,14 +35,14 @@ class Veriphone:
 
         if not self.accepts(query):
             raise IncompatibleQueryType('Query unable to be parsed as phone number')
-        
+
         e164_query = phonenumbers.format_number(phonenumbers.parse(query, self.__country), phonenumbers.PhoneNumberFormat.E164)
 
         sanitized_query = requests.utils.requote_uri(e164_query)
         response = requests.get(self.__api_url.format(KEY=self.__api_key, COUNTRY=self.__country, PHONE=sanitized_query))
         if response.status_code != 200:
             raise RequestError(f'Failed to get results from ProxyNova. Status code: {response.status_code}')
-        
+
         json_data:dict = json.loads(response.text)
         raw_rows:List[Dict] = [
             {

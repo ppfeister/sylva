@@ -5,8 +5,9 @@ import pandas as pd
 import phonenumbers
 import requests
 
-from ..config import config
-from ..helpers.generic import QueryType, RequestError, IncompatibleQueryType, APIKeyError
+from sylva.config import config
+from sylva.types import QueryType
+from sylva.errors import IncompatibleQueryType, APIKeyError, RequestError
 
 
 class Endato:
@@ -37,23 +38,23 @@ class Endato:
             pass
 
         raise IncompatibleQueryType(f'Query type not supported by {self.source_name}')
-    
+
 
     def accepts(self, query:str, query_type:QueryType=QueryType.TEXT) -> bool:
         if self.__country != 'US':
             # Not sure if Endato supports queries for non-US information
             return False
-        
+
         if query_type != QueryType.PHONE and query_type != QueryType.TEXT:
             return False
-        
+
         try:
             self._type(query)
         except IncompatibleQueryType:
             return False
         else:
             return True
-        
+
 
     def _query_phone(self, query:str) -> pd.DataFrame:
         e164_query = phonenumbers.format_number(phonenumbers.parse(query, self.__country), phonenumbers.PhoneNumberFormat.E164)
@@ -95,14 +96,14 @@ class Endato:
     def search(self, query:str, in_recursion:bool=False, query_type:QueryType=QueryType.TEXT, proxy_data:dict[str, str]|None=None) -> pd.DataFrame:
         if in_recursion and not config['Target Options']['endato-branch-in']:
             return pd.DataFrame()
-        
+
         if not self.__api_name or not self.__api_key:
             raise APIKeyError(key_not_provided=True)
-        
+
         try:
             query_type = self._type(query)
         except IncompatibleQueryType:
             return pd.DataFrame()
-        
+
         if query_type == QueryType.PHONE:
             return self._query_phone(query)

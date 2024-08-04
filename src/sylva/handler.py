@@ -1,25 +1,22 @@
-import time
 from typing import List, NamedTuple
 
 from colorama import Fore, Back, Style
 import phonenumbers
 
-from .collector import Collector
-from .config import config
-from .easy_logger import LogLevel, loglevel, NoColor, overwrite_previous_line
-from .helpers.proxy import ProxySvc, test_if_flaresolverr_online
-from .helpers.generic import (
-    QueryType,
-    RequestError,
-    APIKeyError,
-)
-from .integrations import (
+from sylva import Collector
+from sylva.config import config
+from sylva.easy_logger import LogLevel, loglevel, NoColor, overwrite_previous_line
+from sylva.errors import RequestError, APIKeyError
+from sylva.helpers.proxy import ProxySvc, test_if_flaresolverr_online
+from sylva.types import QueryType
+
+from sylva.integrations import (
     endato,
     #proxynova, FIXME problems on certain queries that have multiple results
     #intelx,
     veriphone,
 )
-from .modules import (
+from sylva.modules import (
     pgp as pgp_module,
     sherlock,
     github,
@@ -31,7 +28,7 @@ class QueryDataItem(NamedTuple):
     """Query value and typographical data.
 
     The QueryDataItem is a simple dataclass that holds the query itself and the enumerated type.
-    This helps make the distinction between simple strings, identitical dicts, and similar, more apparent to Sylva."""
+    This helps make the distinction between simple strings, identical dicts, and similar, more apparent to Sylva."""
     query: str
     type: QueryType
 
@@ -41,7 +38,7 @@ if config['General']['colorful'] == 'False': # no better way since distutils dep
 
 class Handler:
     """Request handler with built-in helpers and proxy services
-    
+
     Attributes:
         collector (Collector): Collector object to store results
         runners (List[Runner]): List of search modules to execute queries
@@ -156,7 +153,7 @@ class Handler:
                 if e.key_not_provided:
                     if loglevel >= LogLevel.INFO.value:
                         print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} API key has not been provided for {runner.source_name} - {runner.source_obtain_keys_url}')
-        
+
         if not no_deduplicate:
             self.collector.deduplicate()
 

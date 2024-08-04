@@ -7,8 +7,9 @@ import aiohttp
 import pandas as pd
 import requests
 
-from sylva.helpers.generic import IncompatibleQueryType, QueryType
-from sylva.collector import Collector
+from sylva import Collector
+from sylva.errors import IncompatibleQueryType
+from sylva.types import QueryType
 
 
 class IdentItem(NamedTuple):
@@ -40,7 +41,7 @@ class GitHub:
         if api_key != '':
             self.__generic_headers['Authorization'] = f'Bearer {api_key}'
 
-    
+
     async def __get_page(self, session:aiohttp.ClientSession, url:str, headers:Dict[str, str]):
         async with session.get(url, headers=headers) as response:
             if response.status == 200:
@@ -50,7 +51,7 @@ class GitHub:
                     return None
                 # TODO status code specific handling? is that needed?
                 return None
-            
+
     async def __get_pages(self, url:str):
         # TODO Check for number of actually populated pages if account < maximum_query_depth values
         # Without this check, rate limit may be exceeded more quickly
@@ -64,14 +65,14 @@ class GitHub:
             results = await asyncio.gather(*tasks)
             filtered_results = [result for result in results if result is not None]
             return filtered_results
-        
+
 
     def __type(self, query:str) -> QueryType:
         """Determine the type of query based on the query string
-        
+
         Keyword Arguments:
             query {str} -- The query to check
-        
+
         Returns:
             QueryType -- The type of query
         """
@@ -95,12 +96,12 @@ class GitHub:
             and query_type != QueryType.FIRSTNAME_LASTNAME
         ):
             return False
-        
+
         try:
             self.__type(query)
         except IncompatibleQueryType:
             return False
-        
+
         return True
 
 
@@ -145,14 +146,14 @@ class GitHub:
             new_data = new_data[mask]
 
         return new_data
-    
+
 
     def search_accounts_by_keyword(self, username:str|None=None, email:str|None=None, full_name:str|None=None) -> pd.DataFrame:
         if username is None and email is None and full_name is None:
             raise ValueError('At least one of username, email, or full_name must be provided')
-        
+
         query:str|None = None
-        
+
         if username is not None:
             if email is not None or full_name is not None:
                 raise ValueError('Only one of username, email, or full_name may be provided')

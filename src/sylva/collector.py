@@ -1,7 +1,7 @@
 from typing import List
 import pandas as pd
 
-from .helpers.generic import ResultDataFrame
+from sylva.types import ResultDataFrame
 
 class Collector:
     """Result collector object to store results
@@ -30,11 +30,11 @@ class Collector:
 
     def get_data(self) -> pd.DataFrame:
         return self.__data.get_data()
-    
+
 
     def deduplicate(self) -> pd.DataFrame:
         return self.__data.deduplicate()
-    
+
 
     def get_unique_queries(self, branchable_only:bool=False) -> List[str]:
         df = self.__data.get_data()

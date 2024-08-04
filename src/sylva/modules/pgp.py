@@ -7,10 +7,10 @@ import pandas as pd
 import pgpy
 import requests
 
-from .. import __github_raw_data_url__, __short_name__
-from ..config import config
-from ..helpers.generic import IncompatibleQueryType, QueryType
-from ..collector import Collector
+from sylva import __github_raw_data_url__, __short_name__, Collector
+from sylva.config import config
+from sylva.errors import IncompatibleQueryType
+from sylva.types import QueryType
 
 
 # FIXME GitLab PGP API seems to be broken. Documentation indicates no auth
@@ -60,7 +60,7 @@ class PGPModule:
                 'comment': comment,
             })
         return raw_rows
-    
+
     def accepts(self, query:str, query_type:QueryType=QueryType.TEXT) -> bool:
         if query_type != QueryType.TEXT:
             return False

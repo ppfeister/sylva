@@ -1,9 +1,9 @@
 import pandas as pd
-import requests
 from typing import Dict
 
-from sylva.collector import Collector
-from sylva.helpers.generic import QueryType, compare_to_known, ref_list
+from sylva import Collector
+from sylva.types import QueryType
+from sylva.helpers.generic import compare_to_known, ref_list
 from sylva.modules.voter_regions import USA
 from sylva.helpers.proxy import test_if_flaresolverr_online
 
@@ -22,7 +22,7 @@ class Voter:
     def search(self, query:str, in_recursion:bool=False, query_type:QueryType=QueryType.TEXT, proxy_data:dict[str, str]|None=None) -> pd.DataFrame:
         if query_type != QueryType.FULLNAME:
             return pd.DataFrame()
-        
+
         if proxy_data is None or 'proxy_url' not in proxy_data or proxy_data['proxy_url'] is None:
             return pd.DataFrame()
 
@@ -45,4 +45,4 @@ class Voter:
         self.collector.insert(new_df)
 
         return new_df
-        
+

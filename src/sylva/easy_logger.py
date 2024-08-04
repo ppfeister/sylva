@@ -2,7 +2,7 @@ from enum import Enum
 
 from colorama import Fore, Style
 
-from .config import config
+from sylva.config import config
 
 class LogLevel(Enum):
     FATAL = 0

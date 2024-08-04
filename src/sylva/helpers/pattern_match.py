@@ -10,8 +10,8 @@ import pandas as pd
 import requests
 import tldextract
 
-from .. import __url_normalization_pattern__
-from .generic import RequestError
+from sylva import __url_normalization_pattern__
+from sylva.errors import RequestError
 
 
 class PatternMatch:
@@ -73,10 +73,10 @@ class PatternMatch:
                 else:
                     if last_match:
                         captures = re.search(pattern['sequence'][f'{steps}'], last_match)
-            
+
             else:
                 captures = re.search(pattern['pattern'], body)
-            
+
             if captures:
                 new_item:Dict = {}
 
@@ -99,7 +99,7 @@ class PatternMatch:
                 print(f'MATHCING: Already discovered {url}')
                 return True
             return False
-        
+
 
         def _search_desirables(url:str) -> Dict[str, str]:
             # Normalize the URL by removing www, tailing slash, and query string
@@ -133,20 +133,20 @@ class PatternMatch:
                     return {}
 
                 found_desirable['username'] = captured_groups.group('uid')
-            
+
             return found_desirable
 
 
         if _already_discovered(url):
             return pd.DataFrame()
-            
+
 
         split_url = tldextract.extract(url)
         root_domain = f'{split_url.domain}.{split_url.suffix}'
 
         if root_domain not in self.pattern_data:
             return pd.DataFrame()
-        
+
         current_pattern_data = self.pattern_data[root_domain]
 
         if (not body and query) or 'custom_url' in current_pattern_data:
@@ -219,7 +219,7 @@ class PatternMatch:
         if 'patterns' in current_pattern_data:
             for pattern in current_pattern_data['patterns']:
                 _search_patterns(pattern)
-        
+
         soup = BeautifulSoup(body, 'html.parser')
 
         for desired_target in self._generic_desirables:
@@ -233,7 +233,7 @@ class PatternMatch:
                     new_data.extend(scraped_data)
                 else:
                     new_data.append(_search_desirables(url=a['href']))
-            
+
         for known_redirect_pattern in self._known_redirects_by_query_string:
             for a in soup.find_all('a', href=re.compile(known_redirect_pattern)):
                 matched_groups = re.search(known_redirect_pattern, a['href'])

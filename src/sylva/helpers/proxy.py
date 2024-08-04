@@ -26,10 +26,10 @@ if config['General']['colorful'] == 'False': # no better way since distutils dep
 
 def test_if_flaresolverr_online(proxy_url:str) -> bool:
     """Test if the FlareSolverr proxy server is online
-    
+
     Keyword Arguments:
         proxy_url {str} -- The URL of the proxy server to test
-    
+
     Returns:
         bool -- True if the proxy server is online, False otherwise
     """
@@ -45,7 +45,7 @@ def test_if_flaresolverr_online(proxy_url:str) -> bool:
         return False
     if flaresolverr_response_test.json()['msg'] != 'FlareSolverr is ready!':
         return False
-    
+
     return True
 
 
@@ -127,7 +127,7 @@ class ProxySvc:
     def start_primary_session(self) -> str:
         if not test_if_flaresolverr_online(proxy_url=self.primary_proxy_url):
             raise Exception('FlareSolverr is not online')
-        
+
         if self.primary_session_id:
             return self.primary_session_id
 
