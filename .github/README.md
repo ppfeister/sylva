@@ -5,6 +5,10 @@
 <h1 align="center">Sylva identity discovery</h1>
 
 <p align="center">
+<a href="https://codeclimate.com/github/ppfeister/sylva/maintainability"><img src="https://api.codeclimate.com/v1/badges/4884eb85ac21a8426edc/maintainability" /></a>
+<a href="https://codeclimate.com/github/ppfeister/sylva/test_coverage"><img src="https://api.codeclimate.com/v1/badges/4884eb85ac21a8426edc/test_coverage" /></a>
+
+
 Note that Sylva is undergoing rapid development and documentation may be quickly obseleted and/or incomplete.
 </p>
 
