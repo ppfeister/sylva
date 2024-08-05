@@ -11,7 +11,7 @@ class Collector:
 
     Methods:
         insert: Insert a new ResultDataFrame into the collector
-        get_data: Returns a Pandas DataFrame of the collected results
+        get_data: Returns a DataFrame of the collected results
         deduplicate: Deduplicate the collected results
         get_unique_queries: Returns a list of unique queries
         get_unique_usernames: Returns a list of unique usernames

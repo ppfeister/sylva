@@ -54,8 +54,11 @@ theme:
 plugins:
   - mkdocstrings:
       default_handler: python
+      enable_inventory: true
       handlers:
         python:
+          import:
+            - https://pandas.pydata.org/pandas-docs/stable/objects.inv
           selection:
             filters:
               - "!^_"  # exclude all members starting with _
@@ -126,11 +129,12 @@ nav:
     - Install Sylva (simple): install.md
     - Install Sylva (advanced): install-adv.md
   - API Reference:
-    - Interactive Console: reference/interactive.md
-    - Request Handling: reference/handler.md
-    - Response Collector: reference/collector.md
-    - Resultant Frames: reference/resultdf.md
-    - Generic Errors: reference/generic_errors.md
+    - Programmatic Examples: reference/examples.md
+    - sylva.Collector: reference/sylva.Collector.md
+    - sylva.console: reference/sylva.console.md
+    - sylva.handler: reference/sylva.handler.md
+    - sylva.types: reference/sylva.types.md
+    - sylva.errors: reference/sylva.errors.md
   - Contributing:
     - Introduction: contributing/introduction.md
     - Documentation: contributing/documentation.md
