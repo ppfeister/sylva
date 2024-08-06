@@ -70,10 +70,10 @@ jobs:
           target: cli-prod
           context: .
           tags: |
-            ${{ github.repository_owner }}/sylva:latest
-            ${{ github.repository_owner }}/sylva:${{ env.TAG_VERSION }}
-            ghcr.io/${{ vars.DOCKERHUB_USERNAME }}/sylva:latest
-            ghcr.io/${{ vars.DOCKERHUB_USERNAME }}/sylva:${{ env.TAG_VERSION }}
+            sylva/sylva:latest
+            sylva/sylva:${{ env.TAG_VERSION }}
+            ghcr.io/${{ github.repository_owner }}/sylva:latest
+            ghcr.io/${{ github.repository_owner }}/sylva:${{ env.TAG_VERSION }}
 
       - name: Build and push Sylva CLI to registries (preview)
         if: ${{ env.RELEASE_TYPE == 'prerelease' || env.RELEASE_TYPE == 'preview' }}
@@ -83,5 +83,5 @@ jobs:
           target: cli-prod
           context: .
           tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/sylva:preview
+            sylva/sylva:preview
             ghcr.io/${{ github.repository_owner }}/sylva:preview
