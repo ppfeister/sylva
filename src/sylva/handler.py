@@ -1,6 +1,6 @@
 from typing import List, NamedTuple
 
-from colorama import Fore, Back, Style
+from colorama import Fore, Style
 import phonenumbers
 
 from sylva import Collector
