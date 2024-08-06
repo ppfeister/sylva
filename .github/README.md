@@ -5,11 +5,15 @@
 <h1 align="center">Sylva identity discovery</h1>
 
 <p align="center">
-<a href="https://codeclimate.com/github/ppfeister/sylva/maintainability"><img src="https://api.codeclimate.com/v1/badges/4884eb85ac21a8426edc/maintainability" /></a>
+<a href="https://codeclimate.com/github/ppfeister/sylva/maintainability"><img src="https://api.codeclimate.com/v1/badges/4884eb85ac21a8426edc/maintainability" /></a> &nbsp;
 <a href="https://codeclimate.com/github/ppfeister/sylva/test_coverage"><img src="https://api.codeclimate.com/v1/badges/4884eb85ac21a8426edc/test_coverage" /></a>
+</p>
 
-
-Note that Sylva is undergoing rapid development and documentation may be quickly obsoleted and/or incomplete.
+<p align="center">
+Note that Sylva is undergoing rapid development and documentation may be quickly obsoleted.
+</p>
+<p align="center">
+Visit the <strong><a href="https://sylva.pfeister.dev">Sylva Wiki</a></strong> for more information.
 </p>
 
 ## Summary
@@ -34,7 +38,7 @@ Query GitHub for any known PGP keys, scrape both the oldest and newest 1000 comm
 
 Personal Access Token (PAT) is required for PGP scraping, but all other functions work out of the box. PAT is _recommended_ for higher rate limits on other functions. PAT does not require any permissions assigned to it whatsoever.
 
-### Native modules
+### Generic modules
 
 | Name | Description |
 | --- | --- |
@@ -77,6 +81,11 @@ It's recommended that you don't package Sylva yet. Changes are happening at rate
 Contributors should refer to our [contributing guidelines][wiki-contributing] for information on how to contribute to the project. Note that since the project is still in its infancy, there isn't yet a formal roadmap.
 
 Contributors opening a pull request are assumed to have read and agreed to the guidelines.
+
+
+## Stargazers over time
+[![Stargazers over time](https://starchart.cc/ppfeister/sylva.svg?variant=adaptive)](https://starchart.cc/ppfeister/sylva)
+
 
 [wiki-install]: https://sylva.pfeister.dev/install/
 [wiki-contributing]: https://sylva.pfeister.dev/contributing/introduction/
