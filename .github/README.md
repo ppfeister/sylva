@@ -9,7 +9,7 @@
 <a href="https://codeclimate.com/github/ppfeister/sylva/test_coverage"><img src="https://api.codeclimate.com/v1/badges/4884eb85ac21a8426edc/test_coverage" /></a>
 
 
-Note that Sylva is undergoing rapid development and documentation may be quickly obseleted and/or incomplete.
+Note that Sylva is undergoing rapid development and documentation may be quickly obsoleted and/or incomplete.
 </p>
 
 ## Summary
@@ -32,7 +32,7 @@ Most development was done without any paid access -- so despite some integration
 
 Query GitHub for any known PGP keys, scrape both the oldest and newest 1000 commit authorships (2000 total) for leaked identifying information, and search for identities based on full name, email, or username.
 
-Personal Access Token (PAT) is requried for PGP scraping, but all other functions work out of the box. PAT is _recommended_ for higher rate limits on other functions. PAT does not require any permissions assigned to it whatsoever.
+Personal Access Token (PAT) is required for PGP scraping, but all other functions work out of the box. PAT is _recommended_ for higher rate limits on other functions. PAT does not require any permissions assigned to it whatsoever.
 
 ### Native modules
 
