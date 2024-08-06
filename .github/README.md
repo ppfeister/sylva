@@ -63,7 +63,7 @@ Personal Access Token (PAT) is required for PGP scraping, but all other function
 Docker is the preferred method of installation, providing the most consistent experience.
 
 ```bash
-docker run --rm ppfeister/sylva sylva search <query>
+docker run --rm -it ppfeister/sylva sylva search <query>
 ```
 
 Other installation methods are described on the [__Sylva Wiki__][wiki-install].
