@@ -3,7 +3,6 @@ import os
 from typing import Dict
 from urllib.parse import urlunparse, urlparse
 
-import pandas as pd
 import requests
 from tldextract import extract as tldx
 
