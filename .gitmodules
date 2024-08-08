@@ -1,0 +1,3 @@
+[submodule "src/flaresolverr"]
+	path = src/flaresolverr
+	url = https://github.com/ppfeister/FlareSolverr.git

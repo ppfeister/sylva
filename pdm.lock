@@ -5,7 +5,7 @@
 groups = ["default", "dev", "mkdocs"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:c3339e02fb5c8f2d314c2ab214342adaee34e2f7f6adffcb05b775e868b05b89"
+content_hash = "sha256:ccfd5bb502b6cf44401e82cf0bbf2e493dd48d7c1a4db6d9821e6c31809ae43d"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -413,27 +413,6 @@ files = [
 ]
 
 [[package]]
-name = "drissionpage"
-version = "4.1.0.0b14"
-requires_python = ">=3.6"
-summary = "Python based web automation tool. It can control the browser and send and receive data packets."
-groups = ["default"]
-dependencies = [
-    "DownloadKit>=2.0.0",
-    "click",
-    "cssselect",
-    "lxml",
-    "psutil",
-    "requests",
-    "tldextract",
-    "websocket-client",
-]
-files = [
-    {file = "DrissionPage-4.1.0.0b14-py3-none-any.whl", hash = "sha256:44bda948599a039c17011b334ed84e89b6c8b98c4fd74ddc1f33ee7fa0c292a1"},
-    {file = "DrissionPage-4.1.0.0b14.tar.gz", hash = "sha256:85b4fc2999c1509d9becb76899c9b6c1a0b2ebb2359912a301137c4ff44b235d"},
-]
-
-[[package]]
 name = "et-xmlfile"
 version = "1.1.0"
 requires_python = ">=3.6"
@@ -465,29 +444,6 @@ groups = ["default", "dev"]
 files = [
     {file = "filelock-3.15.4-py3-none-any.whl", hash = "sha256:6ca1fffae96225dab4c6eaf1c4f4f28cd2568d3ec2a44e15a08520504de468e7"},
     {file = "filelock-3.15.4.tar.gz", hash = "sha256:2207938cbc1844345cb01a5a95524dae30f0ce089eba5b00378295a17e3e90cb"},
-]
-
-[[package]]
-name = "flaresolverr"
-version = "3.3.21rc4.post3"
-requires_python = ">=3.9"
-summary = "Proxy server to bypass Cloudflare protection"
-groups = ["default"]
-dependencies = [
-    "DrissionPage==4.1.0.0b14",
-    "bottle==0.12.25",
-    "certifi==2024.07.04",
-    "func-timeout==4.3.5",
-    "pefile==2023.2.7; platform_system == \"Windows\"",
-    "prometheus-client==0.17.1",
-    "requests==2.32.0",
-    "waitress==2.1.2",
-    "websockets==11.0.3",
-    "xvfbwrapper==0.2.9; platform_system != \"Windows\"",
-]
-files = [
-    {file = "flaresolverr-3.3.21rc4.post3-py3-none-any.whl", hash = "sha256:11b8550c860b12c83fbc507bf5cad9d3b7dfcdd0e9f359af7eaab04a7b44b40c"},
-    {file = "flaresolverr-3.3.21rc4.post3.tar.gz", hash = "sha256:6c9c0d63eb75ef73c35850a3f58d4e797011c2cb94f492da28ed15c262e0c974"},
 ]
 
 [[package]]

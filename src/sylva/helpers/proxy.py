@@ -5,7 +5,7 @@ import time
 from urllib.parse import urlparse, urlunparse
 
 from colorama import Fore, Style, Back
-from flaresolverr.flaresolverr import run
+from .flaresolverr.flaresolverr import run
 import requests
 
 from sylva import __user_agent__

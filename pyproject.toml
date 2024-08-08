@@ -16,7 +16,31 @@ dependencies = [
     "tldextract>=5.1.2",
     "BeautifulSoup4>=4.12.3",
     "aiohttp>=3.9.5",
-    "flaresolverr>=3.3.21rc0",
+    "bottle==0.12.25",                                    # FlareSolverr depends on this
+    "certifi==2024.7.4",                                  # FlareSolverr depends on this
+    "charset-normalizer==3.3.2",                          # FlareSolverr depends on this
+    "click==8.1.7",                                       # FlareSolverr depends on this
+    "colorama==0.4.6; platform_system == \"Windows\"",    # FlareSolverr depends on this
+    "cssselect==1.2.0",                                   # FlareSolverr depends on this
+    "datarecorder==3.5.3",                                # FlareSolverr depends on this
+    "downloadkit==2.0.2",                                 # FlareSolverr depends on this
+    "et-xmlfile==1.1.0",                                  # FlareSolverr depends on this
+    "filelock==3.15.4",                                   # FlareSolverr depends on this
+    "func-timeout==4.3.5",                                # FlareSolverr depends on this
+    "idna==3.7",                                          # FlareSolverr depends on this
+    "lxml==5.2.2",                                        # FlareSolverr depends on this
+    "openpyxl==3.1.5",                                    # FlareSolverr depends on this
+    "pefile==2023.2.7; platform_system == \"Windows\"",   # FlareSolverr depends on this
+    "prometheus-client==0.17.1",                          # FlareSolverr depends on this
+    "psutil==6.0.0",                                      # FlareSolverr depends on this
+    "requests==2.32.0",                                   # FlareSolverr depends on this
+    "requests-file==2.1.0",                               # FlareSolverr depends on this
+    "tldextract==5.1.2",                                  # FlareSolverr depends on this
+    "urllib3==2.2.2",                                     # FlareSolverr depends on this
+    "waitress==2.1.2",                                    # FlareSolverr depends on this
+    "websocket-client==1.8.0",                            # FlareSolverr depends on this
+    "websockets==11.0.3",                                 # FlareSolverr depends on this
+    "xvfbwrapper==0.2.9; platform_system != \"Windows\"", # FlareSolverr depends on this
 ]
 requires-python = ">=3.10"
 readme = ".github/README.md"
@@ -36,7 +60,6 @@ mkdocs = [
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
-
 
 [tool.pdm]
 distribution = true
