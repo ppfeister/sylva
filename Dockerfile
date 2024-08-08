@@ -63,7 +63,7 @@ COPY --from=cli-builder /app/.venv /app/.venv
 COPY src/ /app/src/
 
 # Documentation
-COPY .github/README.md COPYING COPYING_ATTRIB /app/
+COPY .github/README.md COPYING CREDITS /app/
 
 ENV PATH="/app/.venv/bin:$PATH"
 ENV SYLVA_ENV="docker"
