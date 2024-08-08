@@ -46,6 +46,11 @@ requires-python = ">=3.10"
 readme = ".github/README.md"
 license = {text = "AGPL-3.0-or-later"}
 
+[project.urls]
+homepage = "https://sylva.pfeister.dev"
+repository = "https://github.com/ppfeister/sylva"
+bug-tracker = "https://github.com/ppfeister/sylva/issues"
+
 [project.scripts]
 sylva = "sylva.console:interactive"
 
