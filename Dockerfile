@@ -68,6 +68,6 @@ COPY .github/README.md COPYING CREDITS /app/
 ENV PATH="/app/.venv/bin:$PATH"
 ENV SYLVA_ENV="docker"
 
-ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+ENTRYPOINT ["/usr/bin/dumb-init", "--", "sylva"]
 
 CMD ["sylva"]
