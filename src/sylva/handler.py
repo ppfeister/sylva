@@ -85,8 +85,21 @@ class Handler:
 
         self.__proxy_svc:ProxySvc = ProxySvc()
         if config['General']['flaresolverr'] == 'True':
-            self.__proxy_svc.start()
-            self.__proxy_svc.start_primary_session()
+            try:
+                if loglevel >= LogLevel.SUCCESS_ONLY.value:
+                    print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Starting proxy service...')
+                self.__proxy_svc.start()
+            except Exception as e:
+                if loglevel >= LogLevel.ERROR.value:
+                    if loglevel <= LogLevel.SUCCESS_ONLY.value:
+                        overwrite_previous_line()
+                    print(f'{Fore.LIGHTRED_EX}{Style.BRIGHT}[!]{Style.RESET_ALL}{Fore.RESET} {Style.DIM}Failed to start proxy service{Style.RESET_ALL}')
+            else:
+                if loglevel >= LogLevel.SUCCESS_ONLY.value:
+                    if loglevel <= LogLevel.TRACE.value:
+                        overwrite_previous_line()
+                    print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Starting proxy session...')
+                self.__proxy_svc.start_primary_session()
 
 
     def __del__(self):
