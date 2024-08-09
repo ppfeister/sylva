@@ -44,12 +44,14 @@ def interactive():
 
     parser_search = subparsers.add_parser('search', help='Find an identity')
     parser_search.add_argument('query', help='The query to search for')
+    parser_search.add_argument('--captcha', dest='custom-captcha-proxy-address', action='store', default=None, metavar='PROXY_URL', help='Use an alternative captcha-solving proxy server')
     parser_search.set_defaults(func=search_subcommand)
 
     parser_branch = subparsers.add_parser('branch', help='Recursively search based on discovered identities')
     parser_branch.add_argument('query', help='The query to search for')
     parser_branch.add_argument('-d', '--depth', type=int, default=3, dest='branch_depth', metavar='123', help='The depth to search')
     parser_branch.add_argument('-a', '--show-all', dest='no_deduplicate', action='store_true', default=False, help='Do not deduplicate results')
+    parser_branch.add_argument('--captcha', dest='custom-captcha-proxy-address', action='store', default=None, metavar='PROXY_URL', help='Use an alternative captcha-solving proxy server')
     parser_branch.set_defaults(func=branch_subcommand)
 
     parser_interactive = subparsers.add_parser('interactive', help='Launch the query builder (mutliple parameters allowed)')
