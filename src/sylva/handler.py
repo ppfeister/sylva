@@ -99,7 +99,13 @@ class Handler:
                     if loglevel <= LogLevel.TRACE.value:
                         overwrite_previous_line()
                     print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Starting proxy session...')
-                self.__proxy_svc.start_primary_session()
+                try:
+                    self.__proxy_svc.start_primary_session()
+                except Exception as e:
+                    if loglevel >= LogLevel.ERROR.value:
+                        if loglevel <= LogLevel.SUCCESS_ONLY.value:
+                            overwrite_previous_line()
+                        print(f'{Fore.LIGHTRED_EX}{Style.BRIGHT}[!]{Style.RESET_ALL}{Fore.RESET} {Style.DIM}Failed to start proxy browser session{Style.RESET_ALL}')
 
 
     def __del__(self):
