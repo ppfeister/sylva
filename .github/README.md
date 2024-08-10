@@ -47,28 +47,18 @@ Personal Access Token (PAT) is required for PGP scraping, but all other function
 | Voter Records | Geographical, relation, and age lookup in 18 US States |
 
 
-### Helpers and utilities
+## Quick Start
 
-| Name | Description |
-| --- | --- |
-| [__FlareSolverr__][flaresolverr] | Proxy server to add support for additional target types |
-
-
-## Usage
-
-`sylva search <query>` will search all available modules for the given query.
-
-`sylva branch <query>` will search all available modules for the given query, merge and deduplicate results, and resume searching with the newly found identities up to a certain depth. Some modules, particularly those with low API limits, may be branch disabled by default.
-
-`sylva config --edit` to edit the configuration file (including API keys).
-
-## Installation
-
-Docker is the preferred method of installation, providing the most consistent experience.
+Docker is the preferred method of installation, providing the most consistent and predictable user experience.
 
 ```bash
-docker run --rm -it ppfeister/sylva sylva search <query>
+docker run --rm -it sylva/sylva --help
 ```
+
+> [!TIP]
+> Some users may opt to add an alias to their shell for ease of use.
+>
+> Adding `alias sd="docker run --rm -it sylva/sylva"` to your ~/.bashrc or ~/.zshrc will allow you to simply type `sd branch user123` rather than the entire docker command.
 
 Other installation methods are described on the [__Sylva Wiki__][wiki-install].
 
