@@ -10,7 +10,6 @@ dependencies = [
     "platformdirs>=4.2.2",
     "requests>=2.28.0",
     "pandas>=2.2.2",
-    "PGPy>=0.6.0",
     "colorama>=0.4.6",
     "phonenumbers>=8.13.40",
     "tldextract>=3.5.0",                                  # TODO: Request fc39-41 update to 5.1.2
@@ -36,6 +35,8 @@ dependencies = [
     "websocket-client>=1.3.3",                            # FlareSolverr depends on this
     "websockets>=11.0.3",                                 # FlareSolverr depends on this
     "xvfbwrapper>=0.2.9; platform_system != \"Windows\"", # FlareSolverr depends on this
+    "cryptography>=3.3.2",                                # PGPy depends on this
+    "pyasn1>=0.5.1",                                      # PGPy depends on this
 ]
 requires-python = ">=3.10"
 readme = ".github/README.md"

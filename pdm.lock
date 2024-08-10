@@ -5,7 +5,7 @@
 groups = ["default", "dev", "mkdocs"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:d152eebcd82498a54abeba88245e1549da24d88e91cc7e0f3be04a35cf6d878a"
+content_hash = "sha256:c0f138240ae31b60768e6bba7a271933b298e7a7bac52b957403e46f186952c4"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -1145,20 +1145,6 @@ marker = "platform_system == \"Windows\""
 files = [
     {file = "pefile-2023.2.7-py3-none-any.whl", hash = "sha256:da185cd2af68c08a6cd4481f7325ed600a88f6a813bad9dea07ab3ef73d8d8d6"},
     {file = "pefile-2023.2.7.tar.gz", hash = "sha256:82e6114004b3d6911c77c3953e3838654b04511b8b66e8583db70c65998017dc"},
-]
-
-[[package]]
-name = "pgpy"
-version = "0.6.0"
-requires_python = ">=3.6"
-summary = "Pretty Good Privacy for Python"
-groups = ["default"]
-dependencies = [
-    "cryptography>=3.3.2",
-    "pyasn1",
-]
-files = [
-    {file = "PGPy-0.6.0.tar.gz", hash = "sha256:279c2e353f4c3a319f00bd9bd582456e420f8a3ac6de2b4e9731444746828383"},
 ]
 
 [[package]]

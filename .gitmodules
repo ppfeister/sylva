@@ -1,3 +1,6 @@
 [submodule "src/flaresolverr"]
 	path = src/flaresolverr
-	url = https://github.com/ppfeister/FlareSolverr.git
+	url = git@github.com:ppfeister/FlareSolverr.git
+[submodule "src/pgpy"]
+	path = src/pgpy
+	url = git@github.com:SecurityInnovation/PGPy.git

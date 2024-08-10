@@ -4,12 +4,12 @@ import re
 from typing import Dict, List
 
 import pandas as pd
-import pgpy
 import requests
 
 from sylva import __github_raw_data_url__, __short_name__, Collector
 from sylva.config import config
 from sylva.errors import IncompatibleQueryType
+from sylva.helpers import pgpy
 from sylva.types import QueryType
 
 
