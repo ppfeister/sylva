@@ -2,10 +2,10 @@ import json
 import pandas as pd
 import requests
 
-from sylva import config
-from sylva.errors import IncompatibleQueryType, RequestError
-from sylva.types import QueryType
-from sylva.collector import Collector
+from .. import config
+from ..errors import IncompatibleQueryType, RequestError
+from ..types import QueryType
+from ..collector import Collector
 
 
 class ProxyNova:

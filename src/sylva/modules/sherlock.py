@@ -8,11 +8,11 @@ from sherlock_project.sites import SitesInformation
 from sherlock_project.notify import QueryNotify
 from sherlock_project.result import QueryStatus
 
-from sylva import __url_normalization_pattern__
-from sylva.errors import RequestError
-from sylva.types import QueryType
-from sylva.collector import Collector
-from sylva.helpers import pattern_match
+from .. import __url_normalization_pattern__
+from ..errors import RequestError
+from ..types import QueryType
+from ..collector import Collector
+from ..helpers import pattern_match
 
 class Sherlock:
     def __init__(self, collector:Collector):

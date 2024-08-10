@@ -7,9 +7,9 @@ import aiohttp
 import pandas as pd
 import requests
 
-from sylva import Collector
-from sylva.errors import IncompatibleQueryType
-from sylva.types import QueryType
+from .. import Collector
+from ..errors import IncompatibleQueryType
+from ..types import QueryType
 
 
 class IdentItem(NamedTuple):

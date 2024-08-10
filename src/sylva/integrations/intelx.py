@@ -1,10 +1,10 @@
 import pandas as pd
 
-from sylva import __user_agent__, Collector
-from sylva.config import config
-from sylva.errors import APIKeyError
-from sylva.integrations.intelxapi import IntelX_API
-from sylva.types import QueryType
+from .. import __user_agent__, Collector
+from ..config import config
+from ..errors import APIKeyError
+from ..integrations.intelxapi import IntelX_API
+from ..types import QueryType
 
 
 # TODO IntelX needs quite a bit of work

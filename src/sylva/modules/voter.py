@@ -1,11 +1,11 @@
 import pandas as pd
 from typing import Dict
 
-from sylva import Collector
-from sylva.types import QueryType
-from sylva.helpers.generic import compare_to_known, ref_list
-from sylva.modules.voter_regions import USA
-from sylva.helpers.proxy import test_if_flaresolverr_online
+from .. import Collector
+from ..types import QueryType
+from ..helpers.generic import compare_to_known, ref_list
+from ..modules.voter_regions import USA
+from ..helpers.proxy import test_if_flaresolverr_online
 
 
 class Voter:

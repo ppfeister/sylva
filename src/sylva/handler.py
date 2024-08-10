@@ -3,20 +3,20 @@ from typing import List, NamedTuple
 from colorama import Fore, Style
 import phonenumbers
 
-from sylva import Collector
-from sylva.config import config
-from sylva.easy_logger import LogLevel, loglevel, NoColor, overwrite_previous_line
-from sylva.errors import RequestError, APIKeyError
-from sylva.helpers.proxy import ProxySvc, test_if_flaresolverr_online
-from sylva.types import QueryType
+from . import Collector
+from .config import config
+from .easy_logger import LogLevel, loglevel, NoColor, overwrite_previous_line
+from .errors import RequestError, APIKeyError
+from .helpers.proxy import ProxySvc, test_if_flaresolverr_online
+from .types import QueryType
 
-from sylva.integrations import (
+from .integrations import (
     endato,
     #proxynova, FIXME problems on certain queries that have multiple results
     #intelx,
     veriphone,
 )
-from sylva.modules import (
+from .modules import (
     pgp as pgp_module,
     sherlock,
     github,

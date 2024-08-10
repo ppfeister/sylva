@@ -1,7 +1,7 @@
 from typing import List
 import pandas as pd
 
-from sylva.types import ResultDataFrame
+from .types import ResultDataFrame
 
 class Collector:
     """Result collector object to store results

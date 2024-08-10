@@ -5,9 +5,9 @@ import pandas as pd
 import phonenumbers
 import requests
 
-from sylva.config import config
-from sylva.types import QueryType
-from sylva.errors import IncompatibleQueryType, APIKeyError, RequestError
+from ..config import config
+from ..types import QueryType
+from ..errors import IncompatibleQueryType, APIKeyError, RequestError
 
 
 class Endato:

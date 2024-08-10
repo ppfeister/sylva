@@ -6,11 +6,11 @@ from typing import Dict, List
 import pandas as pd
 import requests
 
-from sylva import __github_raw_data_url__, __short_name__, Collector
-from sylva.config import config
-from sylva.errors import IncompatibleQueryType
-from sylva.helpers import pgpy
-from sylva.types import QueryType
+from .. import __github_raw_data_url__, __short_name__, Collector
+from ..config import config
+from ..errors import IncompatibleQueryType
+from ..helpers import pgpy
+from ..types import QueryType
 
 
 # FIXME GitLab PGP API seems to be broken. Documentation indicates no auth

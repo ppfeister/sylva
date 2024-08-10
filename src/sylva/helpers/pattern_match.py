@@ -10,8 +10,8 @@ import pandas as pd
 import requests
 import tldextract
 
-from sylva import __url_normalization_pattern__
-from sylva.errors import RequestError
+from .. import __url_normalization_pattern__
+from ..errors import RequestError
 
 
 class PatternMatch:

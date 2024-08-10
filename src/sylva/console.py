@@ -1,9 +1,9 @@
 import argparse
 import sys
 
-from sylva import __short_name__, __long_name__, __version__, __author__, __forge_url__
-from sylva.config import InteractiveConfig
-from sylva.handler import Handler
+from . import __short_name__, __long_name__, __version__, __author__, __forge_url__
+from .config import InteractiveConfig
+from .handler import Handler
 
 def config_subcommand(args:argparse.Namespace):
     """Handles the config subcommand

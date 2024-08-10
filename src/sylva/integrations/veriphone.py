@@ -5,9 +5,9 @@ import pandas as pd
 import requests
 import phonenumbers
 
-from sylva.errors import IncompatibleQueryType, RequestError
-from sylva.types import QueryType
-from sylva.collector import Collector
+from ..errors import IncompatibleQueryType, RequestError
+from ..types import QueryType
+from ..collector import Collector
 
 
 class Veriphone:

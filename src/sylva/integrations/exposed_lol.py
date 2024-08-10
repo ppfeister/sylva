@@ -1,9 +1,9 @@
 import pandas as pd
 import requests
 
-from sylva.collector import Collector
-from sylva.helpers.generic import QueryType
-from sylva.helpers.proxy import test_if_flaresolverr_online
+from ..collector import Collector
+from ..helpers.generic import QueryType
+from ..helpers.proxy import test_if_flaresolverr_online
 
 
 class Voter:
@@ -20,13 +20,13 @@ class Voter:
     def search(self, query:str, in_recursion:bool=False, query_type:QueryType=QueryType.TEXT, proxy_url:str|None=None) -> pd.DataFrame:
         if query_type != QueryType.FULLNAME:
             return pd.DataFrame()
-        
+
         if proxy_url is None:
             return pd.DataFrame()
 
         if not test_if_flaresolverr_online(proxy_url):
             return pd.DataFrame()
-        
+
         query_url:str = 'https://exposed.lol/'
         flare_payload:dict = {
             'cmd': 'request.get',
@@ -39,9 +39,9 @@ class Voter:
 
         if flare_response.status_code != 200:
             return pd.DataFrame()
-        
+
         print(flare_json)
 
-        
+
 
         return pd.DataFrame()

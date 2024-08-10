@@ -9,9 +9,9 @@ from colorama import Fore, Style, Back
 from .flaresolverr.flaresolverr import run
 import requests
 
-from sylva import __user_agent__
-from sylva.config import config
-from sylva.easy_logger import LogLevel, loglevel, NoColor
+from .. import __user_agent__
+from ..config import config
+from ..easy_logger import LogLevel, loglevel, NoColor
 
 
 flaresolverr_base_headers:dict[str, str] = {
