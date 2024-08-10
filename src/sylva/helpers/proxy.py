@@ -1,5 +1,6 @@
 import os
 import multiprocessing
+import subprocess
 import sys
 import time
 from urllib.parse import urlparse, urlunparse
@@ -59,6 +60,16 @@ class ProxySvc:
         )
         self.primary_proxy_url: str|None = None
         self.primary_session_id: str|None = None
+
+        # FIXME: Remove when FlareSolverr nonsense is fixed
+        if os.environ.get('SYLVA_ENV', 'tty') == 'docker':
+            def _call_flaresolverr_module():
+                subprocess.call(['python', '-u', '/app/flaresolverr.py'])
+            self.server_host: str = '127.0.0.1'
+            self.server_port: int = 8191
+            self.__server_process: multiprocessing.Process = multiprocessing.Process(
+                target=_call_flaresolverr_module
+            )
 
 
     def __del__(self):

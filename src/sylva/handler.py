@@ -96,8 +96,7 @@ class Handler:
                     print(f'{Fore.LIGHTRED_EX}{Style.BRIGHT}[!]{Style.RESET_ALL}{Fore.RESET} {Style.DIM}Failed to start proxy service{Style.RESET_ALL}')
             else:
                 if loglevel >= LogLevel.SUCCESS_ONLY.value:
-                    if loglevel <= LogLevel.TRACE.value:
-                        overwrite_previous_line()
+                    overwrite_previous_line()
                     print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Starting proxy session...')
                 try:
                     self.__proxy_svc.start_primary_session()
@@ -106,6 +105,11 @@ class Handler:
                         if loglevel <= LogLevel.SUCCESS_ONLY.value:
                             overwrite_previous_line()
                         print(f'{Fore.LIGHTRED_EX}{Style.BRIGHT}[!]{Style.RESET_ALL}{Fore.RESET} {Style.DIM}Failed to start proxy browser session{Style.RESET_ALL}')
+                else:
+                    if loglevel >= LogLevel.SUCCESS_ONLY.value:
+                        overwrite_previous_line()
+                    if loglevel >= LogLevel.INFO.value:
+                        print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Proxy session started')
 
 
     def __del__(self):
