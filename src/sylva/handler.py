@@ -227,7 +227,10 @@ class Handler:
 
             for new_query in new_queries:
                 if loglevel >= LogLevel.SUCCESS_ONLY.value:
-                    print(f'{Fore.BLUE}{Style.BRIGHT}[{Fore.RESET}Depth {i+1}{Fore.BLUE}{Style.BRIGHT}]{Fore.RESET}{Style.RESET_ALL} {new_query.query}')
+                    depth_str:str = ''
+                    if loglevel >= LogLevel.INFO.value:
+                        depth_str = f' {i+1}' # Only show depth if verbosity above SUCCESS_ONLY
+                    print(f'{Fore.BLUE}{Style.BRIGHT}[Branch{depth_str}]{Fore.RESET}{Style.RESET_ALL} {new_query.query}')
                 if not self.search_all(query=new_query):
                     overwrite_previous_line()
 
