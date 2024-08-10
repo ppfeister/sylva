@@ -8,8 +8,9 @@ COPY src/ /app/src/
 COPY pyproject.toml pdm.lock /app/
 
 # No idea why symlinks refuse to work when dockerized but here we are
-RUN rm /app/src/sylva/helpers/flaresolverr
+RUN rm /app/src/sylva/helpers/flaresolverr /app/src/sylva/helpers/pgpy
 RUN mv /app/src/flaresolverr/src/flaresolverr/ /app/src/sylva/helpers/flaresolverr
+RUN mv /app/src/pgpy/pgpy/ /app/src/sylva/helpers/pgpy
 RUN rm -rf /app/src/flaresolverr
 
 # Readme is needed to satisfy PyProject
