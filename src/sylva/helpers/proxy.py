@@ -127,10 +127,10 @@ class ProxySvc:
             self.server_host = self.server_host if self.server_host != '0.0.0.0' else '127.0.0.1'
             self.primary_proxy_url = f'http://{self.server_host}:{self.server_port}/v1'
 
-            for i in range(3):
+            for i in range(6):
                 if test_if_flaresolverr_online(proxy_url=self.primary_proxy_url):
                     break
-                time.sleep(2)
+                time.sleep(0.5)
             else:
                 raise Exception('FlareSolverr failed to start for an unknown reason')
 

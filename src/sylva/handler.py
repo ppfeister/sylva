@@ -117,9 +117,7 @@ class Handler:
 
 
     def __del__(self):
-        if test_if_flaresolverr_online(proxy_url=self.__proxy_svc.primary_proxy_url):
-            self.__proxy_svc.destroy_all_sessions()
-        self.__proxy_svc.stop()
+        del self.__proxy_svc
 
 
     def search_all(self, query:str|QueryDataItem, no_deduplicate:bool=False) -> int:
