@@ -44,6 +44,26 @@ RUN pdm install --check --prod --no-editable --frozen-lockfile --verbose
 
 FROM alexfozor/flaresolverr@sha256:3e5e1335c31365b5b0d9a737097c6a719de0ba49fed7db65cd828d75ae1bbecb AS cli-prod
 
+USER root:root
+
+# # # # # # # Replace after FlareSolverr is patched for Chromium 127
+# FROM python:3.12-slim-bookworm AS cli-prod
+#
+# # Dependencies not found in package
+# RUN apt-get update
+# RUN apt-get install -y --no-install-recommends chromium chromium-driver xvfb dumb-init
+# RUN apt-get clean
+
+# Remove temporary files and hardware decoding libraries
+RUN rm -rf /var/lib/apt/lists/* \
+  && rm -f /usr/lib/x86_64-linux-gnu/libmfxhw* \
+  && rm -f /usr/lib/x86_64-linux-gnu/mfx/*
+
+RUN useradd --home-dir /app --create-home --shell /bin/bash sylva \
+  && chown -R sylva:sylva /app
+
+USER sylva:sylva
+
 # Installation
 COPY --from=cli-builder /app/.venv /app/.venv
 COPY src/ /app/src/
