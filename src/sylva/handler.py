@@ -95,9 +95,13 @@ class Handler:
                         overwrite_previous_line()
                     print(f'{Fore.LIGHTRED_EX}{Style.BRIGHT}[!]{Style.RESET_ALL}{Fore.RESET} {Style.DIM}Failed to start proxy service{Style.RESET_ALL}')
             else:
-                if loglevel >= LogLevel.SUCCESS_ONLY.value:
+                if loglevel >= LogLevel.INFO.value:
                     overwrite_previous_line()
-                    print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Starting proxy session...')
+                    print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Proxy service started')
+                if loglevel >= LogLevel.SUCCESS_ONLY.value:
+                    if loglevel == LogLevel.SUCCESS_ONLY.value:
+                        overwrite_previous_line()
+                    print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Starting browser session...')
                 try:
                     self.__proxy_svc.start_primary_session()
                 except Exception as e:
@@ -109,7 +113,7 @@ class Handler:
                     if loglevel >= LogLevel.SUCCESS_ONLY.value:
                         overwrite_previous_line()
                     if loglevel >= LogLevel.INFO.value:
-                        print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Proxy session started')
+                        print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Browser session started')
 
 
     def __del__(self):
@@ -159,20 +163,22 @@ class Handler:
                 # Each runner should return a DataFrame, but since that data is already
                 # added to the collector, all we care about is the number of new rows.
                 results = len(runner.search(query=query, in_recursion=self.__in_recursion, query_type=query_type, proxy_data=proxy_data).index)
-                if loglevel >= LogLevel.SUCCESS_ONLY.value and results > 0:
+
+                if loglevel < LogLevel.DEBUG.value:
                     overwrite_previous_line()
+                if loglevel >= LogLevel.SUCCESS_ONLY.value and results > 0:
                     print(f'{Fore.LIGHTGREEN_EX}{Style.BRIGHT}[+]{Style.RESET_ALL}{Fore.RESET} Found {results} via {runner.source_name}')
                 elif loglevel >= LogLevel.INFO.value and results == 0:
-                    overwrite_previous_line()
                     print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} No results found via {runner.source_name}')
-                elif loglevel >= LogLevel.SUCCESS_ONLY.value and results == 0:
-                    overwrite_previous_line()
-                else:
-                    print("Something weird happened.")
+
                 total_discovered += results
+
             except RequestError:
                 pass
+
             except APIKeyError as e:
+                if loglevel <= LogLevel.DEBUG.value:
+                    overwrite_previous_line()
                 if e.key_not_provided:
                     if loglevel >= LogLevel.INFO.value:
                         print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} API key has not been provided for {runner.source_name} - {runner.source_obtain_keys_url}')
