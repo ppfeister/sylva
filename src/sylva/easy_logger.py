@@ -27,6 +27,11 @@ loglevel = int(config['General']['log_level'])
 def overwrite_previous_line():
     # Line up then clear only yields a not so pretty result while waiting for the next output
     # Therefore, line up, erase with new line, then line up again for next output
+
+    # Skip overwrite with high enough verbosity
+    if loglevel >= LogLevel.TRACE.value:
+        return
+
     print(_LINE_UP, end=_LINE_CLEAR)
     print()
     print(_LINE_UP, end=_LINE_CLEAR)
