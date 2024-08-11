@@ -7,7 +7,7 @@ from . import Collector
 from .config import config
 from .easy_logger import LogLevel, loglevel, NoColor, overwrite_previous_line
 from .errors import RequestError, APIKeyError
-from .helpers.proxy import ProxySvc, test_if_flaresolverr_online
+from .helpers.proxy import ProxySvc
 from .types import QueryType, SearchArgs
 
 from .integrations import (
@@ -28,7 +28,8 @@ class QueryDataItem(NamedTuple):
     """Query value and typographical data.
 
     The QueryDataItem is a simple dataclass that holds the query itself and the enumerated type.
-    This helps make the distinction between simple strings, identical dicts, and similar, more apparent to Sylva."""
+    This helps make the distinction between simple strings, identical dicts, and similar, more
+    apparent to Sylva."""
     query: str
     type: QueryType
 
@@ -85,39 +86,44 @@ class Handler:
 
         self.__proxy_svc:ProxySvc = ProxySvc()
         if config['General']['flaresolverr'] == 'True':
-            try:
-                if loglevel >= LogLevel.SUCCESS_ONLY.value:
-                    print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Starting proxy service...')
-                self.__proxy_svc.start()
-            except Exception as e:
-                if loglevel >= LogLevel.ERROR.value:
-                    if loglevel <= LogLevel.SUCCESS_ONLY.value:
-                        overwrite_previous_line()
-                    print(f'{Fore.LIGHTRED_EX}{Style.BRIGHT}[!]{Style.RESET_ALL}{Fore.RESET} {Style.DIM}Failed to start proxy service{Style.RESET_ALL}')
-            else:
-                if loglevel >= LogLevel.INFO.value:
-                    overwrite_previous_line()
-                    print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Proxy service started')
-                if loglevel >= LogLevel.SUCCESS_ONLY.value:
-                    if loglevel == LogLevel.SUCCESS_ONLY.value:
-                        overwrite_previous_line()
-                    print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Starting browser session...')
-                try:
-                    self.__proxy_svc.start_primary_session()
-                except Exception as e:
-                    if loglevel >= LogLevel.ERROR.value:
-                        if loglevel <= LogLevel.SUCCESS_ONLY.value:
-                            overwrite_previous_line()
-                        print(f'{Fore.LIGHTRED_EX}{Style.BRIGHT}[!]{Style.RESET_ALL}{Fore.RESET} {Style.DIM}Failed to start proxy browser session{Style.RESET_ALL}')
-                else:
-                    if loglevel >= LogLevel.SUCCESS_ONLY.value:
-                        overwrite_previous_line()
-                    if loglevel >= LogLevel.INFO.value:
-                        print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Browser session started')
+            self.__prepare_flaresolverr()
 
 
     def __del__(self):
         del self.__proxy_svc
+
+
+    def __prepare_flaresolverr(self):
+        """Attempt to start the proxy service and a common browser session"""
+        try:
+            if loglevel >= LogLevel.SUCCESS_ONLY.value:
+                print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Starting proxy service...')
+            self.__proxy_svc.start()
+        except Exception as e:
+            if loglevel >= LogLevel.ERROR.value:
+                if loglevel <= LogLevel.SUCCESS_ONLY.value:
+                    overwrite_previous_line()
+                print(f'{Fore.LIGHTRED_EX}{Style.BRIGHT}[!]{Style.RESET_ALL}{Fore.RESET} {Style.DIM}Failed to start proxy service{Style.RESET_ALL}')
+        else:
+            if loglevel >= LogLevel.INFO.value:
+                overwrite_previous_line()
+                print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Proxy service started')
+            if loglevel >= LogLevel.SUCCESS_ONLY.value:
+                if loglevel == LogLevel.SUCCESS_ONLY.value:
+                    overwrite_previous_line()
+                print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Starting browser session...')
+            try:
+                self.__proxy_svc.start_primary_session()
+            except Exception as e:
+                if loglevel >= LogLevel.ERROR.value:
+                    if loglevel <= LogLevel.SUCCESS_ONLY.value:
+                        overwrite_previous_line()
+                    print(f'{Fore.LIGHTRED_EX}{Style.BRIGHT}[!]{Style.RESET_ALL}{Fore.RESET} {Style.DIM}Failed to start proxy browser session{Style.RESET_ALL}')
+            else:
+                if loglevel >= LogLevel.SUCCESS_ONLY.value:
+                    overwrite_previous_line()
+                if loglevel >= LogLevel.INFO.value:
+                    print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Browser session started')
 
 
     def search_all(self, query:str|QueryDataItem, no_deduplicate:bool=False) -> int:

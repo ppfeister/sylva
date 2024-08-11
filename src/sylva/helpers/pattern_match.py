@@ -1,4 +1,5 @@
 import calendar
+from dataclasses import dataclass
 from difflib import SequenceMatcher
 import json
 import pathlib
@@ -12,6 +13,16 @@ import tldextract
 
 from .. import __url_normalization_pattern__
 from ..errors import RequestError
+
+
+@dataclass
+class PatternMatchQueryArgs:
+    """Enumerated query arguments with typographical data for pattern matching"""
+    url: str
+    body: str|None = None
+    query: str|None = None
+    preexisting: pd.DataFrame|None = None
+    recursion_depth: int = 0
 
 
 class PatternMatch:
@@ -47,18 +58,23 @@ class PatternMatch:
         self._known_redirects_by_query_string:List[str] = [
             r'https?:\/\/(?:www\.)youtube\.com\/redirect\?.+?q=(?P<url>https?%3A%2F%2F.+)' # YouTube has problems.. FIXME?
         ]
-    def search(self, url:str, body:str=None, query:str=None, preexisting:pd.DataFrame=None, recursion_depth: int=0) -> pd.DataFrame:
+
+
+    def search(self, args:PatternMatchQueryArgs) -> pd.DataFrame:
         """Searches for patterns in the given URL and body.
 
         Keyword Arguments:
-            url {str} -- The URL to search probe and pattern match body)
-            body {str} -- The body of the URL to search for patterns in (default: {None})
-            query {str} -- The query to search for (default: {None})
-            preexisting {pd.DataFrame} -- Optional dataframe containing alreayd scraped items to avoid duplicate results (read only) (default: {None})
-            recursion_depth {int} -- The new recursion depth (default: {0}) - Rarely used, normally to avoid infinite recursion
+            args {PatternMatchQueryArgs} -- The arguments to use for the search
         Returns:
             pd.DataFrame -- A DataFrame containing the results of the search
         """
+        url = args.url
+        body = args.body
+        query = args.query
+        preexisting = args.preexisting
+        recursion_depth = args.recursion_depth
+
+
         url = re.sub(__url_normalization_pattern__, '', url)
 
 
