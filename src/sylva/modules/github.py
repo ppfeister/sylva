@@ -9,7 +9,7 @@ import requests
 
 from .. import Collector
 from ..errors import IncompatibleQueryType
-from ..types import QueryType
+from ..types import QueryType, SearchArgs
 
 
 class IdentItem(NamedTuple):
@@ -52,6 +52,7 @@ class GitHub:
                 # TODO status code specific handling? is that needed?
                 return None
 
+
     async def __get_pages(self, url:str):
         # TODO Check for number of actually populated pages if account < maximum_query_depth values
         # Without this check, rate limit may be exceeded more quickly
@@ -87,18 +88,26 @@ class GitHub:
             raise IncompatibleQueryType(f'Query type not supported by {self.source_name}')
 
 
-    def accepts(self, query:str, query_type:str) -> bool:
+    def accepts(self, search_args:SearchArgs) -> bool:
+        """Determine if the search is supported by the module
+
+        Keyword Arguments:
+            search_args {SearchArgs} -- The arguments to use for the search
+
+        Returns:
+            bool -- True if the search is supported, False otherwise
+        """
         if (
-            query_type != QueryType.TEXT
-            and query_type != QueryType.USERNAME
-            and query_type != QueryType.EMAIL
-            and query_type != QueryType.FULLNAME
-            and query_type != QueryType.FIRSTNAME_LASTNAME
+            search_args.query_type != QueryType.TEXT
+            and search_args.query_type != QueryType.USERNAME
+            and search_args.query_type != QueryType.EMAIL
+            and search_args.query_type != QueryType.FULLNAME
+            and search_args.query_type != QueryType.FIRSTNAME_LASTNAME
         ):
             return False
 
         try:
-            self.__type(query)
+            self.__type(search_args.query)
         except IncompatibleQueryType:
             return False
 
@@ -214,24 +223,36 @@ class GitHub:
         return pd.DataFrame(new_data)
 
 
-    def search(self, query:str, in_recursion:bool=False, query_type:str|None=None, proxy_data:dict[str, str]|None=None) -> pd.DataFrame:
-        if query_type is None or query_type == QueryType.TEXT:
-            query_type = self.__type(query)
+    def search(self, search_args:SearchArgs) -> pd.DataFrame:
+        """Initiate a search of GitHub data
+
+        Keyword Arguments:
+            search_args {SearchArgs} -- The arguments to use for the search
+
+        Returns:
+            pd.DataFrame -- The results of the search
+        """
+        if search_args.query_type is None or search_args.query_type == QueryType.TEXT:
+            search_args.query_type = self.__type(search_args.query)
 
         all_new_data: pd.DataFrame = pd.DataFrame()
 
-        if query_type == QueryType.USERNAME:
-            results_by_username: pd.DataFrame = self.search_commits_by_username(username=query)
+        if search_args.query_type == QueryType.USERNAME:
+            results_by_username: pd.DataFrame = self.search_commits_by_username(username=search_args.query)
             all_new_data = pd.concat([all_new_data, results_by_username], ignore_index=True)
 
-        if query_type == QueryType.EMAIL:
-            results_by_email: pd.DataFrame = self.search_accounts_by_keyword(email=query)
+        if search_args.query_type == QueryType.EMAIL:
+            results_by_email: pd.DataFrame = self.search_accounts_by_keyword(email=search_args.query)
             all_new_data = pd.concat([all_new_data, results_by_email], ignore_index=True)
 
-        if query_type == QueryType.FULLNAME or query_type == QueryType.TEXT or query_type == QueryType.FIRSTNAME_LASTNAME:
-            if query_type == QueryType.FIRSTNAME_LASTNAME:
-                query = query.join(' ')
-            results_by_fullname: pd.DataFrame = self.search_accounts_by_keyword(full_name=query)
+        if (
+            search_args.query_type == QueryType.FULLNAME
+            or search_args.query_type == QueryType.TEXT
+            or search_args.query_type == QueryType.FIRSTNAME_LASTNAME
+        ):
+            if search_args.query_type == QueryType.FIRSTNAME_LASTNAME:
+                search_args.query = search_args.query.join(' ')
+            results_by_fullname: pd.DataFrame = self.search_accounts_by_keyword(full_name=search_args.query)
             if len(results_by_fullname.index) < 2: # Generic "full name" searches can be noisy
                 all_new_data = pd.concat([all_new_data, results_by_fullname], ignore_index=True)
 

@@ -8,7 +8,7 @@ from .config import config
 from .easy_logger import LogLevel, loglevel, NoColor, overwrite_previous_line
 from .errors import RequestError, APIKeyError
 from .helpers.proxy import ProxySvc, test_if_flaresolverr_online
-from .types import QueryType
+from .types import QueryType, SearchArgs
 
 from .integrations import (
     endato,
@@ -146,7 +146,17 @@ class Handler:
         total_discovered: int = 0
 
         for runner in self.runners:
-            if not runner.accepts(query=query, query_type=query_type):
+            search_args: SearchArgs = SearchArgs(
+                    query=query,
+                    in_recursion=self.__in_recursion,
+                    query_type=query_type,
+                    proxy_data={
+                        'proxy_url': self.__proxy_svc.primary_proxy_url,
+                        'flaresolverr_session_id': self.__proxy_svc.primary_session_id,
+                    },
+                )
+
+            if not runner.accepts(search_args=search_args):
                 if loglevel >= LogLevel.DEBUG.value:
                     print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} Query type not supported by {runner.source_name}')
                 continue
@@ -154,15 +164,12 @@ class Handler:
             if loglevel >= LogLevel.SUCCESS_ONLY.value:
                 print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Searching {runner.source_name}...')
 
-            proxy_data:dict[str, str] = {
-                'proxy_url': self.__proxy_svc.primary_proxy_url,
-                'flaresolverr_session_id': self.__proxy_svc.primary_session_id,
-            }
-
             try:
                 # Each runner should return a DataFrame, but since that data is already
                 # added to the collector, all we care about is the number of new rows.
-                results = len(runner.search(query=query, in_recursion=self.__in_recursion, query_type=query_type, proxy_data=proxy_data).index)
+                results = len(
+                    runner.search(search_args=search_args).index
+                    )
 
                 if loglevel < LogLevel.DEBUG.value:
                     overwrite_previous_line()

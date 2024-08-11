@@ -10,7 +10,7 @@ from .. import __github_raw_data_url__, __short_name__, Collector
 from ..config import config
 from ..errors import IncompatibleQueryType
 from ..helpers import pgpy
-from ..types import QueryType
+from ..types import QueryType, SearchArgs
 
 
 # FIXME GitLab PGP API seems to be broken. Documentation indicates no auth
@@ -61,41 +61,41 @@ class PGPModule:
             })
         return raw_rows
 
-    def accepts(self, query:str, query_type:QueryType=QueryType.TEXT) -> bool:
-        if query_type != QueryType.TEXT:
+    def accepts(self, search_args:SearchArgs) -> bool:
+        if search_args.query_type != QueryType.TEXT:
             return False
         return True
         # TODO Adapt to properly support fingerprint queries against keyservers
         if (
-            not re.match(self.__simple_email_regex, query)
-            and not re.match(self.__fingerprint_regex, query)
-            and not re.match(self.__keyid_regex, query)
+            not re.match(self.__simple_email_regex, search_args.query)
+            and not re.match(self.__fingerprint_regex, search_args.query)
+            and not re.match(self.__keyid_regex, search_args.query)
         ):
             return False
 
-    def search(self, query:str, in_recursion:bool=False, query_type:QueryType=QueryType.TEXT, proxy_data:dict[str, str]|None=None) -> pd.DataFrame:
-        if not self.accepts(query):
+    def search(self, search_args:SearchArgs) -> pd.DataFrame:
+        if not self.accepts(search_args):
             raise IncompatibleQueryType(f'Query type not supported by {self.source_name}')
 
         new_data:pd.DataFrame = pd.DataFrame()
         for target in self.targets.targets:
             sanitized_query: str = None
             if target['validation_pattern']:
-                if not re.match(target['validation_pattern'], query):
+                if not re.match(target['validation_pattern'], search_args.query):
                     continue
             elif target['validation_type'] == 'encoded-email':
-                if not re.match(self.__simple_email_regex, query):
+                if not re.match(self.__simple_email_regex, search_args.query):
                     continue
                 else:
-                    sanitized_query = requests.utils.requote_uri(query)
+                    sanitized_query = requests.utils.requote_uri(search_args.query)
             elif target['validation_type'] == 'fingerprint':
-                sanitized_query = query.replace(' ', '')
+                sanitized_query = search_args.query.replace(' ', '')
                 if sanitized_query.startswith('0x'):
                     sanitized_query = sanitized_query[2:]
                 if not re.match(self.__fingerprint_regex, sanitized_query):
                     continue
             elif target['validation_type'] == 'keyid':
-                sanitized_query = query.replace(' ', '')
+                sanitized_query = search_args.query.replace(' ', '')
                 if sanitized_query.startswith('0x'):
                     sanitized_query = sanitized_query[2:]
                 if not re.match(self.__keyid_regex, sanitized_query):
@@ -106,7 +106,7 @@ class PGPModule:
                         section, key = config_substitution
                         target['headers'][header] = value.format(config[section][key])
             if not sanitized_query:
-                sanitized_query = query
+                sanitized_query = search_args.query
             if 'headers' in target:
                 response = requests.get(target['simple_url'].format(query=sanitized_query), headers=target['headers'])
             else:
@@ -125,14 +125,14 @@ class PGPModule:
             for row in raw_rows:
                 new_rows.append({'email': row['email']} )
                 row['platform_name'] = target['friendly_name']
-                row['query'] = query
+                row['query'] = search_args.query
                 row['source_name'] = f"{__short_name__} PGP"
                 row['branch_recommended'] = True
 
             new_rows = pd.DataFrame(new_rows)
-            new_rows['query'] = query
+            new_rows['query'] = search_args.query
             new_rows['platform_name'] = target['friendly_name']
-            new_rows['platform_url'] = target['profile_url'].format(query=query)
+            new_rows['platform_url'] = target['profile_url'].format(query=search_args.query)
             new_rows['source_name'] = f"{__short_name__} PGP"
             new_rows['branch_recommended'] = True
             new_data = pd.concat([new_data, new_rows], ignore_index=True)

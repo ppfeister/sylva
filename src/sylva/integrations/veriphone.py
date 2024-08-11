@@ -6,7 +6,7 @@ import requests
 import phonenumbers
 
 from ..errors import IncompatibleQueryType, RequestError
-from ..types import QueryType
+from ..types import QueryType, SearchArgs
 from ..collector import Collector
 
 
@@ -20,23 +20,35 @@ class Veriphone:
         self.source_obtain_keys_url:str = 'https://veriphone.io/cp'
         self.collector:Collector = collector
     # TODO add validation for username, email, password
-    def accepts(self, query:str, query_type:QueryType=QueryType.TEXT) -> bool:
-        if query_type != QueryType.PHONE and query_type != QueryType.TEXT:
+
+
+    def accepts(self, search_args:SearchArgs) -> bool:
+        """Determine if the search is supported by the module
+
+        Keyword Arguments:
+            search_args {SearchArgs} -- The arguments to use for the search
+
+        Returns:
+            bool -- True if the search is supported, False otherwise
+        """
+        if search_args.query_type != QueryType.PHONE and search_args.query_type != QueryType.TEXT:
             return False
 
         try:
-            return phonenumbers.is_valid_number(phonenumbers.parse(query, self.__country))
+            return phonenumbers.is_valid_number(phonenumbers.parse(search_args.query, self.__country))
         except phonenumbers.phonenumberutil.NumberParseException:
             return False
-    def search(self, query:str, in_recursion:bool=False, query_type:QueryType=QueryType.TEXT, proxy_data:dict[str, str]|None=None) -> pd.DataFrame:
+
+
+    def search(self, search_args:SearchArgs) -> pd.DataFrame:
         # TODO Should this integreation have a toggle for branching?
         #if in_recursion and not config['Target Options']['veriphone-branch-in']:
         #    return pd.DataFrame()
 
-        if not self.accepts(query):
+        if not self.accepts(search_args):
             raise IncompatibleQueryType('Query unable to be parsed as phone number')
 
-        e164_query = phonenumbers.format_number(phonenumbers.parse(query, self.__country), phonenumbers.PhoneNumberFormat.E164)
+        e164_query = phonenumbers.format_number(phonenumbers.parse(search_args.query, self.__country), phonenumbers.PhoneNumberFormat.E164)
 
         sanitized_query = requests.utils.requote_uri(e164_query)
         response = requests.get(self.__api_url.format(KEY=self.__api_key, COUNTRY=self.__country, PHONE=sanitized_query))

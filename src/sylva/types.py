@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from enum import Enum
 
 import pandas as pd
@@ -12,6 +13,21 @@ class QueryType(Enum):
     FIRSTNAME = 5
     LASTNAME = 6
     FIRSTNAME_LASTNAME = 7
+
+@dataclass
+class SearchArgs:
+    """Enumerated arguments for built in search functions
+
+    Attributes:
+        query (str): The query to search for
+        in_recursion (bool): Whether or not the search is being performed recursively
+        query_type (QueryType): The type of query being searched for
+        proxy_data (dict[str, str]): Proxy data to use for the search
+    """
+    query: str
+    in_recursion: bool = False
+    query_type: QueryType = QueryType.TEXT
+    proxy_data: dict[str, str]|None = None
 
 
 class ResultDataFrame:
