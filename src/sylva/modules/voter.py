@@ -30,6 +30,10 @@ class Voter:
             bool -- True if the search is supported, False otherwise
         """
         # TODO Address proper acceptability checks
+        if search_args.query_type != QueryType.FULLNAME:
+            if ' ' not in search_args.query:
+                return False
+
         return True
 
 
