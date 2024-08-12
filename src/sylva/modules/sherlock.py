@@ -94,10 +94,14 @@ class Sherlock:
                     body_placeholder = None
                     send_body = False
 
-                if send_body:
-                    matched_patterns = pd.concat([matched_patterns, self.pattern_match.search(url=sites_data[site.name]['url'], body=body_placeholder, query=search_args.query, preexisting=self.collector.get_data())], ignore_index=True)
-                else:
-                    matched_patterns = pd.concat([matched_patterns, self.pattern_match.search(url=sites_data[site.name]['url'], query=search_args.query, preexisting=self.collector.get_data())], ignore_index=True)
+                pattern_match_args = pattern_match.PatternMatchQueryArgs(
+                    url=sites_data[site.name]['url'],
+                    body=body_placeholder if send_body else None,
+                    query=search_args.query,
+                    preexisting=self.collector.get_data(),
+                )
+
+                matched_patterns = pd.concat([matched_patterns, self.pattern_match.search(pattern_match_args)], ignore_index=True)
 
                 if not matched_patterns.empty:
                     matched_patterns['query'] = search_args.query

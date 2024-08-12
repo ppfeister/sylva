@@ -53,7 +53,7 @@ class Endato:
             # Not sure if Endato supports queries for non-US information
             return False
 
-        if search_args.query_type != QueryType.PHONE and search_args.query_type != QueryType.TEXT:
+        if search_args.query_type != QueryType.PHONE:
             return False
 
         try:

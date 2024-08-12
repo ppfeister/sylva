@@ -245,7 +245,11 @@ class PatternMatch:
                     and desired_target['scrape_to_resolve']
                     and not recursion_depth
                 ):
-                    scraped_data:List[Dict] = self.search(url=a['href'], query='filler data to pass checks', recursion_depth=recursion_depth+1).to_dict(orient='records')
+                    search_args: PatternMatchQueryArgs = PatternMatchQueryArgs(
+                        url=a['href'],
+                        recursion_depth=recursion_depth+1,
+                    )
+                    scraped_data:List[Dict] = self.search(args=search_args).to_dict(orient='records')
                     new_data.extend(scraped_data)
                 else:
                     new_data.append(_search_desirables(url=a['href']))

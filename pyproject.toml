@@ -37,6 +37,7 @@ dependencies = [
     "xvfbwrapper>=0.2.9; platform_system != \"Windows\"", # FlareSolverr depends on this
     "cryptography>=3.3.2",                                # PGPy depends on this
     "pyasn1>=0.5.1",                                      # PGPy depends on this
+    "nltk>=3.8.2",
 ]
 requires-python = ">=3.10"
 readme = ".github/README.md"

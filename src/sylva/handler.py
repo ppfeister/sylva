@@ -1,3 +1,4 @@
+import os
 from typing import List, NamedTuple
 
 from colorama import Fore, Style
@@ -21,6 +22,7 @@ from .modules import (
     sherlock,
     github,
     voter,
+    reddit,
 )
 
 
@@ -81,11 +83,12 @@ class Handler:
             veriphone.Veriphone(collector=self.collector, api_key=config['Keys']['veriphone-key'], country=self.__default_country),
             sherlock.Sherlock(collector=self.collector),
             github.GitHub(collector=self.collector, api_key=config['Keys']['github-key']),
+            reddit.Reddit(collector=self.collector),
             voter.Voter(collector=self.collector),
         ]
 
         self.__proxy_svc:ProxySvc = ProxySvc()
-        if config['General']['flaresolverr'] == 'True':
+        if config['General']['flaresolverr'] == 'True' and os.environ.get('SYLVA_FLARESOLVERR', '') != 'False':
             self.__prepare_flaresolverr()
 
 
@@ -184,8 +187,18 @@ class Handler:
 
                 total_discovered += results
 
-            except RequestError:
-                pass
+            except RequestError as e:
+                if loglevel <= LogLevel.DEBUG.value:
+                    overwrite_previous_line()
+
+                if loglevel >= LogLevel.INFO.value:
+                    if e.rate_limit_exceeded:
+                        print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} Rate limit exceeded with {runner.source_name}')
+                    else:
+                        print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} Something unexpected happened with {runner.source_name}')
+
+                if loglevel >= LogLevel.DEBUG.value:
+                    print(e)
 
             except APIKeyError as e:
                 if loglevel <= LogLevel.DEBUG.value:
