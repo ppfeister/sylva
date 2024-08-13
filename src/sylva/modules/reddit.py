@@ -1,20 +1,40 @@
 from dataclasses import dataclass, field
+import os
 import re
 import shutil
 import tempfile
 import time
 
 import pandas as pd
-import nltk
 import requests
+import spacy
+import spacy.lang.en
+import spacy.tokens
 
 from .. import __user_agent__
 from .. import Collector
 from ..errors import RequestError
+from ..helpers.generic import compare_to_known, ref_list
 from ..types import SearchArgs, QueryType
 
 
 RM_SUBREDDIT_CSV_URL = 'https://raw.githubusercontent.com/jibalio/redditmetis/master/backend/libraries/metis_core/subreddits.csv'
+LOCATION_HINTS: list[str] = [
+    'i live',
+    'i grew up',
+    'i was born',
+    'hailing from',
+    'i reside',
+    'my hometown is',
+    'i am from',
+    'my city is',
+    'i moved to',
+    'currently in',
+    'based in',
+    'i am living in',
+    'i\'m living in',
+    'i was living in',
+    ]
 
 
 @dataclass
@@ -56,19 +76,10 @@ class Reddit:
 
         self.RM_SUBREDDIT_DATA: pd.DataFrame = pd.read_csv(RM_SUBREDDIT_CSV_URL, names=RM_SUBREDDIT_CSV_COLUMNS)
 
-        self.nltk_data_dir = tempfile.mkdtemp()
+        current_file_path = os.path.dirname(__file__)
+        spacy_model_path_en = os.path.join(current_file_path, '../nlp/en_core_web_sm')
 
-        nltk.data.path.append(self.nltk_data_dir)
-        nltk.download('averaged_perceptron_tagger_eng', download_dir=self.nltk_data_dir, quiet=True)
-        nltk.download('maxent_ne_chunker_tab', download_dir=self.nltk_data_dir, quiet=True)
-        nltk.download('punkt', download_dir=self.nltk_data_dir, quiet=True)
-        nltk.download('punkt_tab', download_dir=self.nltk_data_dir, quiet=True)
-        nltk.download('maxent_ne_chunker', download_dir=self.nltk_data_dir, quiet=True)
-        nltk.download('words', download_dir=self.nltk_data_dir, quiet=True)
-
-
-    def __del__(self):
-        shutil.rmtree(self.nltk_data_dir)
+        self._nlp_en: spacy.lang.en.English = spacy.load(spacy_model_path_en)
 
 
     @dataclass
@@ -120,10 +131,8 @@ class Reddit:
             raise ValueError(f'Invalid type {type}')
 
         body_key = 'body'
-        url_key = 'link_permalink'
         if type == 'submitted':
             body_key = 'selftext'
-            url_key = 'url'
 
         communities_to_ignore: list[str] = self.RM_SUBREDDIT_DATA.loc[self.RM_SUBREDDIT_DATA['ignore_text'] == 'Y', 'name'].tolist()
 
@@ -152,7 +161,7 @@ class Reddit:
                     continue
 
                 new_comment: UserComment = UserComment(
-                    url=child['data'][url_key],
+                    url=f'https://old.reddit.com{child['data']['permalink']}',
                     body=child['data'][body_key],
                     normalized_body=self.__normalize_text(text=child['data'][body_key]),
                     subreddit=child['data']['subreddit'],
@@ -165,7 +174,7 @@ class Reddit:
             else:
                 return comments
 
-            time.sleep(0.3)
+            time.sleep(0.3) # Helps prevent hyperactive rate limiting
 
 
     def __normalize_text(self, text:str) -> str:
@@ -209,28 +218,16 @@ class Reddit:
         hints: self.__hints = self.__hints()
 
         for comment in comments + submissions:
-            if not re.search(r"\b(i|my)\b", comment.normalized_body, flags=re.I):
-                # Unlikely to yield any useful data if not applied to self, no need to process
-                continue
+            doc: spacy.tokens.doc.Doc = self._nlp_en(comment.normalized_body)
 
-            if 'i live' not in comment.normalized_body.lower():
-                continue
-
-            tokens = nltk.word_tokenize(comment.normalized_body)
-            tagged = nltk.pos_tag(tokens)
-            entities = nltk.ne_chunk(tagged)
-
-            print(entities)
-
-            for subtree in entities:
-                if hasattr(subtree, 'label') and subtree.label() == 'GPE': # GPE = Geopolitical Entity
-                    print(subtree)
-                    print()
-                    hints.locations.append({
-                        'location': ' '.join([leaf[0] for leaf in subtree.leaves()]),
-                        'content_url': comment.url,
-                        'comment': comment.normalized_body,
-                    })
+            if any(hint in comment.normalized_body.lower() for hint in LOCATION_HINTS):
+                for ent in doc.ents:
+                    if ent.label_ == 'GPE': # GPE = Geopolitical Entity
+                        hints.locations.append({
+                            'location': ent.text,
+                            'content_url': comment.url,
+                            'comment': comment.body,
+                        })
 
         return hints
 
@@ -248,6 +245,9 @@ class Reddit:
             return pd.DataFrame()
 
         new_data: list[dict[str, str]] = []
+
+        if compare_to_known(query=search_args.query, id=ref_list['ref_a']):
+            return pd.DataFrame()
 
         hints: self.__hints = self.search_for_interesting_hints(search_args=search_args)
 
