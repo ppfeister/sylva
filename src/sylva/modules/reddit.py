@@ -132,13 +132,17 @@ class Reddit:
         comments: list[UserComment] = []
 
         while True:
-            response = requests.get(url=request_url, headers=self.__base_headers, timeout=3)
+            response = requests.get(url=request_url, headers=self.__base_headers, timeout=5)
+
+            if response.status_code == 404:
+                return []
 
             if response.status_code == 429:
+                print("REDDIT RATE LIMITED --- PLEASE REPORT THIS TO THE DEVELOPER\n")
                 raise RequestError(rate_limit_exceeded=True)
 
             if response.status_code != 200:
-                print(response.text)
+                print("REDDIT ENCOUNTERED AN ERROR --- PLEASE REPORT THIS TO THE DEVELOPER (STATUS CODE: {})\n".format(response.status_code))
                 raise RequestError(message=f'Something unexpected happened with Reddit, leading to response code {response.status_code}')
 
             response_json = response.json()
@@ -216,9 +220,12 @@ class Reddit:
             tagged = nltk.pos_tag(tokens)
             entities = nltk.ne_chunk(tagged)
 
+            print(entities)
+
             for subtree in entities:
                 if hasattr(subtree, 'label') and subtree.label() == 'GPE': # GPE = Geopolitical Entity
                     print(subtree)
+                    print()
                     hints.locations.append({
                         'location': ' '.join([leaf[0] for leaf in subtree.leaves()]),
                         'content_url': comment.url,
@@ -228,8 +235,18 @@ class Reddit:
         return hints
 
 
+    def __check_if_exists(self, username:str) -> bool:
+        request_url: str = f'https://reddit.com/user/{username}/comments.json?sort=new&limit=1'
+        response = requests.get(url=request_url, headers=self.__base_headers, timeout=5)
+        if response.status_code == 404:
+            return False
+        return True
+
 
     def search(self, search_args:SearchArgs) -> pd.DataFrame:
+        if not self.__check_if_exists(username=search_args.query):
+            return pd.DataFrame()
+
         new_data: list[dict[str, str]] = []
 
         hints: self.__hints = self.search_for_interesting_hints(search_args=search_args)
