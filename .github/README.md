@@ -18,7 +18,7 @@ Visit the <strong><a href="https://sylva.pfeister.dev">Sylva Wiki</a></strong> f
 
 ## Summary
 
-### Useful Integrations
+### Useful integrations and data sources
 
 | Name | Description | API Key |
 | --- | --- | --- |
@@ -27,16 +27,11 @@ Visit the <strong><a href="https://sylva.pfeister.dev">Sylva Wiki</a></strong> f
 | ProxyNova | COMB API (cleartext passwords, usernames) | Native |
 | Veriphone | Phone number lookup | Req [ F+ ] |
 | GitHub | See detail below | Opt [ F ] |
+| Reddit | Natural language processing for residency hints  | Native |
 
 $ : paid | T : trial | F : Free | F+ : Freemium
 
 Most development was done without any paid access -- so despite some integrations requiring an account, the full experience can be attained without any subscriptions.
-
-#### GitHub Integration
-
-Query GitHub for any known PGP keys, scrape both the oldest and newest 1000 commit authorships (2000 total) for leaked identifying information, and search for identities based on full name, email, or username.
-
-Personal Access Token (PAT) is required for PGP scraping, but all other functions work out of the box. PAT is _recommended_ for higher rate limits on other functions. PAT does not require any permissions assigned to it whatsoever.
 
 ### Generic modules
 
@@ -45,6 +40,14 @@ Personal Access Token (PAT) is required for PGP scraping, but all other function
 | PGP Search | Search for identities through discovered PGP keys |
 | [__Sherlock__][sherlock] | Sherlock extended for discovery of additional identities and branching
 | Voter Records | Geographical, relation, and age lookup in 18 US States |
+
+___
+
+#### GitHub Integration
+
+Query GitHub for any known PGP keys, scrape both the oldest and newest 1000 commit authorships (2000 total) for leaked identifying information, and search for identities based on full name, email, or username.
+
+Personal Access Token (PAT) is required for PGP scraping, but all other functions work out of the box. PAT is _recommended_ for higher rate limits on other functions. PAT does not require any permissions assigned to it whatsoever.
 
 
 ## Quick Start
