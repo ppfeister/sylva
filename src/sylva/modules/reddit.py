@@ -29,6 +29,8 @@ LOCATION_HINTS: list[str] = [
     'i am from',
     'my city is',
     'i moved to',
+    'i am moving to',
+    'i\'m moving to'
     'currently in',
     'based in',
     'i am living in',
