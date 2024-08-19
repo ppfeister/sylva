@@ -1,16 +1,20 @@
 from dataclasses import dataclass, field
+import os
 import re
 import time
 
 import pandas as pd
 import requests
-import spacy
 
 from .. import __user_agent__
 from .. import Collector
 from ..errors import RequestError
 from ..helpers.generic import compare_to_known, ref_list
+from ..helpers.nlp import NatLangProcessor
 from ..types import SearchArgs, QueryType
+
+
+RM_SUBREDDIT_CSV_URL = 'https://raw.githubusercontent.com/jibalio/redditmetis/master/backend/libraries/metis_core/subreddits.csv'
 
 
 @dataclass
@@ -38,6 +42,21 @@ class Reddit:
             'Accept': 'application/json',
             'User-Agent': __user_agent__,
         }
+
+        RM_SUBREDDIT_CSV_COLUMNS = [
+            'name',            # Subreddit name
+            'topic_level1',    # Level 1 topic. For instance, Entertainment.
+            'topic_level2',    # Level 2 topic. For instance, TV Shows.
+            'topic_level3',    # Level 2 topic. For instance, Sherlock.
+            'default',         # Y if default sub, blank otherwise.
+            'ignore_text',     # Y if text in sub needs to be ignored, blank otherwise.
+            'sub_attribute',   # An attribute we can derive from this subreddit. i.e. sex, religion, gadget, etc.
+            'sub_value',       # Value for the above attribute. i.e. male, atheism, iPhone, etc.
+        ]
+
+        self.RM_SUBREDDIT_DATA: pd.DataFrame = pd.read_csv(RM_SUBREDDIT_CSV_URL, names=RM_SUBREDDIT_CSV_COLUMNS)
+
+        self.nlp = NatLangProcessor()
 
 
     @dataclass
@@ -105,11 +124,9 @@ class Reddit:
                 return []
 
             if response.status_code == 429:
-                print("REDDIT RATE LIMITED --- PLEASE REPORT THIS TO THE DEVELOPER\n")
                 raise RequestError(rate_limit_exceeded=True)
 
             if response.status_code != 200:
-                print("REDDIT ENCOUNTERED AN ERROR --- PLEASE REPORT THIS TO THE DEVELOPER (STATUS CODE: {})\n".format(response.status_code))
                 raise RequestError(message=f'Something unexpected happened with Reddit, leading to response code {response.status_code}')
 
             response_json = response.json()
@@ -132,7 +149,7 @@ class Reddit:
             else:
                 return comments
 
-            time.sleep(0.3) # Helps prevent hyperactive rate limiting
+            time.sleep(0.5) # Helps prevent hyperactive rate limiting
 
 
     def __normalize_text(self, text:str) -> str:
@@ -176,16 +193,14 @@ class Reddit:
         hints: self.__hints = self.__hints()
 
         for comment in comments + submissions:
-            doc: spacy.tokens.doc.Doc = self._nlp_en(comment.normalized_body)
+            discovered_locations: list[str] = self.nlp.get_residences(comment.normalized_body)
 
-            if any(hint in comment.normalized_body.lower() for hint in []):
-                for ent in doc.ents:
-                    if ent.label_ == 'GPE': # GPE = Geopolitical Entity
-                        hints.locations.append({
-                            'location': ent.text,
-                            'content_url': comment.url,
-                            'comment': comment.body,
-                        })
+            for location in discovered_locations:
+                hints.locations.append({
+                    'location': location,
+                    'content_url': comment.url,
+                    'comment': comment.body,
+                })
 
         return hints
 

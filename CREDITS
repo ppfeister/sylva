@@ -3,7 +3,7 @@ Upstream-Contact: Paul Pfeister <code@pfeister.dev>
 Comment: Intended for attribution of vendored libraries only (reference COPYING)
 Source: https://github.com/ppfeister/sylva
 
-_____________________________________________________________________
+_______________________________________________________________________________
 
 Files:
   *
@@ -44,22 +44,22 @@ License: BSD-3-Clause
 ---------------------------------------------------------------------
 
 Files:
-  src/sylva/nlp/en_core_web_sm/*
+  src/sylva/data/nlp/spacy_models/*
 Copyright (c) 2021, ExplosionAI GmbH
 License: Expat (regarding WordNet)
 License: WordNet 3.0
 
 Files:
-  src/sylva/nlp/en_core_web_sm/*
+  src/sylva/data/nlp/spacy_models/*
 Comment: Regarding WordNet
 License: WordNet 3.0
 
 Files:
-  src/sylva/nlp/en_core_web_sm/*
+  src/sylva/data/nlp/spacy_models/*
 Comment: Regarding OntoNotes 5
 License: Commercial to ExplosionAI GmbH for inclusion in Expat distribution
 
----------------------------------------------------------------------
+_______________________________________________________________________________
 
 License: Expat
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -80,7 +80,7 @@ License: Expat
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   SOFTWARE.
 
----------------------------------------------------------------------
+_______________________________________________________________________________
 
 License: BSD-3-Clause
   Redistribution and use in source and binary forms, with or without
@@ -108,7 +108,7 @@ License: BSD-3-Clause
   OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
----------------------------------------------------------------------
+_______________________________________________________________________________
 
 WordNet 3.0
   This software and database is being provided to you, the LICENSEE, by
