@@ -102,7 +102,7 @@ class Handler:
             if loglevel >= LogLevel.SUCCESS_ONLY.value:
                 print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Starting proxy service...')
             self.__proxy_svc.start()
-        except Exception as e:
+        except Exception:
             if loglevel >= LogLevel.ERROR.value:
                 if loglevel <= LogLevel.SUCCESS_ONLY.value:
                     overwrite_previous_line()
@@ -117,7 +117,7 @@ class Handler:
                 print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} Starting browser session...')
             try:
                 self.__proxy_svc.start_primary_session()
-            except Exception as e:
+            except Exception:
                 if loglevel >= LogLevel.ERROR.value:
                     if loglevel <= LogLevel.SUCCESS_ONLY.value:
                         overwrite_previous_line()

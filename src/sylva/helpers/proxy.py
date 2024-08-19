@@ -86,7 +86,7 @@ class ProxySvc:
                 print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} Starting FlareSolverr...')
             while not stop_event.is_set():
                 run(server_host=self.server_host, server_port=self.server_port)
-        except Exception as e:
+        except Exception:
             if loglevel >= LogLevel.INFO.value:
                 print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} Unable to start FlareSolverr, proceeding without it')
         else:

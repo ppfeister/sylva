@@ -58,6 +58,9 @@ mkdocs = [
     "mkdocs-git-revision-date-plugin>=0.3.2",
     "mkdocstrings[python]>=0.25.2",
 ]
+lint = [
+    "ruff>=0.6.1",
+]
 
 [build-system]
 requires = ["pdm-backend"]
@@ -73,7 +76,23 @@ write_template = "__version__ = '{}'"
 
 [tool.pdm.dev-dependencies]
 dev = [
-    "pytest>=8.2.2",
+    "pytest>=8.3.2",
     "tox>=4.16.0",
-    "ruff>=0.5.1",
+    "tox-pdm>=0.7.2",
+    "coverage>=7.6.1",
+    "jsonschema>=4.23.0",
 ]
+
+[tool.ruff]
+exclude = [
+    "src/pgpy/",
+    "src/flaresolverr/",
+]
+
+[tool.pytest.ini_options]
+norecursedirs = [
+    "src/pgpy",
+    "src/flaresolverr",
+]
+addopts = "--strict-markers"
+

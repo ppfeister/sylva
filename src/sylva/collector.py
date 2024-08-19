@@ -39,32 +39,32 @@ class Collector:
     def get_unique_queries(self, branchable_only:bool=False) -> List[str]:
         df = self.__data.get_data()
         if branchable_only:
-            df = df[df['branch_recommended'] == True]
+            df = df[df['branch_recommended'] == True] # noqa: E712
         return df['query'].dropna().unique().tolist()
     def get_unique_usernames(self, branchable_only:bool=False) -> List[str]:
         df = self.__data.get_data()
         if branchable_only:
-            df = df[df['branch_recommended'] == True]
+            df = df[df['branch_recommended'] == True] # noqa: E712
         return df['username'].dropna().unique().tolist()
     def get_unique_emails(self, branchable_only:bool=False) -> List[str]:
         df = self.__data.get_data()
         if branchable_only:
-            df = df[df['branch_recommended'] == True]
+            df = df[df['branch_recommended'] == True] # noqa: E712
         return df['email'].dropna().unique().tolist()
     def get_unique_phones(self, branchable_only:bool=False) -> List[str]:
         df = self.__data.get_data()
         if branchable_only:
-            df = df[df['branch_recommended'] == True]
+            df = df[df['branch_recommended'] == True] # noqa: E712
         return df['phone'].dropna().unique().tolist()
     def get_unique_fullnames(self, branchable_only:bool=False) -> List[str]:
         df = self.__data.get_data()
         if branchable_only:
-            df = df[df['branch_recommended'] == True]
+            df = df[df['branch_recommended'] == True] # noqa: E712
         return df['full_name'].dropna().unique().tolist()
     def get_unique_firstname_middlename_lastname_groups(self, branchable_only:bool=False) -> set[tuple[str, str, str]]:
         df = self.__data.get_data()
         if branchable_only:
-            df = df[df['branch_recommended'] == True]
+            df = df[df['branch_recommended'] == True] # noqa: E712
         filtered_df = df.dropna(subset=['first_name', 'last_name'])
         filtered_data = set(zip(filtered_df['first_name'], filtered_df['middle_name'], filtered_df['last_name']))
         return filtered_data

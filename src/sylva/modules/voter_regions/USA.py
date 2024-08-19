@@ -3,7 +3,6 @@ import re
 from typing import Dict, List
 import urllib.parse
 
-import pandas as pd
 import requests
 
 
@@ -182,7 +181,7 @@ def search(
         fullname: str = re.search(fullname_pattern, response.json()['solution']['response']).group('FULLNAME')
         rawaddr: str = re.search(rawaddr_pattern, response.json()['solution']['response']).group('ADDRESS')
         age: int = int(re.search(age_pattern, response.json()['solution']['response']).group('AGE'))
-    except KeyError as e:
+    except KeyError:
         # Important expected data not found. Possibly a false positive.
         # TODO Make this better for handling redacted/excluded data
         return {}
