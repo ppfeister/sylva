@@ -28,10 +28,10 @@ def test_single_residency(prompt, response):
     assert nlp.get_residences(prompt) == [response]
 
 
-@pytest.mark.xfail(reason='NLP does not yet properly handle multiple residencies')
+@pytest.mark.xfail(reason='NLP does not yet properly handle multiple residencies', strict=False)
 @pytest.mark.parametrize('prompt,response', [
     ('I\'ve lived in both Boston and Bremen before', ['Boston', 'Bremen']),
-    ('I\'ve vacationed in Enble, but lived in Bremen and Boston', ['Bremen', 'Boston']),
+    ('I\'ve vacationed in Manchester, but lived in Bremen and Boston', ['Bremen', 'Boston']),
     ('I used to live in Boston, but I now live in Bremen', ['Boston', 'Bremen']),
     ('I used to live in Boston, but I moved to Bremen', ['Boston', 'Bremen']),
     ('I\'ve lived in Boston, vacationed in Enble, and moved to Bremen', ['Boston', 'Bremen']),

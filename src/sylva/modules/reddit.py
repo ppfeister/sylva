@@ -235,8 +235,6 @@ class Reddit:
                 'raw_address': location['location'],
                 'comment': location['comment'],
             })
-            print(location['location'])
-            print(location['content_url'])
 
         new_df: pd.DataFrame = pd.DataFrame(new_data)
         self.collector.insert(new_df)

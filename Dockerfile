@@ -20,18 +20,21 @@ COPY .github/README.md /app/.github/
 
 # Testing source
 COPY tests/ /app/tests/
-COPY tox.ini pytest.ini /app/
+COPY tox.ini /app/
 
 WORKDIR /app
 
 # Extract version from git
 RUN apt-get update
-RUN apt-get install -y --no-install-recommends git
+RUN apt-get install -y --no-install-recommends git tox
 RUN apt-get clean
 
+# Necessary for pdm versioning
 ARG REL_REF
 RUN REL_REF=$(git describe --tags --abbrev=0)
-RUN echo "Building $REL_REF"
+
+# Helps prevent ci from pushing failed builds to registry
+#RUN tox -e py312 -v #FIXME
 
 # Build package
 RUN pip install --upgrade pdm
