@@ -2,20 +2,20 @@ import os
 import spacy
 from spacy.matcher import Matcher
 
+PRINT_TOKENS_FOR_DEBUG: bool = False
 
 LANGUAGE_RESOURCES: dict = {
     'en': {
         'model': 'en_core_web_md',
         'patterns': [
-            [{"LEMMA": {"IN": ["live", "reside", "move"]}}, {"POS": "ADP"}, {"ENT_TYPE": "GPE"}],
-            [{"LEMMA": {"IN": ["hail"]}}, {"LOWER": "from"}, {"ENT_TYPE": "GPE"}],
-            [{"LOWER": {"IN": ["moved", "relocated", "shifted"]}}, {"LOWER": "to"}, {"ENT_TYPE": "GPE"}],
-            [{"LOWER": "based"}, {"LOWER": {"IN": ["out", "in"]}}, {"OP": "?", "LOWER": {"IN": ["of", "from", "in"]}}, {"ENT_TYPE": "GPE"}],
-            [{"LOWER": {"IN": ["born"]}}, {"LOWER": "in"}, {"ENT_TYPE": "GPE"}],
-            [{"LEMMA": "grow"}, {"LOWER": "up"}, {"LOWER": "in"}, {"ENT_TYPE": "GPE"}]
+            [{"LEMMA": {"IN": ["live", "reside", "move"]}}, {"POS": "ADP"}, {"ENT_TYPE": "GPE", "OP": "+"}],
+            [{"LEMMA": {"IN": ["hail"]}}, {"LOWER": "from"}, {"ENT_TYPE": "GPE", "OP": "+"}],
+            [{"LOWER": {"IN": ["moved", "relocated", "shifted"]}}, {"LOWER": "to"}, {"ENT_TYPE": "GPE", "OP": "+"}],
+            [{"LOWER": "based"}, {"LOWER": {"IN": ["out", "in"]}}, {"OP": "?", "LOWER": {"IN": ["of", "from", "in"]}}, {"ENT_TYPE": "GPE", "OP": "+"}],
+            [{"LOWER": {"IN": ["born"]}}, {"LOWER": "in"}, {"ENT_TYPE": "GPE", "OP": "+"}],
+            [{"LEMMA": "grow"}, {"LOWER": "up"}, {"LOWER": "in"}, {"ENT_TYPE": "GPE", "OP": "+"}]
         ],
         'lemmas': {'live', 'reside', 'move', 'hail', 'grow', 'born'},
-        'alternate_lemmas': {'base', 'in', 'of'}, # NLP is a PITA and this is the best way so far to get things like "based out of"
         'first_person_pronouns': ['i', 'me', 'my', 'mine', 'myself'],
     }
 }
@@ -33,10 +33,9 @@ class NatLangProcessor:
         self.matcher: Matcher = Matcher(self.nlp.vocab)
 
         patterns = LANGUAGE_RESOURCES[language_code]['patterns']
-        self.matcher.add(f"RESIDENCY_PATTERN_{language_code.upper()}", patterns)
+        self.matcher.add(f"RESIDENCY_PATTERN_{language_code.upper()}", patterns, greedy="LONGEST")
 
         self.lemmas = LANGUAGE_RESOURCES[language_code]['lemmas']
-        self.alternate_lemmas = LANGUAGE_RESOURCES[language_code]['alternate_lemmas']
         self.first_person_pronouns = LANGUAGE_RESOURCES[language_code]['first_person_pronouns']
 
 
@@ -55,9 +54,10 @@ class NatLangProcessor:
         discovered_locations: list[str] = []
 
         doc = self.nlp(message)
-        matches = self.matcher(doc)
+        matches = self.matcher(doc, with_alignments=True)
 
-        for match_id, start, end in matches:
+        assembled_location: str = ''
+        for match_id, start, end, alignments in matches:
             span = doc[start:end]
 
             # Skip if no indication of first person
@@ -65,14 +65,37 @@ class NatLangProcessor:
                 continue
 
             for token in span:
-                if token.dep_ == 'pobj' and token.ent_type_ == "GPE" and (token.head.lemma_ in self.lemmas or token.head.lemma_ in self.alternate_lemmas):
-                    discovered_locations.append(token.text)
+                if PRINT_TOKENS_FOR_DEBUG:
+                    print("++++++++++++++++++++++++++++++++++++++++++")
+                    print(f'New token: {token.text}')
+                    print(f'DEP: {token.dep_}')
+                    print(f'TYPE: {token.ent_type_}')
+                    print(f'HEAD LEMMA: {token.head.lemma_}')
+                    print(f'HEAD TYPE: {token.head.ent_type_}')
+                    print(f'HEAD DEP: {token.head.dep_}')
+                    print(f'HEAD POS: {token.head.pos_}')
+                    print(f'HEAD SHAPE: {token.head.shape_}')
+                    print(f'HEAD TAG: {token.head.tag_}')
+                    print(f'HEAD TEXT: {token.head.text}')
+                if (
+                    token.dep_  == 'pobj'
+                    and token.ent_type_ == "GPE"
+                    and token.head.ent_type_ == 'prep'
+                ) or (
+                    token.ent_type_ == 'GPE'
+                    and token.dep_ in ['pobj', 'compound']
+                ):
+                    if PRINT_TOKENS_FOR_DEBUG:
+                        print(f'Found GPE token: {token.text}')
+                    assembled_location += token.text + ' '
 
-                # Check for prepositional phrases that include residency-related lemmas
-                elif token.dep_ == 'prep' and (token.head.lemma_ in self.lemmas or token.head.lemma_ in self.alternate_lemmas):
-                    discovered_locations.extend(
-                        child.text for child in token.children if child.dep_ == "pobj" and child.ent_type_ == "GPE"
-                    )
+                else:
+                    if assembled_location:
+                        discovered_locations.append(assembled_location.strip())
+                        assembled_location = ''
+
+            if assembled_location:
+                discovered_locations.append(assembled_location.strip())
 
         return list(set(discovered_locations))  # Remove duplicates, if any
 
