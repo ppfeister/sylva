@@ -7,15 +7,18 @@ PRINT_TOKENS_FOR_DEBUG: bool = False
 LANGUAGE_RESOURCES: dict = {
     'en': {
         'model': 'en_core_web_md',
-        'patterns': [
-            [{"LEMMA": {"IN": ["live", "reside", "move"]}}, {"POS": "ADP"}, {"ENT_TYPE": "GPE", "OP": "+"}],
-            [{"LEMMA": {"IN": ["hail"]}}, {"LOWER": "from"}, {"ENT_TYPE": "GPE", "OP": "+"}],
-            [{"LOWER": {"IN": ["moved", "relocated", "shifted"]}}, {"LOWER": "to"}, {"ENT_TYPE": "GPE", "OP": "+"}],
+        'pattern_old': [
             [{"LOWER": "based"}, {"LOWER": {"IN": ["out", "in"]}}, {"OP": "?", "LOWER": {"IN": ["of", "from", "in"]}}, {"ENT_TYPE": "GPE", "OP": "+"}],
-            [{"LOWER": {"IN": ["born"]}}, {"LOWER": "in"}, {"ENT_TYPE": "GPE", "OP": "+"}],
-            [{"LEMMA": "grow"}, {"LOWER": "up"}, {"LOWER": "in"}, {"ENT_TYPE": "GPE", "OP": "+"}]
         ],
-        'lemmas': {'live', 'reside', 'move', 'hail', 'grow', 'born'},
+        'patterns': [
+            [
+                {"POS": "AUX", "OP": "?"},
+                {"LEMMA": {"IN": ["live", "reside", "move", "hail", "grow", "bear", "relocate", "base", "shift", "move"]}},
+                {"POS": "ADP", "OP": "{,2}"},
+                {"LEMMA": "of", "OP": "?"},
+                {"ENT_TYPE": "GPE", "OP": "+"},
+            ]
+        ],
         'first_person_pronouns': ['i', 'me', 'my', 'mine', 'myself'],
     }
 }
@@ -35,7 +38,6 @@ class NatLangProcessor:
         patterns = LANGUAGE_RESOURCES[language_code]['patterns']
         self.matcher.add(f"RESIDENCY_PATTERN_{language_code.upper()}", patterns, greedy="LONGEST")
 
-        self.lemmas = LANGUAGE_RESOURCES[language_code]['lemmas']
         self.first_person_pronouns = LANGUAGE_RESOURCES[language_code]['first_person_pronouns']
 
 
