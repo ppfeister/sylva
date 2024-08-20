@@ -12,6 +12,9 @@ LANGUAGE_RESOURCES: dict = {
         ],
         'patterns': [
             [
+                {"POS": "PRON", "LOWER": {"IN": ["i", "me", "my", "mine", "myself"]}},
+                {"POS": "VERB", "LEMMA": {"IN": ["use", "be", "now"]}, "OP": "?"},
+                {"POS": "PART", "OP": "{,2}"},
                 {"POS": "AUX", "OP": "?"},
                 {"LEMMA": {"IN": ["live", "reside", "move", "hail", "grow", "bear", "relocate", "base", "shift", "move"]}},
                 {"POS": "ADP", "OP": "{,2}"},
@@ -19,7 +22,6 @@ LANGUAGE_RESOURCES: dict = {
                 {"ENT_TYPE": "GPE", "OP": "+"},
             ]
         ],
-        'first_person_pronouns': ['i', 'me', 'my', 'mine', 'myself'],
     }
 }
 
@@ -37,8 +39,6 @@ class NatLangProcessor:
 
         patterns = LANGUAGE_RESOURCES[language_code]['patterns']
         self.matcher.add(f"RESIDENCY_PATTERN_{language_code.upper()}", patterns, greedy="LONGEST")
-
-        self.first_person_pronouns = LANGUAGE_RESOURCES[language_code]['first_person_pronouns']
 
 
     def get_residences(self, message) -> list[str]:
@@ -61,10 +61,6 @@ class NatLangProcessor:
         assembled_location: str = ''
         for match_id, start, end, alignments in matches:
             span = doc[start:end]
-
-            # Skip if no indication of first person
-            if not any(token.lemma_.lower() in self.first_person_pronouns for token in span.sent):
-                continue
 
             for token in span:
                 if PRINT_TOKENS_FOR_DEBUG:
