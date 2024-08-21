@@ -96,3 +96,7 @@ norecursedirs = [
 ]
 addopts = "--strict-markers"
 
+[tool.coverage.run]
+omit = [
+    "**/intelxapi.py",
+]
