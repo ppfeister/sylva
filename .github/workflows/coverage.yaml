@@ -1,0 +1,33 @@
+name: Code Coverage
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - '!*'
+    paths:
+      - '.github/workflows/coverage.yaml'
+      - '**/*.json'
+      - '**/*.py'
+      - '**/*.ini'
+      - '**/*.toml'
+      - '**/*.lock'
+
+jobs:
+  coverage:
+    name: Run report
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up test environment
+        uses: pdm-project/setup-pdm@v4
+        with:
+          python-version: '3.x'
+          cache: true
+      - run: pdm install
+      - uses: paambaati/codeclimate-action@v8
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_REPORTER_ID }}
+        with:
+          coverageCommand: pdm run tox -e coverage
