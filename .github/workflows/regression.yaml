@@ -32,15 +32,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set up linting environment
-        uses: actions/setup-python@v5
+        uses: pdm-project/setup-pdm@v4
         with:
           python-version: '3.x'
-      - name: Install tox and related dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install tox
-      - name: Run tox linting environment
+          cache: true
+      - name: Install dependencies
+        run: python -m pip install --upgrade tox
+      - name: Lint via standard tox linting environment
         run: tox -e lint
+
 
   tox-matrix:
     name: Regression testing matrix
@@ -61,13 +61,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set up environment ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: pdm-project/setup-pdm@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install tox and related dependencies
+          cache: true
+      - name: Install dependencies
+        run: python -m pip install --upgrade tox
+      - name: Run regression test suite
         run: |
-          python -m pip install --upgrade pip
-          pip install tox
-          pip install tox-gh-actions
-      - name: Run tox
-        run: tox
+          tox
