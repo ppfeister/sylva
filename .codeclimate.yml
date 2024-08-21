@@ -7,3 +7,8 @@ checks:
       threshold: 10
   return-statements:
     enabled: false
+
+exclude_patterns:
+  - "src/sylva/data/nlp/spacy_models/"
+  - "**/tests/"
+  - "**/intelxapi.py"
