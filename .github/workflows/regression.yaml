@@ -43,7 +43,7 @@ jobs:
 
 
   tox-matrix:
-    name: Regression (${{ matrix.os }} / ${{ matrix.python-version }})
+    name: ${{ matrix.os }} / Python ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false # We want to know what specicic versions it fails on
