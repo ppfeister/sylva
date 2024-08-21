@@ -1,0 +1,9 @@
+version: "2"
+
+checks:
+  method-complexity:
+    enabled: true
+    config:
+      threshold: 10
+  return-statements:
+    enabled: false
