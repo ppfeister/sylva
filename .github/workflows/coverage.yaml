@@ -18,6 +18,7 @@ jobs:
   coverage:
     name: Run report
     runs-on: ubuntu-latest
+    environment: code-cov
     steps:
       - uses: actions/checkout@v4
       - name: Set up test environment
@@ -26,8 +27,10 @@ jobs:
           python-version: '3.x'
           cache: true
       - run: pdm install
+      - run: pdm run tox -e coverage
       - uses: paambaati/codeclimate-action@v8
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_REPORTER_ID }}
         with:
-          coverageCommand: pdm run tox -e coverage
+          coverageCommand: pdm run coverage lcov
+          coverageLocations: ${{github.workspace}}/coverage.lcov:lcov
