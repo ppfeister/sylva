@@ -82,8 +82,12 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/ppfeister
+    - icon: fontawesome/brands/docker
+      link: https://hub.docker.com/r/sylva/sylva
     - icon: fontawesome/brands/python
       link: https://pypi.org/project/sylva
+    - icon: fontawesome/solid/heart
+      link: https://github.com/sponsors/ppfeister
   consent:
     title: Cookie consent
     description: >-
