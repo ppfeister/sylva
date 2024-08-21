@@ -138,4 +138,5 @@ nav:
   - Contributing:
     - Introduction: contributing/introduction.md
     - Documentation: contributing/documentation.md
+    - Regression Testing: contributing/regression.md
   - Sponsor: https://github.com/sponsors/ppfeister

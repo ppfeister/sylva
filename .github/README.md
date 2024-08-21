@@ -1,5 +1,9 @@
 <p align="center">
-<img width="144" height="144" src="https://img.icons8.com/pulsar-gradient/144/tree.png" alt="tree"/>
+<picture>
+  <source media="(prefers-color-scheme: dark)" width="100" height="100" srcset="../docs/assets/logo-white.png">
+  <source media="(prefers-color-scheme: light)" width="100" height="100" srcset="../docs/assets/logo-dark.png">
+  <img alt="Shows an illustrated sun in light mode and a moon with stars in dark mode." src="../docs/assets/logo-dark.png">
+</picture>
 </p>
 
 <h1 align="center">Sylva identity discovery</h1>
