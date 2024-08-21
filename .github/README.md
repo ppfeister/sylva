@@ -59,13 +59,19 @@ Personal Access Token (PAT) is required for PGP scraping, but all other function
 Docker is the preferred method of installation, providing the most consistent and predictable user experience.
 
 ```bash
-docker run --rm -it sylva/sylva --help
+docker run -it sylva/sylva --help
+```
+
+For a preview of the latest changes, the `preview` tag may be used.
+
+```bash
+docker run -it sylva/sylva:preview --help
 ```
 
 > [!TIP]
 > Some users may opt to add an alias to their shell for ease of use.
 >
-> Adding `alias sd="docker run --rm -it sylva/sylva"` to your ~/.bashrc or ~/.zshrc will allow you to simply type `sd branch user123` rather than the entire docker command.
+> Adding `alias sd="docker run -it sylva/sylva"` to your ~/.bashrc or ~/.zshrc will allow you to simply type `sd branch user123` rather than the entire docker command. Add the `:preview` tag if necessary.
 
 Other installation methods are described on the [__Sylva Wiki__][wiki-install].
 
