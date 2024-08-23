@@ -3,10 +3,12 @@ import re
 from typing import Dict, List
 
 import pandas as pd
-from sherlock_project.sherlock import sherlock
-from sherlock_project.sites import SitesInformation
-from sherlock_project.notify import QueryNotify
-from sherlock_project.result import QueryStatus
+from sherlock_project.sherlock import (
+    sherlock,
+    QueryNotify,
+    QueryStatus,
+    SitesInformation,
+)
 
 from .. import __url_normalization_pattern__
 from ..errors import RequestError
