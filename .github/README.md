@@ -10,7 +10,8 @@
 
 <p align="center">
 <a href="https://codeclimate.com/github/ppfeister/sylva/maintainability"><img src="https://api.codeclimate.com/v1/badges/4884eb85ac21a8426edc/maintainability" /></a> &nbsp;
-<a href="https://codeclimate.com/github/ppfeister/sylva/test_coverage"><img src="https://api.codeclimate.com/v1/badges/4884eb85ac21a8426edc/test_coverage" /></a>
+<a href="https://codeclimate.com/github/ppfeister/sylva/test_coverage"><img src="https://api.codeclimate.com/v1/badges/4884eb85ac21a8426edc/test_coverage" /></a> &nbsp;
+<a href="#"><img alt="Static Badge" src="https://img.shields.io/badge/statically%20typed-mypy-039dfc"></a>
 </p>
 
 <p align="center">
