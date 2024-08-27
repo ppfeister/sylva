@@ -4,17 +4,18 @@ from typing import Dict, List
 
 import pandas as pd
 from sherlock_project.sherlock import (
-    sherlock,
     QueryNotify,
     QueryStatus,
     SitesInformation,
+    sherlock,
 )
 
 from .. import __url_normalization_pattern__
-from ..errors import RequestError
-from ..types import QueryType, SearchArgs
 from ..collector import Collector
+from ..errors import RequestError
 from ..helpers import pattern_match
+from ..types import QueryType, SearchArgs
+
 
 class Sherlock:
     def __init__(self, collector:Collector):
@@ -103,7 +104,10 @@ class Sherlock:
                     preexisting=self.collector.get_data(),
                 )
 
-                matched_patterns = pd.concat([matched_patterns, self.pattern_match.search(pattern_match_args)], ignore_index=True)
+                matched_patterns = pd.concat(
+                    [matched_patterns, self.pattern_match.search(pattern_match_args)],
+                    ignore_index=True,
+                )
 
                 if not matched_patterns.empty:
                     matched_patterns['query'] = search_args.query

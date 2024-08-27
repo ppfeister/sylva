@@ -1,15 +1,15 @@
 import calendar
-from dataclasses import dataclass
-from difflib import SequenceMatcher
 import json
 import pathlib
 import re
+from dataclasses import dataclass
+from difflib import SequenceMatcher
 from typing import Dict, List
 
-from bs4 import BeautifulSoup
 import pandas as pd
 import requests
 import tldextract
+from bs4 import BeautifulSoup
 
 from .. import __url_normalization_pattern__
 from ..errors import RequestError
@@ -34,29 +34,29 @@ class PatternMatch:
             self.pattern_data = json.load(f)
         self.pattern_data = self.pattern_data['patterns']
         self._generic_desirables:List[Dict] = [
-            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?behance\.net\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Behance'},
-            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?dribbble\.com\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Dribbble'},
-            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?flickr\.com\/people\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Flickr'},
+            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?behance\.net\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Behance'},  # noqa: E501
+            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?dribbble\.com\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Dribbble'},  # noqa: E501
+            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?flickr\.com\/people\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Flickr'},  # noqa: E501
             {'pattern': r'^(?P<url>https?:\/\/(?P<uid>.+?)\.tumblr\.com\/?)$', 'platform_name': 'Tumblr'},
-            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?youtube\.com\/channel\/(?:@(?P<uid>[^\s]+?)|.+?))(?:\/.*)?$', 'platform_name': 'YouTube', 'scrape_to_resolve': True},
+            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?youtube\.com\/channel\/(?:@(?P<uid>[^\s]+?)|.+?))(?:\/.*)?$', 'platform_name': 'YouTube', 'scrape_to_resolve': True},  # noqa: E501
             {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?vimeo\.com\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Vimeo'},
-            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?soundcloud\.com\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'SoundCloud'},
-            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?linkedin\.com\/in\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'LinkedIn'},
-            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?github\.com\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'GitHub', 'validation_string': 'itemprop="additionalName"'},
-            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?(?:twitter|x)\.com\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Twitter'},
-            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?instagram\.com\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Instagram'},
-            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?facebook\.com\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Facebook'},
-            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?xing\.com\/profile\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Xing'},
+            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?soundcloud\.com\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'SoundCloud'},  # noqa: E501
+            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?linkedin\.com\/in\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'LinkedIn'},  # noqa: E501
+            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?github\.com\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'GitHub', 'validation_string': 'itemprop="additionalName"'},  # noqa: E501
+            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?(?:twitter|x)\.com\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Twitter'},  # noqa: E501
+            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?instagram\.com\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Instagram'},  # noqa: E501
+            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?facebook\.com\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Facebook'},  # noqa: E501
+            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?xing\.com\/profile\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Xing'},  # noqa: E501
             {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?twitch\.tv\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Twitch'},
-            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?snapchat\.com\/add\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Snapchat'},
-            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?telegram\.me\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Telegram'},
-            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?gitlab\.com\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'GitLab'},
-            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?pinterest\.(?:com|fr)\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Pintrest'},
-            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?stackoverflow\.com\/users\/[0-9]+?\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'StackOverflow'},
-            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?crowdin\.com\/profile\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Crowdin'},
+            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?snapchat\.com\/add\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Snapchat'},  # noqa: E501
+            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?telegram\.me\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Telegram'},  # noqa: E501
+            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?gitlab\.com\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'GitLab'},  # noqa: E501
+            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?pinterest\.(?:com|fr)\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Pintrest'},  # noqa: E501
+            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?stackoverflow\.com\/users\/[0-9]+?\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'StackOverflow'},  # noqa: E501
+            {'pattern': r'^(?P<url>https?:\/\/(?:www\.)?crowdin\.com\/profile\/(?P<uid>[^\/\s]+\/?))$', 'platform_name': 'Crowdin'},  # noqa: E501
         ]
         self._known_redirects_by_query_string:List[str] = [
-            r'https?:\/\/(?:www\.)youtube\.com\/redirect\?.+?q=(?P<url>https?%3A%2F%2F.+)' # YouTube has problems.. FIXME?
+            r'https?:\/\/(?:www\.)youtube\.com\/redirect\?.+?q=(?P<url>https?%3A%2F%2F.+)' # YouTube has problems..FIXME
         ]
 
 

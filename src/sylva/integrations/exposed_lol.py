@@ -2,8 +2,8 @@ import pandas as pd
 import requests
 
 from ..collector import Collector
-from ..helpers.generic import QueryType
 from ..helpers.proxy import test_if_flaresolverr_online
+from ..types import QueryType
 
 
 class Voter:
@@ -17,7 +17,12 @@ class Voter:
         return True
 
 
-    def search(self, query:str, in_recursion:bool=False, query_type:QueryType=QueryType.TEXT, proxy_url:str|None=None) -> pd.DataFrame:
+    def search(self,
+               query:str,
+               in_recursion:bool=False,
+               query_type:QueryType=QueryType.TEXT,
+               proxy_url:str|None=None
+            ) -> pd.DataFrame:
         if query_type != QueryType.FULLNAME:
             return pd.DataFrame()
 

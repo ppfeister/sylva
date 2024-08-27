@@ -1,18 +1,17 @@
-import os
 import multiprocessing
+import os
 import subprocess
 import sys
 import time
 from urllib.parse import urlparse, urlunparse
 
-from colorama import Fore, Style, Back
-from .flaresolverr.flaresolverr import run
 import requests
+from colorama import Back, Fore, Style
 
 from .. import __user_agent__
 from ..config import config
-from ..easy_logger import LogLevel, loglevel, NoColor
-
+from ..easy_logger import LogLevel, NoColor, loglevel
+from .flaresolverr.flaresolverr import run
 
 flaresolverr_base_headers:dict[str, str] = {
     'Accept': 'application/json',
@@ -53,7 +52,7 @@ def test_if_flaresolverr_online(proxy_url:str) -> bool:
 class ProxySvc:
     def __init__(self, host: str = os.environ.get('HOST', '0.0.0.0'), port: int = None):
         self.server_host: str = host
-        self.server_port: int = port if port is not None else 54011 # TODO Change to 0 when dynamic added to flaresolverr
+        self.server_port: int = port if port is not None else 54011 # TODO Change to 0 when dynamic added to flaresolverr  # fmt: skip # noqa: E501
         self.__stop_event: multiprocessing.Event = multiprocessing.Event()
         self.__server_process: multiprocessing.Process = multiprocessing.Process(
             target=self._start_async_server, args=(self.__stop_event,)
@@ -88,10 +87,10 @@ class ProxySvc:
                 run(server_host=self.server_host, server_port=self.server_port)
         except Exception:
             if loglevel >= LogLevel.INFO.value:
-                print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} Unable to start FlareSolverr, proceeding without it')
+                print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} Unable to start FlareSolverr, proceeding without it')  # fmt: skip # noqa: E501
         else:
             if loglevel >= LogLevel.INFO.value:
-                print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} Started FlareSolverr on {self.server_host}:{self.server_port}')
+                print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} Started FlareSolverr on {self.server_host}:{self.server_port}')  # fmt: skip # noqa: E501
 
 
     def stop(self):
@@ -108,10 +107,10 @@ class ProxySvc:
                     print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} Stopped FlareSolverr')
             else:
                 if loglevel >= LogLevel.INFO.value:
-                    print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} Something went wrong terminating FlareSolverr')
+                    print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} Something went wrong terminating FlareSolverr')  # fmt: skip # noqa: E501
         else:
             if loglevel >= LogLevel.DEBUG.value:
-                print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} Attempted to stop FlareSolverr, but it was not running')
+                print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} Attempted to stop FlareSolverr, but it was not running')  # fmt: skip # noqa: E501
 
 
     def start(self):

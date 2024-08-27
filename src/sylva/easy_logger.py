@@ -4,6 +4,7 @@ from colorama import Fore, Style
 
 from .config import config
 
+
 class LogLevel(Enum):
     FATAL = 0
     ERROR = 1
@@ -15,7 +16,8 @@ class LogLevel(Enum):
 
 class NoColor:
     BLACK = RED = GREEN = YELLOW = BLUE = MAGENTA = CYAN = WHITE = ''
-    LIGHTBLACK_EX = LIGHTRED_EX = LIGHTGREEN_EX = LIGHTYELLOW_EX = LIGHTBLUE_EX = LIGHTMAGENTA_EX = LIGHTCYAN_EX = LIGHTWHITE_EX = ''
+    LIGHTBLACK_EX = LIGHTRED_EX = LIGHTGREEN_EX = LIGHTYELLOW_EX = ''
+    LIGHTBLUE_EX = LIGHTMAGENTA_EX = LIGHTCYAN_EX = LIGHTWHITE_EX = ''
     DIM = NORMAL = BRIGHT = ''
     RESET = RESET_ALL = ''
 

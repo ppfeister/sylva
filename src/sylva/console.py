@@ -1,9 +1,10 @@
 import argparse
 import sys
 
-from . import __short_name__, __long_name__, __version__, __author__, __forge_url__
+from . import __author__, __forge_url__, __long_name__, __short_name__, __version__
 from .config import InteractiveConfig
 from .handler import Handler
+
 
 def config_subcommand(args:argparse.Namespace):
     """Handles the config subcommand
@@ -44,21 +45,21 @@ def interactive():
 
     parser_search = subparsers.add_parser('search', help='Find an identity')
     parser_search.add_argument('query', help='The query to search for')
-    parser_search.add_argument('--captcha', dest='custom-captcha-proxy-address', action='store', default=None, metavar='PROXY_URL', help='Use an alternative captcha-solving proxy server')
+    parser_search.add_argument('--captcha', dest='custom-captcha-proxy-address', action='store', default=None, metavar='PROXY_URL', help='Use an alternative captcha-solving proxy server')  # fmt: skip # noqa: E501
     parser_search.set_defaults(func=search_subcommand)
 
     parser_branch = subparsers.add_parser('branch', help='Recursively search based on discovered identities')
     parser_branch.add_argument('query', help='The query to search for')
-    parser_branch.add_argument('-d', '--depth', type=int, default=3, dest='branch_depth', metavar='123', help='The depth to search')
-    parser_branch.add_argument('-a', '--show-all', dest='no_deduplicate', action='store_true', default=False, help='Do not deduplicate results')
-    parser_branch.add_argument('--captcha', dest='custom-captcha-proxy-address', action='store', default=None, metavar='PROXY_URL', help='Use an alternative captcha-solving proxy server')
+    parser_branch.add_argument('-d', '--depth', type=int, default=3, dest='branch_depth', metavar='123', help='The depth to search')  # fmt: skip # noqa: E501
+    parser_branch.add_argument('-a', '--show-all', dest='no_deduplicate', action='store_true', default=False, help='Do not deduplicate results')  # fmt: skip # noqa: E501
+    parser_branch.add_argument('--captcha', dest='custom-captcha-proxy-address', action='store', default=None, metavar='PROXY_URL', help='Use an alternative captcha-solving proxy server')  # fmt: skip # noqa: E501
     parser_branch.set_defaults(func=branch_subcommand)
 
-    parser_interactive = subparsers.add_parser('interactive', help='Launch the query builder (mutliple parameters allowed)')
+    parser_interactive = subparsers.add_parser('interactive', help='Launch the query builder (mutliple parameters allowed)')  # fmt: skip # noqa: E501
     parser_interactive.set_defaults(func=interactive_setup_subcommand)
 
     parser_config = subparsers.add_parser('config', help=f'Edit the {__short_name__} config')
-    parser_config.add_argument('-e', '--edit', dest='interactive_edit', action='store_true', default=False, help='Edit the config interactively')
+    parser_config.add_argument('-e', '--edit', dest='interactive_edit', action='store_true', default=False, help='Edit the config interactively')  # fmt: skip # noqa: E501
     parser_config.set_defaults(func=config_subcommand)
 
     parser.add_argument(

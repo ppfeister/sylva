@@ -3,6 +3,7 @@ from enum import Enum
 
 import pandas as pd
 
+
 class QueryType(Enum):
     """Used to more consistently define the type of a query"""
     TEXT = 0

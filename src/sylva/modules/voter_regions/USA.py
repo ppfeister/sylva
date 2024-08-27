@@ -1,10 +1,9 @@
-from datetime import datetime
 import re
-from typing import Dict, List
 import urllib.parse
+from datetime import datetime
+from typing import Dict, List
 
 import requests
-
 
 __us_state_to_abbrev:Dict[str, str] = {
     "alaska": "ak",
@@ -48,7 +47,7 @@ def search(
         age:int|None=None,
 ) -> Dict[str, str|bool]:
     """Search for voter information in the United States
-    
+
     Keyword Arguments:
         first_name {str} -- The first name of the voter (default: {None})
         middle_name {str} -- The middle name of the voter (default: {None})
@@ -60,7 +59,7 @@ def search(
 
     Note that at least one name related argument MUST be provided.
     State should be full proper name or two letter abbreviation.
-    
+
     Returns:
         pd.DataFrame -- A DataFrame containing the results of the search
     """
@@ -71,7 +70,7 @@ def search(
         and full_name is None
     ):
         return {}
-    
+
     if (
         (
             first_name is not None
@@ -81,7 +80,7 @@ def search(
         and full_name is not None
     ):
         raise ValueError('Cannot provide either first_name, middle_name, or last_name with full_name')
-    
+
     query_name:str = ''
     if full_name is not None:
         query_name = urllib.parse.quote_plus(full_name)
@@ -96,7 +95,7 @@ def search(
             if query_name != '':
                 query_name += '+'
             query_name += urllib.parse.quote(last_name)
-    
+
     if state is not None:
         state = state.lower()
         if state in __us_state_to_abbrev:
@@ -136,7 +135,7 @@ def search(
             birth_year_range = 'before+1930'
 
     query_url:str = f'{__voter_data_url}/voters'
-    
+
     if location:
         query_url += f'/{location}'
     if query_name:
@@ -159,23 +158,24 @@ def search(
     if response.status_code != 200:
         # FlareSolverr proxy failed directly
         return {}
-    
+
     if response.json()['solution']['status'] != 200:
         # FlareSolverr proxy failed to get a valid response from target
         return {}
-    
+
     # Matching expected indicator or new rows (shown below). More than one is low confidence.
     # <tr data-href="/voter/<id number>/<name>" itemscope itemtype="http://schema.org/Person">
     if response.text.count('tr data-href') != 1:
         return {}
-    
+
     urlpart_pattern = r'tr data-href="(?P<URL_PART>\/voter\/\d+\/[a-z\-]+)\" itemscope'
     fullname_pattern = r'span itemprop="name">(?P<FULLNAME>.+?) ?<\/span>'
     rawaddr_pattern = r'span itemprop="address">(?P<ADDRESS>.+?)<\/span>'
     age_pattern = r'<strong>Age:&nbsp;<\/strong>(?P<AGE>\d{1,3})<br\/>'
 
     try:
-        # TODO First name, middle initial, and last name can be guessed based on values on the profile's page (compare with/without middle initial)
+        # TODO First name, middle initial, and last name can be guessed based on values on the profile's page
+        # (compare with/without middle initial)
         urlpart: str = re.search(urlpart_pattern, response.json()['solution']['response']).group('URL_PART')
         profile_url: str = f'{__voter_data_url}{urlpart}'
         fullname: str = re.search(fullname_pattern, response.json()['solution']['response']).group('FULLNAME')
@@ -185,7 +185,7 @@ def search(
         # Important expected data not found. Possibly a false positive.
         # TODO Make this better for handling redacted/excluded data
         return {}
-    
+
     new_data:Dict = {
             'branch_recommended': True,
             'platform_name': "VoterRecords.com",
@@ -196,4 +196,3 @@ def search(
         }
 
     return new_data
-    

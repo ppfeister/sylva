@@ -1,11 +1,12 @@
 import json
+
 import pandas as pd
 import requests
 
 from .. import config
+from ..collector import Collector
 from ..errors import IncompatibleQueryType, RequestError
 from ..types import QueryType
-from ..collector import Collector
 
 
 class ProxyNova:
@@ -21,7 +22,16 @@ class ProxyNova:
             return True
         return False
 
-    def search(self, query:str, start:int=0, end:int=config['Target Options']['proxynova-default-limit'], in_recursion:bool=False, query_type:QueryType=QueryType.TEXT, proxy_data:dict[str, str]|None=None) -> pd.DataFrame:
+    def search(
+            self,
+            query:str,
+            start:int=0,
+            end:int=config['Target Options']['proxynova-default-limit'],
+            in_recursion:bool=False,
+            query_type:QueryType=QueryType.TEXT,
+            proxy_data:dict[str, str]|None=None
+        ) -> pd.DataFrame:
+
         if in_recursion and not config['Target Options']['proxynova-branch-in']:
             return pd.DataFrame()
 

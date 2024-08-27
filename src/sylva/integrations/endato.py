@@ -6,8 +6,8 @@ import phonenumbers
 import requests
 
 from ..config import config
+from ..errors import APIKeyError, IncompatibleQueryType, RequestError
 from ..types import QueryType, SearchArgs
-from ..errors import IncompatibleQueryType, APIKeyError, RequestError
 
 
 class Endato:
@@ -65,8 +65,14 @@ class Endato:
 
 
     def _query_phone(self, query:str) -> pd.DataFrame:
-        e164_query = phonenumbers.format_number(phonenumbers.parse(query, self.__country), phonenumbers.PhoneNumberFormat.E164)
-        readable_query = phonenumbers.format_number(phonenumbers.parse(query, self.__country), phonenumbers.PhoneNumberFormat.NATIONAL)
+        e164_query = phonenumbers.format_number(
+            phonenumbers.parse(query, self.__country),
+            phonenumbers.PhoneNumberFormat.E164,
+        )
+        readable_query = phonenumbers.format_number(
+            phonenumbers.parse(query, self.__country),
+            phonenumbers.PhoneNumberFormat.NATIONAL,
+        )
 
         headers = self.__base_headers
         headers['galaxy-search-type'] = 'DevAPICallerID'
@@ -78,7 +84,7 @@ class Endato:
 
         response = requests.post(self.__api_url['phone'], headers=headers, data=values)
         if response.status_code != 200:
-            raise RequestError(f'Failed to get results from Endato. Status code: {response.status_code}\n\n{response.text}')
+            raise RequestError(f'Failed to get results from Endato. Status code: {response.status_code}\n\n{response.text}')  # fmt: skip # noqa: E501
         json_data:dict = json.loads(response.text)
         flattened_data:dict = {
             'first_name': json_data['person']['name']['firstName'],

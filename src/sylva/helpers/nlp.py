@@ -1,4 +1,5 @@
 import os
+
 import spacy
 from spacy.matcher import Matcher
 
@@ -7,17 +8,14 @@ PRINT_TOKENS_FOR_DEBUG: bool = False
 LANGUAGE_RESOURCES: dict = {
     'en': {
         'model': 'en_core_web_md',
-        'pattern_old': [
-            [{"LOWER": "based"}, {"LOWER": {"IN": ["out", "in"]}}, {"OP": "?", "LOWER": {"IN": ["of", "from", "in"]}}, {"ENT_TYPE": "GPE", "OP": "+"}],
-        ],
         'patterns': [
             [
                 {"POS": "PRON", "LOWER": {"IN": ["i", "me", "my", "mine", "myself"]}},
                 {"POS": "VERB", "LEMMA": {"IN": ["use", "be", "now"]}, "OP": "?"},
                 {"POS": "PART", "OP": "{,2}"},
                 {"POS": "AUX", "OP": "?"},
-                {"LEMMA": {"IN": ["live", "reside", "move", "hail", "grow", "bear", "relocate", "base", "shift", "move"]}},
-                {"POS": "ADP", "OP": "{,2}"},
+                {'LEMMA': {'IN': ['live', 'reside', 'move', 'hail', 'grow', 'bear', 'relocate', 'base', 'shift', 'move']}},  # fmt: skip # noqa: E501
+                {'POS': 'ADP', 'OP': '{,2}'},
                 {"LEMMA": "of", "OP": "?"},
                 {"ENT_TYPE": "GPE", "OP": "+"},
             ]

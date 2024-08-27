@@ -1,17 +1,15 @@
-from dataclasses import dataclass, field
 import re
 import time
+from dataclasses import dataclass, field
 
 import pandas as pd
 import requests
 
-from .. import __user_agent__
-from .. import Collector
+from .. import Collector, __user_agent__
 from ..errors import RequestError
 from ..helpers.generic import compare_to_known, ref_list
 from ..helpers.nlp import NatLangProcessor
-from ..types import SearchArgs, QueryType
-
+from ..types import QueryType, SearchArgs
 
 RM_SUBREDDIT_CSV_URL = 'https://raw.githubusercontent.com/jibalio/redditmetis/master/backend/libraries/metis_core/subreddits.csv'
 
@@ -110,7 +108,8 @@ class Reddit:
         if type == 'submitted':
             body_key = 'selftext'
 
-        communities_to_ignore: list[str] = self.RM_SUBREDDIT_DATA.loc[self.RM_SUBREDDIT_DATA['ignore_text'] == 'Y', 'name'].tolist()
+        communities_to_ignore: list[str] = \
+            self.RM_SUBREDDIT_DATA.loc[self.RM_SUBREDDIT_DATA['ignore_text'] == 'Y', 'name'].tolist()
 
         request_url_base: str = f'https://reddit.com/user/{username}/{type}.json?t=all&limit=100&sort=new'
         request_url: str = request_url_base
@@ -126,7 +125,7 @@ class Reddit:
                 raise RequestError(rate_limit_exceeded=True)
 
             if response.status_code != 200:
-                raise RequestError(message=f'Something unexpected happened with Reddit, leading to response code {response.status_code}')
+                raise RequestError(message=f'Something unexpected happened with Reddit, leading to response code {response.status_code}')  # fmt: skip # noqa: E501
 
             response_json = response.json()
 

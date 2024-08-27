@@ -1,7 +1,6 @@
 import configparser
 import os
 import subprocess
-#from typing import List
 
 import platformdirs
 
@@ -11,7 +10,7 @@ __config_dir = platformdirs.user_config_dir(__short_name__.lower())
 __config_path = f"{__config_dir}/config.ini"
 
 # Whitelist to help prevent command injection on launch of preferred editor
-#__allowed_editors: List[str] = ['atom', 'atom-beta', 'code', 'code-insiders', 'code-oss', 'emacs', 'geany', 'gedit', 'kate', 'nano', 'notepad++', 'nvim', 'subl', 'vim', 'vim-gtk', 'vscode']
+#__allowed_editors: List[str] = ['atom', 'atom-beta', 'code', 'code-insiders', 'code-oss', 'emacs', 'geany', 'gedit', 'kate', 'nano', 'notepad++', 'nvim', 'subl', 'vim', 'vim-gtk', 'vscode']  # noqa: E501
 
 class InteractiveConfig():
     def __init__(self):

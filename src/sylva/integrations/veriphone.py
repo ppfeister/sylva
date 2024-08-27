@@ -2,12 +2,12 @@ import json
 from typing import Dict, List
 
 import pandas as pd
-import requests
 import phonenumbers
+import requests
 
+from ..collector import Collector
 from ..errors import IncompatibleQueryType, RequestError
 from ..types import QueryType, SearchArgs
-from ..collector import Collector
 
 
 class Veriphone:
@@ -48,10 +48,15 @@ class Veriphone:
         if not self.accepts(search_args):
             raise IncompatibleQueryType('Query unable to be parsed as phone number')
 
-        e164_query = phonenumbers.format_number(phonenumbers.parse(search_args.query, self.__country), phonenumbers.PhoneNumberFormat.E164)
+        e164_query = phonenumbers.format_number(
+            phonenumbers.parse(search_args.query, self.__country),
+            phonenumbers.PhoneNumberFormat.E164,
+        )
 
         sanitized_query = requests.utils.requote_uri(e164_query)
-        response = requests.get(self.__api_url.format(KEY=self.__api_key, COUNTRY=self.__country, PHONE=sanitized_query))
+        response = requests.get(
+            self.__api_url.format(KEY=self.__api_key, COUNTRY=self.__country, PHONE=sanitized_query)
+        )
         if response.status_code != 200:
             raise RequestError(f'Failed to get results from ProxyNova. Status code: {response.status_code}')
 

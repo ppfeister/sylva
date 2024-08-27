@@ -6,12 +6,11 @@ from typing import Dict, List
 import pandas as pd
 import requests
 
-from .. import __github_raw_data_url__, __short_name__, Collector
+from .. import Collector, __github_raw_data_url__, __short_name__
 from ..config import config
 from ..errors import IncompatibleQueryType
 from ..helpers import pgpy
 from ..types import QueryType, SearchArgs
-
 
 # FIXME GitLab PGP API seems to be broken. Documentation indicates no auth
 # is required, but that may be incorrect...

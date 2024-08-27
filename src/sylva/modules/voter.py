@@ -1,11 +1,12 @@
-import pandas as pd
 from typing import Dict
 
+import pandas as pd
+
 from .. import Collector
-from ..types import QueryType, SearchArgs
 from ..helpers.generic import compare_to_known, ref_list
-from ..modules.voter_regions import USA
 from ..helpers.proxy import test_if_flaresolverr_online
+from ..modules.voter_regions import USA
+from ..types import QueryType, SearchArgs
 
 
 class Voter:
@@ -49,7 +50,11 @@ class Voter:
         if search_args.query_type != QueryType.FULLNAME:
             return pd.DataFrame()
 
-        if search_args.proxy_data is None or 'proxy_url' not in search_args.proxy_data or search_args.proxy_data['proxy_url'] is None:
+        if (
+            search_args.proxy_data is None
+            or 'proxy_url' not in search_args.proxy_data
+            or search_args.proxy_data['proxy_url'] is None
+        ):
             return pd.DataFrame()
 
         if not test_if_flaresolverr_online(proxy_url=search_args.proxy_data['proxy_url']):

@@ -157,7 +157,9 @@ class GitHub:
         return new_data
 
 
-    def search_accounts_by_keyword(self, username:str|None=None, email:str|None=None, full_name:str|None=None) -> pd.DataFrame:
+    def search_accounts_by_keyword(
+            self, username:str|None=None, email:str|None=None, full_name:str|None=None
+        ) -> pd.DataFrame:
         if username is None and email is None and full_name is None:
             raise ValueError('At least one of username, email, or full_name must be provided')
 

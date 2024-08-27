@@ -84,10 +84,23 @@ dev = [
 ]
 
 [tool.ruff]
+line-length = 120
 exclude = [
     "src/pgpy/",
     "src/flaresolverr/",
+    "tests/",
+    "src/sylva/integrations/intelxapi.py",
 ]
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.ruff.lint]
+select = [ "E", "F", "W", "Q", "I" ]
+ignore = [ "Q000" ]
+
+[tool.ruff.lint.flake8-quotes]
+inline-quotes = "single"
 
 [tool.pytest.ini_options]
 norecursedirs = [

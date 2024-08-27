@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 
-import requests
+import json
+import sys
+
 # import inspect  # DEBUG
 # import logging  # DEBUG
 # import http.client # DEBUG
 import time
-import json
-import sys
+
+import requests
 
 # http.client.HTTPConnection.debuglevel = 1  # DEBUG
 
@@ -437,12 +439,12 @@ class IntelX_API:
         time.sleep(self.API_RATE_LIMIT)
         h = {'x-key': self.API_KEY, 'User-Agent': self.USER_AGENT}
         r = requests.get(self.API_ROOT + f'/file/view?f=13&storageid={id}&bucket={bucket}', headers=h)
-        
+
         if(r.status_code == 200):
             return r.json()
         else:
             return r.status_code
-            
+
 
     def search(self, term, maxresults=100, buckets=[], timeout=5, datefrom="", dateto="", sort=4, media=0, terminate=[]):
         """

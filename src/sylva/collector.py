@@ -1,7 +1,9 @@
 from typing import List
+
 import pandas as pd
 
 from .types import ResultDataFrame
+
 
 class Collector:
     """Result collector object to store results
@@ -18,7 +20,7 @@ class Collector:
         get_unique_emails: Returns a list of unique emails
         get_unique_phones: Returns a list of unique phone numbers
         get_unique_fullnames: Returns a list of unique full names
-        get_unique_firstname_middlename_lastname_groups: Returns a list of unique firstname, middlename, and lastname groups
+        get_unique_fullname_groups: Returns a list of unique firstname, middlename, and lastname groups
     """
     def __init__(self):
         self.__data:ResultDataFrame = ResultDataFrame()
@@ -61,7 +63,7 @@ class Collector:
         if branchable_only:
             df = df[df['branch_recommended'] == True] # noqa: E712
         return df['full_name'].dropna().unique().tolist()
-    def get_unique_firstname_middlename_lastname_groups(self, branchable_only:bool=False) -> set[tuple[str, str, str]]:
+    def get_unique_fullname_groups(self, branchable_only:bool=False) -> set[tuple[str, str, str]]:
         df = self.__data.get_data()
         if branchable_only:
             df = df[df['branch_recommended'] == True] # noqa: E712
