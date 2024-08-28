@@ -8,10 +8,9 @@ on:
       - src/**
       - pyproject.toml
       - pdm.lock
-      - .github/workflows/containerize.yaml
+      - .github/workflows/publish-containers.yaml
       - Dockerfile
       - tests/**
-      - pytest.ini
       - tox.ini
   release:
     types:
