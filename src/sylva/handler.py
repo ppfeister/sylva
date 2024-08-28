@@ -251,7 +251,7 @@ class Handler:
             new_queries.update(QueryDataItem(query=query, type=QueryType.EMAIL) for query in self.collector.get_unique_emails(branchable_only=True))  # fmt: skip # noqa: E501
             new_queries.update(QueryDataItem(query=query, type=QueryType.PHONE) for query in self.collector.get_unique_phones(branchable_only=True))  # fmt: skip # noqa: E501
             new_queries.update(QueryDataItem(query=query, type=QueryType.FULLNAME) for query in self.collector.get_unique_fullnames(branchable_only=True))  # fmt: skip # noqa: E501
-            new_queries.update(QueryDataItem(query=query, type=QueryType.FIRSTNAME_LASTNAME) for query in self.collector.get_unique_fullname_groups(branchable_only=True))   # type: ignore[arg-type] # fmt: skip # noqa: E501 # FIXME: Search needs to accept tuples
+            new_queries.update(QueryDataItem(query=query, type=QueryType.FIRSTNAME_LASTNAME) for query in self.collector.get_unique_fullname_groups(branchable_only=True))  # type: ignore[arg-type] # fmt: skip # noqa: E501 # FIXME: Search needs to accept tuples
 
             new_queries -= queries_made
             queries_made.update(new_queries)

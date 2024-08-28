@@ -12,7 +12,7 @@ from colorama import Back, Fore, Style
 from .. import __user_agent__
 from ..config import config
 from ..easy_logger import LogLevel, NoColor, loglevel
-from .flaresolverr.flaresolverr import run
+from .flaresolverr.flaresolverr import run  # type: ignore[import-not-found] # No idea why it's not found during testing
 
 flaresolverr_base_headers:dict[str, str] = {
     'Accept': 'application/json',
