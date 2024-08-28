@@ -1,8 +1,8 @@
 <p align="center">
 <picture>
   <source media="(prefers-color-scheme: dark)" width="100" height="100" srcset="../docs/assets/logo-white.png">
-  <source media="(prefers-color-scheme: light)" width="100" height="100" srcset="../docs/assets/logo-dark.png">
-  <img alt="Shows an illustrated sun in light mode and a moon with stars in dark mode." src="../docs/assets/logo-dark.png">
+  <source media="(prefers-color-scheme: light)" width="100" height="100" srcset="../docs/assets/logo-black.png">
+  <img alt="Shows an illustrated sun in light mode and a moon with stars in dark mode." src="../docs/assets/logo-black.png">
 </picture>
 </p>
 
@@ -11,7 +11,7 @@
 <p align="center">
 <a href="https://codeclimate.com/github/ppfeister/sylva/maintainability"><img src="https://api.codeclimate.com/v1/badges/4884eb85ac21a8426edc/maintainability" /></a> &nbsp;
 <a href="https://codeclimate.com/github/ppfeister/sylva/test_coverage"><img src="https://api.codeclimate.com/v1/badges/4884eb85ac21a8426edc/test_coverage" /></a> &nbsp;
-<a href="#"><img alt="Static Badge" src="https://img.shields.io/badge/statically%20typed-mypy-039dfc"></a>
+<a href="#"><img alt="Static Badge" src="https://img.shields.io/badge/type%20checked-mypy-1868ff">
 </p>
 
 <p align="center">
