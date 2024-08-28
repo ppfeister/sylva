@@ -37,7 +37,7 @@ jobs:
           python-version: '3.x'
           cache: true
       - name: Install dependencies
-        run: pdm install
+        run: pdm install --no-self
       - name: Lint via standard tox linting environment
         run: pdm run tox -e lint
 
@@ -72,3 +72,19 @@ jobs:
       - name: Run regression test suite
         run: |
           pdm run tox -e py${{ matrix.python-version }}
+
+
+  typecheck:
+    name: Static type checking
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up test environment
+        uses: pdm-project/setup-pdm@v4
+        with:
+          python-version: '3.x'
+          cache: true
+      - name: Install dependencies
+        run: pdm install --no-self
+      - name: Run typechecking
+        run: pdm run tox -e typecheck

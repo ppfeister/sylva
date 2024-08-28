@@ -78,7 +78,7 @@ class PGPModule:
 
         new_data:pd.DataFrame = pd.DataFrame()
         for target in self.targets.targets:
-            sanitized_query: str = None
+            sanitized_query: str|None = None
             if target['validation_pattern']:
                 if not re.match(target['validation_pattern'], search_args.query):
                     continue
@@ -128,13 +128,13 @@ class PGPModule:
                 row['source_name'] = f"{__short_name__} PGP"
                 row['branch_recommended'] = True
 
-            new_rows = pd.DataFrame(new_rows)
-            new_rows['query'] = search_args.query
-            new_rows['platform_name'] = target['friendly_name']
-            new_rows['platform_url'] = target['profile_url'].format(query=search_args.query)
-            new_rows['source_name'] = f"{__short_name__} PGP"
-            new_rows['branch_recommended'] = True
-            new_data = pd.concat([new_data, new_rows], ignore_index=True)
+            new_df: pd.DataFrame = pd.DataFrame(new_rows)
+            new_df['query'] = search_args.query
+            new_df['platform_name'] = target['friendly_name']
+            new_df['platform_url'] = target['profile_url'].format(query=search_args.query)
+            new_df['source_name'] = f"{__short_name__} PGP"
+            new_df['branch_recommended'] = True
+            new_data = pd.concat([new_data, new_df], ignore_index=True)
 
         self.collector.insert(new_data)
         return new_data

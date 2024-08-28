@@ -109,7 +109,7 @@ class Reddit:
             body_key = 'selftext'
 
         communities_to_ignore: list[str] = \
-            self.RM_SUBREDDIT_DATA.loc[self.RM_SUBREDDIT_DATA['ignore_text'] == 'Y', 'name'].tolist()
+            self.RM_SUBREDDIT_DATA.loc[self.RM_SUBREDDIT_DATA['ignore_text'] == 'Y', 'name'].tolist()  # type: ignore[operator]
 
         request_url_base: str = f'https://reddit.com/user/{username}/{type}.json?t=all&limit=100&sort=new'
         request_url: str = request_url_base
@@ -188,7 +188,7 @@ class Reddit:
         comments: list[UserComment] = self.fetch_messages_by_username(username=search_args.query, type='comments')
         submissions: list[UserComment] = self.fetch_messages_by_username(username=search_args.query, type='submitted')
 
-        hints: self.__hints = self.__hints()
+        hints: self.__hints = self.__hints()  # type: ignore[name-defined] # TODO: Figure out why this is even flagged
 
         for comment in comments + submissions:
             discovered_locations: list[str] = self.nlp.get_residences(comment.normalized_body)
@@ -215,12 +215,12 @@ class Reddit:
         if not self.__check_if_exists(username=search_args.query):
             return pd.DataFrame()
 
-        new_data: list[dict[str, str]] = []
+        new_data: list[dict[str, str|bool]] = []
 
         if compare_to_known(query=search_args.query, id=ref_list['ref_a']):
             return pd.DataFrame()
 
-        hints: self.__hints = self.search_for_interesting_hints(search_args=search_args)
+        hints: self.__hints = self.search_for_interesting_hints(search_args=search_args)  # type: ignore[name-defined] # TODO: Figure out why this is even flagged
 
         for location in hints.locations:
             new_data.append({

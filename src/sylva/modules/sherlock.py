@@ -3,7 +3,7 @@ import re
 from typing import Dict, List
 
 import pandas as pd
-from sherlock_project.sherlock import (
+from sherlock_project.sherlock import (  # type: ignore[import-untyped]
     QueryNotify,
     QueryStatus,
     SitesInformation,
@@ -97,21 +97,27 @@ class Sherlock:
                     body_placeholder = None
                     send_body = False
 
-                pattern_match_args = pattern_match.PatternMatchQueryArgs(
+                pattern_match_args: pattern_match.PatternMatchQueryArgs = pattern_match.PatternMatchQueryArgs(
                     url=sites_data[site.name]['url'],
                     body=body_placeholder if send_body else None,
                     query=search_args.query,
                     preexisting=self.collector.get_data(),
                 )
 
+                try:
+                    newly_matched_patterns_df: pd.DataFrame = self.pattern_match.search(pattern_match_args)
+                except RequestError:
+                    newly_matched_patterns_df = pd.DataFrame()
+                else:
+                    if not newly_matched_patterns_df.empty:
+                        newly_matched_patterns_df['query'] = search_args.query
+                        newly_matched_patterns_df['branch_recommended'] = True
+
+
                 matched_patterns = pd.concat(
-                    [matched_patterns, self.pattern_match.search(pattern_match_args)],
+                    [matched_patterns, newly_matched_patterns_df],
                     ignore_index=True,
                 )
-
-                if not matched_patterns.empty:
-                    matched_patterns['query'] = search_args.query
-                    matched_patterns['branch_recommended'] = True
 
                 if (
                     matched_patterns.empty

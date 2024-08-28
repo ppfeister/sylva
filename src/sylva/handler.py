@@ -38,7 +38,7 @@ class QueryDataItem(NamedTuple):
 
 
 if config['General']['colorful'] == 'False': # no better way since distutils deprecation?
-    Fore = Back = Style = NoColor
+    Fore = Back = Style = NoColor  # type: ignore[assignment]
 
 class Handler:
     """Request handler with built-in helpers and proxy services
@@ -147,7 +147,7 @@ class Handler:
         """
         if isinstance(query, QueryDataItem):
             query_type:QueryType = query.type
-            query:str = query.query
+            query = query.query
         else:
             query_type = QueryType.TEXT
 
@@ -159,8 +159,8 @@ class Handler:
                     in_recursion=self.__in_recursion,
                     query_type=query_type,
                     proxy_data={
-                        'proxy_url': self.__proxy_svc.primary_proxy_url,
-                        'flaresolverr_session_id': self.__proxy_svc.primary_session_id,
+                        'proxy_url': self.__proxy_svc.primary_proxy_url,  # type: ignore[dict-item]
+                        'flaresolverr_session_id': self.__proxy_svc.primary_session_id,  # type: ignore[dict-item]
                     },
                 )
 
@@ -251,7 +251,7 @@ class Handler:
             new_queries.update(QueryDataItem(query=query, type=QueryType.EMAIL) for query in self.collector.get_unique_emails(branchable_only=True))  # fmt: skip # noqa: E501
             new_queries.update(QueryDataItem(query=query, type=QueryType.PHONE) for query in self.collector.get_unique_phones(branchable_only=True))  # fmt: skip # noqa: E501
             new_queries.update(QueryDataItem(query=query, type=QueryType.FULLNAME) for query in self.collector.get_unique_fullnames(branchable_only=True))  # fmt: skip # noqa: E501
-            new_queries.update(QueryDataItem(query=query, type=QueryType.FIRSTNAME_LASTNAME) for query in self.collector.get_unique_fullname_groups(branchable_only=True))  # fmt: skip # noqa: E501
+            new_queries.update(QueryDataItem(query=query, type=QueryType.FIRSTNAME_LASTNAME) for query in self.collector.get_unique_fullname_groups(branchable_only=True))   # type: ignore[arg-type] # fmt: skip # noqa: E501 # FIXME: Search needs to accept tuples
 
             new_queries -= queries_made
             queries_made.update(new_queries)

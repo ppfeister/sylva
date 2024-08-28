@@ -1,5 +1,3 @@
-from typing import List
-
 import pandas as pd
 
 from .types import ResultDataFrame
@@ -26,7 +24,9 @@ class Collector:
         self.__data:ResultDataFrame = ResultDataFrame()
 
 
-    def insert(self, new_data:ResultDataFrame):
+    def insert(self, new_data:ResultDataFrame|pd.DataFrame):
+        if isinstance(new_data, ResultDataFrame):
+            new_data = new_data.get_data()
         self.__data.insert_frame(new_data)
 
 
@@ -38,27 +38,27 @@ class Collector:
         return self.__data.deduplicate()
 
 
-    def get_unique_queries(self, branchable_only:bool=False) -> List[str]:
+    def get_unique_queries(self, branchable_only:bool=False) -> list[str]:
         df = self.__data.get_data()
         if branchable_only:
             df = df[df['branch_recommended'] == True] # noqa: E712
         return df['query'].dropna().unique().tolist()
-    def get_unique_usernames(self, branchable_only:bool=False) -> List[str]:
+    def get_unique_usernames(self, branchable_only:bool=False) -> list[str]:
         df = self.__data.get_data()
         if branchable_only:
             df = df[df['branch_recommended'] == True] # noqa: E712
         return df['username'].dropna().unique().tolist()
-    def get_unique_emails(self, branchable_only:bool=False) -> List[str]:
+    def get_unique_emails(self, branchable_only:bool=False) -> list[str]:
         df = self.__data.get_data()
         if branchable_only:
             df = df[df['branch_recommended'] == True] # noqa: E712
         return df['email'].dropna().unique().tolist()
-    def get_unique_phones(self, branchable_only:bool=False) -> List[str]:
+    def get_unique_phones(self, branchable_only:bool=False) -> list[str]:
         df = self.__data.get_data()
         if branchable_only:
             df = df[df['branch_recommended'] == True] # noqa: E712
         return df['phone'].dropna().unique().tolist()
-    def get_unique_fullnames(self, branchable_only:bool=False) -> List[str]:
+    def get_unique_fullnames(self, branchable_only:bool=False) -> list[str]:
         df = self.__data.get_data()
         if branchable_only:
             df = df[df['branch_recommended'] == True] # noqa: E712

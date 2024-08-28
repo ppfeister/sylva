@@ -176,11 +176,11 @@ def search(
     try:
         # TODO First name, middle initial, and last name can be guessed based on values on the profile's page
         # (compare with/without middle initial)
-        urlpart: str = re.search(urlpart_pattern, response.json()['solution']['response']).group('URL_PART')
+        urlpart: str = re.search(urlpart_pattern, response.json()['solution']['response']).group('URL_PART')  # type: ignore[union-attr]
         profile_url: str = f'{__voter_data_url}{urlpart}'
-        fullname: str = re.search(fullname_pattern, response.json()['solution']['response']).group('FULLNAME')
-        rawaddr: str = re.search(rawaddr_pattern, response.json()['solution']['response']).group('ADDRESS')
-        age: int = int(re.search(age_pattern, response.json()['solution']['response']).group('AGE'))
+        fullname: str = re.search(fullname_pattern, response.json()['solution']['response']).group('FULLNAME')  # type: ignore[union-attr]
+        rawaddr: str = re.search(rawaddr_pattern, response.json()['solution']['response']).group('ADDRESS')  # type: ignore[union-attr]
+        age = int(re.search(age_pattern, response.json()['solution']['response']).group('AGE'))  # type: ignore[union-attr]
     except KeyError:
         # Important expected data not found. Possibly a false positive.
         # TODO Make this better for handling redacted/excluded data

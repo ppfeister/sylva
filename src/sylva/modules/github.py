@@ -146,7 +146,7 @@ class GitHub:
                 ))
 
         # data starts out as a set for on-the-fly deduplication --- this type difference is intentional
-        data: List[IdentItem] = list(data)
+        data: List[IdentItem] = list(data)  # type: ignore[no-redef] # TODO: Make redef unnecessary through double cast
         new_data = pd.DataFrame(data)
 
         # clean up the data a bit
@@ -158,8 +158,12 @@ class GitHub:
 
 
     def search_accounts_by_keyword(
-            self, username:str|None=None, email:str|None=None, full_name:str|None=None
+            self,
+            username:str|None=None,
+            email:str|None=None,
+            full_name:str|None=None
         ) -> pd.DataFrame:
+
         if username is None and email is None and full_name is None:
             raise ValueError('At least one of username, email, or full_name must be provided')
 
@@ -210,16 +214,16 @@ class GitHub:
                 continue
 
             profile_data = profile_data.json()
-            email_found = profile_data['email'] if email is None else email
+            email_found = profile_data['email'] if email is None else email  # type: ignore[index]
             new_data.add(IdentItem(
-                full_name = profile_data['name'],
-                username = profile_data['login'],
+                full_name = profile_data['name'],  # type: ignore[index]
+                username = profile_data['login'],  # type: ignore[index]
                 email = email_found,
                 source_name = self.source_name,
-                query = query,
+                query = query,  # type: ignore[arg-type] # TODO: Refactor to use en empty string or QDI rather than None
                 branch_recommended = True,
                 platform_name = 'GitHub',
-                platform_url = profile_data['html_url'],
+                platform_url = profile_data['html_url'],  # type: ignore[index]
             ))
 
         return pd.DataFrame(new_data)

@@ -64,7 +64,6 @@ class Voter:
             return pd.DataFrame()
 
         new_data:Dict[str, str|bool] = USA.search(full_name=search_args.query, proxy_data=search_args.proxy_data)
-        new_df:pd.DataFrame = None
 
         if new_data is None or new_data == {}:
             return pd.DataFrame()
@@ -72,7 +71,7 @@ class Voter:
         new_data['query'] = search_args.query
         new_data['source_name'] = self.source_name
 
-        new_df = pd.DataFrame([new_data])
+        new_df:pd.DataFrame = pd.DataFrame([new_data])
         self.collector.insert(new_df)
 
         return new_df

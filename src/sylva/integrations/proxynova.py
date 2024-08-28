@@ -26,13 +26,13 @@ class ProxyNova:
             self,
             query:str,
             start:int=0,
-            end:int=config['Target Options']['proxynova-default-limit'],
+            end:int=config['Target Options']['proxynova-default-limit'],  # type: ignore[index] # TODO Refactor with proxynova module?
             in_recursion:bool=False,
             query_type:QueryType=QueryType.TEXT,
             proxy_data:dict[str, str]|None=None
         ) -> pd.DataFrame:
 
-        if in_recursion and not config['Target Options']['proxynova-branch-in']:
+        if in_recursion and not config['Target Options']['proxynova-branch-in']:  # type: ignore[index]
             return pd.DataFrame()
 
         if not self.accepts(query=query):
@@ -47,6 +47,6 @@ class ProxyNova:
         new_data = pd.DataFrame(rows[:1], columns=['email', 'password'])
         new_data['query'] = query
         new_data['source_name'] = self.source_name
-        new_data['branch_recommended'] = bool(config['Target Options']['proxynova-branch-out'])
+        new_data['branch_recommended'] = bool(config['Target Options']['proxynova-branch-out'])  # type: ignore[index]
         self.collector.insert(new_data)
         return new_data

@@ -3,6 +3,7 @@ import os
 import subprocess
 import sys
 import time
+from multiprocessing.synchronize import Event as EventType
 from urllib.parse import urlparse, urlunparse
 
 import requests
@@ -21,7 +22,7 @@ flaresolverr_base_headers:dict[str, str] = {
 
 
 if config['General']['colorful'] == 'False': # no better way since distutils deprecation?
-    Fore = Back = Style = NoColor
+    Fore = Back = Style = NoColor  # type: ignore[assignment] # TODO: Check if still works under new layout
 
 
 def test_if_flaresolverr_online(proxy_url:str) -> bool:
@@ -50,10 +51,10 @@ def test_if_flaresolverr_online(proxy_url:str) -> bool:
 
 
 class ProxySvc:
-    def __init__(self, host: str = os.environ.get('HOST', '0.0.0.0'), port: int = None):
+    def __init__(self, host: str = os.environ.get('HOST', '0.0.0.0'), port: int|None = None):
         self.server_host: str = host
         self.server_port: int = port if port is not None else 54011 # TODO Change to 0 when dynamic added to flaresolverr  # fmt: skip # noqa: E501
-        self.__stop_event: multiprocessing.Event = multiprocessing.Event()
+        self.__stop_event: EventType = multiprocessing.Event()
         self.__server_process: multiprocessing.Process = multiprocessing.Process(
             target=self._start_async_server, args=(self.__stop_event,)
         )
@@ -64,9 +65,9 @@ class ProxySvc:
         if os.environ.get('SYLVA_ENV', 'tty') == 'docker':
             def _call_flaresolverr_module():
                 subprocess.call(['python', '-u', '/app/flaresolverr.py'])
-            self.server_host: str = '127.0.0.1'
-            self.server_port: int = 8191
-            self.__server_process: multiprocessing.Process = multiprocessing.Process(
+            self.server_host = '127.0.0.1'
+            self.server_port = 8191
+            self.__server_process = multiprocessing.Process(
                 target=_call_flaresolverr_module
             )
 
@@ -135,14 +136,14 @@ class ProxySvc:
 
 
     def start_primary_session(self) -> str:
-        if not test_if_flaresolverr_online(proxy_url=self.primary_proxy_url):
+        if not test_if_flaresolverr_online(proxy_url=self.primary_proxy_url):  # type: ignore[arg-type]
             raise Exception('FlareSolverr is not online')
 
         if self.primary_session_id:
             return self.primary_session_id
 
         response = requests.post(
-            url=self.primary_proxy_url,
+            url=self.primary_proxy_url,  # type: ignore[arg-type]
             json={
                 'cmd': 'sessions.create',
             },
@@ -155,7 +156,7 @@ class ProxySvc:
 
         self.primary_session_id = response.json()['session']
 
-        return self.primary_session_id
+        return self.primary_session_id  # type: ignore[return-value]
 
 
     def destroy_all_sessions(self):

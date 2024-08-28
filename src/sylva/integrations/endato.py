@@ -30,7 +30,7 @@ class Endato:
         self.collector:pd.DataFrame = collector
 
 
-    def _type(self, query:str) -> str:
+    def _type(self, query:str) -> QueryType:
         try:
             phonenumbers.is_valid_number(phonenumbers.parse(query, self.__country))
             return QueryType.PHONE
@@ -103,11 +103,11 @@ class Endato:
             'phone': e164_query,
         }
         new_data = pd.DataFrame([flattened_data])
-        self.collector.insert(new_data)
-        return new_data
+        self.collector.insert(new_data)  # type: ignore[call-arg, arg-type]
+        return new_data  # type: ignore[arg-type]
 
 
-    def search(self, search_args:SearchArgs) -> pd.DataFrame:
+    def search(self, search_args:SearchArgs) -> pd.DataFrame:  # type: ignore[return]
         """Initiate a search of Endato data
 
         Keyword Arguments:

@@ -83,7 +83,7 @@ class PatternMatch:
                 steps = len(pattern['sequence'])
                 last_match = body
                 for step in range(1, steps):
-                    last_match = re.search(pattern['sequence'][f'{step}'], body)['next']
+                    last_match = re.search(pattern['sequence'][f'{step}'], body)['next']  # type: ignore[index, arg-type]
                     if last_match is None or last_match == '':
                         return
                 else:
@@ -91,7 +91,7 @@ class PatternMatch:
                         captures = re.search(pattern['sequence'][f'{steps}'], last_match)
 
             else:
-                captures = re.search(pattern['pattern'], body)
+                captures = re.search(pattern['pattern'], body)  # type: ignore[arg-type]
 
             if captures:
                 new_item:Dict = {}
@@ -141,14 +141,14 @@ class PatternMatch:
             }
 
             captured_groups = re.search(desired_target['pattern'], target_url)
-            if 'uid' in captured_groups.groupdict() and captured_groups.group('uid') is not None:
+            if 'uid' in captured_groups.groupdict() and captured_groups.group('uid') is not None:  # type: ignore[union-attr]
                 # Skip if username is too similar to the domain is was discovered on
                 # TODO Matching can likely be improved with some secondary library
-                similarity = SequenceMatcher(None, split_url.domain, captured_groups.group('uid')).ratio()
+                similarity = SequenceMatcher(None, split_url.domain, captured_groups.group('uid')).ratio()  # type: ignore[union-attr]
                 if similarity >= 0.75:
                     return {}
 
-                found_desirable['username'] = captured_groups.group('uid')
+                found_desirable['username'] = captured_groups.group('uid')  # type: ignore[union-attr]
 
             return found_desirable
 
@@ -181,6 +181,7 @@ class PatternMatch:
             if response.status_code != 200:
                 return pd.DataFrame()
             body = response.text
+
         elif not body and not query:
             raise RequestError(f'Not enough information for pattern matching {current_pattern_data["friendly_name"]}')
 
@@ -197,7 +198,7 @@ class PatternMatch:
         if 'self' in current_pattern_data:
             self_scrape_data:Dict = {}
             for pattern in current_pattern_data['self']:
-                captures = re.search(pattern, body, re.MULTILINE)
+                captures = re.search(pattern, body, re.MULTILINE)  # type: ignore[arg-type]
                 if captures:
                     self_scrape_data['platform_name'] = current_pattern_data['friendly_name']
                     self_scrape_data['platform_url'] = url
@@ -236,7 +237,7 @@ class PatternMatch:
             for pattern in current_pattern_data['patterns']:
                 _search_patterns(pattern)
 
-        soup = BeautifulSoup(body, 'html.parser')
+        soup = BeautifulSoup(body, 'html.parser')  # type: ignore[arg-type]
 
         for desired_target in self._generic_desirables:
             for a in soup.find_all('a', href=re.compile(desired_target['pattern'])):
@@ -257,8 +258,8 @@ class PatternMatch:
         for known_redirect_pattern in self._known_redirects_by_query_string:
             for a in soup.find_all('a', href=re.compile(known_redirect_pattern)):
                 matched_groups = re.search(known_redirect_pattern, a['href'])
-                if 'url' in matched_groups.groupdict():
-                    print(f'Found redirect {matched_groups.group("url")}\n\n')
-                    new_data.append(_search_desirables(url=matched_groups.group('url')))
+                if 'url' in matched_groups.groupdict():  # type: ignore[union-attr]
+                    print(f'Found redirect {matched_groups.group("url")}\n\n')  # type: ignore[union-attr]
+                    new_data.append(_search_desirables(url=matched_groups.group('url')))  # type: ignore[union-attr]
 
         return pd.DataFrame(new_data)
