@@ -42,27 +42,27 @@ class Collector:
         df = self.__data.get_data()
         if branchable_only:
             df = df[df['branch_recommended'] == True] # noqa: E712
-        return df['query'].dropna().unique().tolist()
+        return df['query'].dropna().unique().tolist()  # type: ignore[no-any-return]
     def get_unique_usernames(self, branchable_only:bool=False) -> list[str]:
         df = self.__data.get_data()
         if branchable_only:
             df = df[df['branch_recommended'] == True] # noqa: E712
-        return df['username'].dropna().unique().tolist()
+        return df['username'].dropna().unique().tolist()  # type: ignore[no-any-return]
     def get_unique_emails(self, branchable_only:bool=False) -> list[str]:
         df = self.__data.get_data()
         if branchable_only:
             df = df[df['branch_recommended'] == True] # noqa: E712
-        return df['email'].dropna().unique().tolist()
+        return df['email'].dropna().unique().tolist()  # type: ignore[no-any-return]
     def get_unique_phones(self, branchable_only:bool=False) -> list[str]:
         df = self.__data.get_data()
         if branchable_only:
             df = df[df['branch_recommended'] == True] # noqa: E712
-        return df['phone'].dropna().unique().tolist()
+        return df['phone'].dropna().unique().tolist()  # type: ignore[no-any-return]
     def get_unique_fullnames(self, branchable_only:bool=False) -> list[str]:
         df = self.__data.get_data()
         if branchable_only:
             df = df[df['branch_recommended'] == True] # noqa: E712
-        return df['full_name'].dropna().unique().tolist()
+        return df['full_name'].dropna().unique().tolist()  # type: ignore[no-any-return]
     def get_unique_fullname_groups(self, branchable_only:bool=False) -> set[tuple[str, str, str]]:
         df = self.__data.get_data()
         if branchable_only:

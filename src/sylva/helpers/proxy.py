@@ -12,7 +12,7 @@ from colorama import Back, Fore, Style
 from .. import __user_agent__
 from ..config import config
 from ..easy_logger import LogLevel, NoColor, loglevel
-from .flaresolverr.flaresolverr import run  # type: ignore[import-not-found] # No idea why it's not found during testing
+from .flaresolverr.flaresolverr import run  # type: ignore[import-not-found, unused-ignore] # problematic during ci
 
 flaresolverr_base_headers:dict[str, str] = {
     'Accept': 'application/json',
@@ -160,11 +160,11 @@ class ProxySvc:
 
 
     def destroy_all_sessions(self):
-        if not test_if_flaresolverr_online(proxy_url=self.primary_proxy_url):
+        if not test_if_flaresolverr_online(proxy_url=self.primary_proxy_url):  # type: ignore[arg-type]
             raise Exception('FlareSolverr is not online')
 
         response = requests.post(
-            url=self.primary_proxy_url,
+            url=self.primary_proxy_url,  # type: ignore[arg-type]
             json={
                 'cmd': 'sessions.list',
             },
@@ -176,7 +176,7 @@ class ProxySvc:
 
         for session in sessions:
             response = requests.post(
-                url=self.primary_proxy_url,
+                url=self.primary_proxy_url,  # type: ignore[arg-type]
                 json={
                     'cmd': 'sessions.destroy',
                     'session': session,

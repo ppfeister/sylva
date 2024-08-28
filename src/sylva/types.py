@@ -46,7 +46,7 @@ class ResultDataFrame:
         deduplicate: Deduplicate the collected results
     """
     def __init__(self):
-        self.data = pd.DataFrame(
+        self.data: pd.DataFrame = pd.DataFrame(
             columns=[
                 'query',
                 'source_name',

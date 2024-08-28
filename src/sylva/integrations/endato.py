@@ -5,13 +5,14 @@ import pandas as pd
 import phonenumbers
 import requests
 
+from ..collector import Collector
 from ..config import config
 from ..errors import APIKeyError, IncompatibleQueryType, RequestError
 from ..types import QueryType, SearchArgs
 
 
 class Endato:
-    def __init__(self, collector:pd.DataFrame, api_name:str, api_key:str, country:str):
+    def __init__(self, collector:Collector, api_name:str, api_key:str, country:str):
         self.__api_name:str = api_name
         self.__api_key:str = api_key
         self.__api_url:Dict[str, str] = {
@@ -27,7 +28,7 @@ class Endato:
         }
         self.source_obtain_keys_url:str = 'https://api.endato.com/Keys'
         self.source_name:str = 'Endato'
-        self.collector:pd.DataFrame = collector
+        self.collector:Collector = collector
 
 
     def _type(self, query:str) -> QueryType:
@@ -103,8 +104,8 @@ class Endato:
             'phone': e164_query,
         }
         new_data = pd.DataFrame([flattened_data])
-        self.collector.insert(new_data)  # type: ignore[call-arg, arg-type]
-        return new_data  # type: ignore[arg-type]
+        self.collector.insert(new_data)
+        return new_data
 
 
     def search(self, search_args:SearchArgs) -> pd.DataFrame:  # type: ignore[return]

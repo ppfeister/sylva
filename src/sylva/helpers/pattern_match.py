@@ -160,10 +160,10 @@ class PatternMatch:
         split_url = tldextract.extract(url)
         root_domain = f'{split_url.domain}.{split_url.suffix}'
 
-        if root_domain not in self.pattern_data:
+        if root_domain not in self.pattern_data:  # type: ignore[operator]
             return pd.DataFrame()
 
-        current_pattern_data = self.pattern_data[root_domain]
+        current_pattern_data = self.pattern_data[root_domain]  # type: ignore[index]
 
         if (not body and query) or 'custom_url' in current_pattern_data:
             if 'custom_url' in current_pattern_data:

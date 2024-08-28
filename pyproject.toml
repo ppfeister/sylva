@@ -132,4 +132,11 @@ exclude = [
     "src/sylva/helpers/pgpy/",
     "src/sylva/helpers/flaresolverr/",
 ]
-follow_imports = "skip"
+follow_imports = "skip" # FIXME Not ideal, but necessary to function within tox
+#disallow_untyped_defs = true  # TODO Enable disallow untyped defs
+#disallow_any_unimported = true  # TODO Enable disallow any unimported
+no_implicit_optional = true
+warn_return_any = true
+warn_unused_ignores = true
+show_error_codes = true
+check_untyped_defs = true

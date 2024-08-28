@@ -200,7 +200,7 @@ class Reddit:
                     'comment': comment.body,
                 })
 
-        return hints
+        return hints  # type: ignore[no-any-return] # False positive?
 
 
     def __check_if_exists(self, username:str) -> bool:

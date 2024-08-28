@@ -29,7 +29,7 @@ class TargetInformation:
                 manifest_data:Dict = json.load(f)
         else:
             # TODO add validation against discovered schema version number
-            manifest_data:Dict = json.loads(r.text)
+            manifest_data = json.loads(r.text)
 
         self.targets:Dict = manifest_data['targets']
 
