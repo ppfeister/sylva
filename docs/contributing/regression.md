@@ -16,13 +16,13 @@ Contributors that have installed the development environment via `pdm install -G
 #### Within venv
 
 ```bash
-tox
+tox p
 ```
 
 #### Outside of venv
 
 ```bash
-pdm run tox
+pdm run tox p
 ```
 
 [advanced-install]: /install-adv/#installing-sylva-for-development
