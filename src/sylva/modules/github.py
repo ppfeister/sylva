@@ -42,7 +42,7 @@ class GitHub:
             self.__generic_headers['Authorization'] = f'Bearer {api_key}'
 
 
-    async def __get_page(self, session:aiohttp.ClientSession, url:str, headers:Dict[str, str]):
+    async def __get_page(self, session:aiohttp.ClientSession, url:str, headers:Dict[str, str]):  # type: ignore[no-untyped-def]
         async with session.get(url, headers=headers) as response:
             if response.status == 200:
                 return await response.json()
@@ -53,7 +53,7 @@ class GitHub:
                 return None
 
 
-    async def __get_pages(self, url:str):
+    async def __get_pages(self, url:str):  # type: ignore[no-untyped-def]
         # TODO Check for number of actually populated pages if account < maximum_query_depth values
         # Without this check, rate limit may be exceeded more quickly
         async with aiohttp.ClientSession() as session:

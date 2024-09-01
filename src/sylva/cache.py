@@ -4,5 +4,5 @@ __cache_dir = platformdirs.user_cache_dir
 __cache_db = f"{__cache_dir}/cache.sqlite"
 
 class Cache:
-    def __init__(self):
+    def __init__(self) -> None:
         self.cache_db_path = __cache_db

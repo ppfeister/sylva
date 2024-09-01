@@ -63,7 +63,7 @@ class ProxySvc:
 
         # FIXME: Remove when FlareSolverr nonsense is fixed
         if os.environ.get('SYLVA_ENV', 'tty') == 'docker':
-            def _call_flaresolverr_module():
+            def _call_flaresolverr_module() -> None:
                 subprocess.call(['python', '-u', '/app/flaresolverr.py'])
             self.server_host = '127.0.0.1'
             self.server_port = 8191
@@ -72,11 +72,11 @@ class ProxySvc:
             )
 
 
-    def __del__(self):
+    def __del__(self) -> None:
         self.stop()
 
 
-    def _start_async_server(self, stop_event):
+    def _start_async_server(self, stop_event: EventType) -> None:
         """
         Start the FlareSolverr server asynchronously and monitor the stop event.
         """
@@ -94,7 +94,7 @@ class ProxySvc:
                 print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} Started FlareSolverr on {self.server_host}:{self.server_port}')  # fmt: skip # noqa: E501
 
 
-    def stop(self):
+    def stop(self) -> None:
         """
         Stop the server by setting the stop event and joining the process.
         """
@@ -114,7 +114,7 @@ class ProxySvc:
                 print(f'{Fore.LIGHTBLACK_EX}{Style.BRIGHT}[-]{Style.RESET_ALL}{Fore.RESET} Attempted to stop FlareSolverr, but it was not running')  # fmt: skip # noqa: E501
 
 
-    def start(self):
+    def start(self) -> None:
         """
         Start the server process.
         """
@@ -159,7 +159,7 @@ class ProxySvc:
         return self.primary_session_id  # type: ignore[return-value]
 
 
-    def destroy_all_sessions(self):
+    def destroy_all_sessions(self) -> None:
         if not test_if_flaresolverr_online(proxy_url=self.primary_proxy_url):  # type: ignore[arg-type]
             raise Exception('FlareSolverr is not online')
 

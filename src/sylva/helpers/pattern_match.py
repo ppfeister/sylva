@@ -26,7 +26,7 @@ class PatternMatchQueryArgs:
 
 
 class PatternMatch:
-    def __init__(self):
+    def __init__(self) -> None:
         self.__module_name:str = 'Discovered'
         self.local_pattern_data = f'{pathlib.Path(__file__).parent.resolve()}/../data/site_patterns.json'
         self.pattern_data = None
@@ -78,7 +78,7 @@ class PatternMatch:
         url = re.sub(__url_normalization_pattern__, '', url)
 
 
-        def _search_patterns(pattern:Dict):
+        def _search_patterns(pattern:Dict) -> None:
             if 'sequence' in pattern:
                 steps = len(pattern['sequence'])
                 last_match = body

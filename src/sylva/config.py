@@ -13,10 +13,10 @@ __config_path = f"{__config_dir}/config.ini"
 #__allowed_editors: List[str] = ['atom', 'atom-beta', 'code', 'code-insiders', 'code-oss', 'emacs', 'geany', 'gedit', 'kate', 'nano', 'notepad++', 'nvim', 'subl', 'vim', 'vim-gtk', 'vscode']  # noqa: E501
 
 class InteractiveConfig():
-    def __init__(self):
+    def __init__(self) -> None:
         self.config = config
         self.config_path = get_config_path()
-    def launch_preferred_editor(self):
+    def launch_preferred_editor(self) -> None:
         EDITOR = os.environ.get('EDITOR')
         if not EDITOR:
             print('$EDITOR is not set on your system.')
@@ -48,13 +48,13 @@ def check_option(section:str, key:str, default:str='') -> str:
     except KeyError:
         return default
 
-def new_config():
+def new_config() -> None:
     print(f"Seems to be your first time using {__short_name__}. Let's create a config file for you.")
     os.makedirs(__config_dir, exist_ok=True)
     with open(__config_path, "x") as configfile:
         config.write(configfile)
 
-def update_config():
+def update_config() -> None:
     config["General"] = {
         "debug": check_option(section="General", key="debug", default="False"),
         "log_level": check_option(section="General", key="log_level", default="3"),
@@ -86,13 +86,12 @@ def update_config():
     with open(__config_path, "w") as configfile:
         config.write(configfile)
 
-def load_config():
+def load_config() -> configparser.ConfigParser:
     if not os.path.isfile(__config_path):
         new_config()
     else:
         config.read(__config_path)
     update_config()
-
 
     return config
 

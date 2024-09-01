@@ -18,7 +18,7 @@ from ..types import QueryType, SearchArgs
 prefer_local_manifest = True
 
 class TargetInformation:
-    def __init__(self):
+    def __init__(self) -> None:
         self._local_manifest_uri = f'{pathlib.Path(__file__).parent.resolve()}/../data/pgp.json'
         self._local_schema_uri = f'{pathlib.Path(__file__).parent.resolve()}/../data/pgp.schema.json'
         self._remote_manifest_uri = __github_raw_data_url__

@@ -26,7 +26,7 @@ _LINE_CLEAR = '\x1b[2L'
 
 loglevel = int(config['General']['log_level'])
 
-def overwrite_previous_line():
+def overwrite_previous_line() -> None:
     # Line up then clear only yields a not so pretty result while waiting for the next output
     # Therefore, line up, erase with new line, then line up again for next output
 
@@ -38,7 +38,7 @@ def overwrite_previous_line():
     print()
     print(_LINE_UP, end=_LINE_CLEAR)
 
-def info(message:str):
+def info(message:str) -> None:
     if loglevel < LogLevel.INFO.value:
         return
     print(f'{Fore.LIGHTCYAN_EX}{Style.BRIGHT}[*]{Style.RESET_ALL}{Fore.RESET} {message}')

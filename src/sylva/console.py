@@ -6,7 +6,7 @@ from .config import InteractiveConfig
 from .handler import Handler
 
 
-def config_subcommand(args:argparse.Namespace):
+def config_subcommand(args:argparse.Namespace) -> None:
     """Handles the config subcommand
 
     Keyword Arguments:
@@ -17,7 +17,7 @@ def config_subcommand(args:argparse.Namespace):
         return
 
 
-def search_subcommand(args:argparse.Namespace):
+def search_subcommand(args:argparse.Namespace) -> None:
     """Handles the search subcommand
 
     Keyword Arguments:
@@ -28,18 +28,18 @@ def search_subcommand(args:argparse.Namespace):
     print(handler.collector.get_data())
 
 
-def branch_subcommand(args:argparse.Namespace):
+def branch_subcommand(args:argparse.Namespace) -> None:
     handler = Handler()
     handler.branch_all(args.query, depth=args.branch_depth)
     print()
     print(handler.collector.get_data())
 
 
-def interactive_setup_subcommand(args:argparse.Namespace):
+def interactive_setup_subcommand(args:argparse.Namespace) -> None:
     pass
 
 
-def interactive():
+def interactive() -> None:
     parser = argparse.ArgumentParser(description=f'{__long_name__}')
     subparsers = parser.add_subparsers(dest='command')
 

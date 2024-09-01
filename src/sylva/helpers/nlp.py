@@ -25,7 +25,7 @@ LANGUAGE_RESOURCES: dict = {
 
 class NatLangProcessor:
     """Basic natural language processor for Sylva data collection"""
-    def __init__(self):
+    def __init__(self) -> None:
         current_file_path = os.path.dirname(__file__)
         spacy_model_base_path = os.path.join(current_file_path, '../data/nlp/spacy_models')
 
@@ -39,7 +39,7 @@ class NatLangProcessor:
         self.matcher.add(f"RESIDENCY_PATTERN_{language_code.upper()}", patterns, greedy="LONGEST")
 
 
-    def get_residences(self, message) -> list[str]:
+    def get_residences(self, message: str) -> list[str]:
         """Get likely residences from a given message
 
         Keyword Arguments:

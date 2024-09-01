@@ -9,13 +9,13 @@
 <h1 align="center">Sylva identity discovery</h1>
 
 <p align="center">
-<a href="https://codeclimate.com/github/ppfeister/sylva/maintainability"><img src="https://api.codeclimate.com/v1/badges/4884eb85ac21a8426edc/maintainability" /></a> &nbsp;
-<a href="https://codeclimate.com/github/ppfeister/sylva/test_coverage"><img src="https://api.codeclimate.com/v1/badges/4884eb85ac21a8426edc/test_coverage" /></a> &nbsp;
-<a href="#"><img alt="Static Badge" src="https://img.shields.io/badge/type%20checked-mypy-1868ff">
+<a href="https://codeclimate.com/github/ppfeister/sylva/maintainability"><img src="https://api.codeclimate.com/v1/badges/4884eb85ac21a8426edc/maintainability" /></a>
+&nbsp; <a href="https://codeclimate.com/github/ppfeister/sylva/test_coverage"><img src="https://api.codeclimate.com/v1/badges/4884eb85ac21a8426edc/test_coverage" /></a>
+&nbsp; <a href="#"><img alt="Static Badge" src="https://img.shields.io/badge/type%20safety-mypy-1868ff"></a>
 </p>
 
 <p align="center">
-Note that Sylva is undergoing rapid development and documentation may be quickly obsoleted.
+Note that Sylva is undergoing rapid development and documentation may be quickly obsoleted. Now that development has a consistent "direction", regression testing is being gradually introduced.
 </p>
 <p align="center">
 Visit the <strong><a href="https://sylva.pfeister.dev">Sylva Wiki</a></strong> for more information.

@@ -24,13 +24,12 @@ class IntelX:
             self,
             query:str,
             limit:int=2,
-            buckets=["leaks.public", "leaks.private", "pastes", "darknet"],
+            buckets:list[str]=["leaks.public", "leaks.private", "pastes", "darknet"],
             timeout:int=5,
             datefrom:str|None=None,
             dateto:str|None=None,
             sort:int=2,
             media:int=24,
-            terminate=[],
             in_recursion:bool=False,
             query_type:QueryType=QueryType.TEXT,
             proxy_data:dict[str, str]|None=None
@@ -58,7 +57,7 @@ class IntelX:
             dateto=dateto,
             sort=sort,
             media=media,
-            terminate=terminate
+            terminate=[],
         )
 
         for record in results['records']:

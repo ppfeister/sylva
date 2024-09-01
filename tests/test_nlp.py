@@ -23,7 +23,7 @@ nlp = NatLangProcessor()
     ('I hail from Boston', 'Boston'),
     ('I am hailing from Boston', 'Boston'),
 ])
-def test_single_residency(prompt, response):
+def test_single_residency(prompt: str, response: str) -> None:
     """Test a single residency query"""
     assert nlp.get_residences(prompt) == [response]
 
@@ -33,7 +33,7 @@ def test_single_residency(prompt, response):
     ('I live in New York, but I moved to Boston', ['New York', 'Boston']),
     #('I live in New York, but I moved to Boston, and now live in London', ['New York', 'Boston', 'London']),
 ])
-def test_complex_with_multipart_location_names(prompt, response):
+def test_complex_with_multipart_location_names(prompt: str, response: str) -> None:
     """Test a complex query with multiple location names"""
     assert set(nlp.get_residences(prompt)) == set(response)
 
@@ -41,7 +41,7 @@ def test_complex_with_multipart_location_names(prompt, response):
 @pytest.mark.parametrize('prompt,response', [
     ('I live in New York', ['New York']),
 ])
-def test_multipart_location_names(prompt, response):
+def test_multipart_location_names(prompt: str, response: str) -> None:
     """Test a query with multiple location names"""
     assert set(nlp.get_residences(prompt)) == set(response)
 
@@ -54,7 +54,7 @@ def test_multipart_location_names(prompt, response):
     ('I used to live in Boston, but I moved to Bremen', ['Boston', 'Bremen']),
     ('I\'ve lived in Boston, vacationed in Enble, and moved to Bremen', ['Boston', 'Bremen']),
 ])
-def test_multiple_residency(prompt, response):
+def test_multiple_residency(prompt: str, response: str) -> None:
     """Test multiple residency queries"""
     assert set(nlp.get_residences(prompt)) == set(response)
 
@@ -63,7 +63,7 @@ def test_multiple_residency(prompt, response):
     ('I\'ve vacationed in Enble'),
     ('I vacationed in both Bostom and Bremen'),
 ])
-def test_non_residency(prompt):
+def test_non_residency(prompt: str) -> None:
     """Test non-residency queries"""
     assert nlp.get_residences(prompt) == []
 
@@ -71,12 +71,12 @@ def test_non_residency(prompt):
 @pytest.mark.parametrize('prompt', [
     ('He lives in Boston'),
 ])
-def test_non_self_residency(prompt):
+def test_non_self_residency(prompt: str) -> None:
     """Test non-self residency queries"""
     assert nlp.get_residences(prompt) == []
 
 
-def test_empty_prompt():
+def test_empty_prompt() -> None:
     """Test empty prompt for empty response"""
     assert nlp.get_residences('') == []
 
@@ -87,7 +87,7 @@ def test_empty_prompt():
     (True),
     (['abc', 'def']),
 ])
-def test_invalid_prompt_type(prompt):
+def test_invalid_prompt_type(prompt: str) -> None:
     """Affirm that an exception is raised for invalid prompt types"""
     with pytest.raises(TypeError):
         nlp.get_residences(prompt)

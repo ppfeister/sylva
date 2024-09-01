@@ -20,11 +20,11 @@ class Collector:
         get_unique_fullnames: Returns a list of unique full names
         get_unique_fullname_groups: Returns a list of unique firstname, middlename, and lastname groups
     """
-    def __init__(self):
+    def __init__(self) -> None:
         self.__data:ResultDataFrame = ResultDataFrame()
 
 
-    def insert(self, new_data:ResultDataFrame|pd.DataFrame):
+    def insert(self, new_data:ResultDataFrame|pd.DataFrame) -> None:
         if isinstance(new_data, ResultDataFrame):
             new_data = new_data.get_data()
         self.__data.insert_frame(new_data)

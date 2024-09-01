@@ -72,7 +72,7 @@ class Handler:
         print(results)
         ```
     """
-    def __init__(self):
+    def __init__(self) -> None:
         self.collector:Collector = Collector()
         self.__default_country:str = 'US'
         self.__in_recursion = False
@@ -93,11 +93,11 @@ class Handler:
             self.__prepare_flaresolverr()
 
 
-    def __del__(self):
+    def __del__(self) -> None:
         del self.__proxy_svc
 
 
-    def __prepare_flaresolverr(self):
+    def __prepare_flaresolverr(self) -> None:
         """Attempt to start the proxy service and a common browser session"""
         try:
             if loglevel >= LogLevel.SUCCESS_ONLY.value:
@@ -213,7 +213,7 @@ class Handler:
 
         return total_discovered
 
-    def branch_all(self, query: str, depth: int = 1, no_deduplicate: bool = False):
+    def branch_all(self, query: str, depth: int = 1, no_deduplicate: bool = False) -> int:
         """Recursively search all available modules for the given query
 
         Runs a variable-depth search for a given query across all available modules and
@@ -269,3 +269,5 @@ class Handler:
                 self.collector.deduplicate()
 
         self.__proxy_svc.stop()
+
+        return 0 # FIXME Needs total discovered

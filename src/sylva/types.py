@@ -45,7 +45,7 @@ class ResultDataFrame:
         get_data: Returns a Pandas DataFrame of the collected results
         deduplicate: Deduplicate the collected results
     """
-    def __init__(self):
+    def __init__(self) -> None:
         self.data: pd.DataFrame = pd.DataFrame(
             columns=[
                 'query',
