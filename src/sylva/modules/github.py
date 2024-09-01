@@ -42,7 +42,7 @@ class GitHub:
             self.__generic_headers['Authorization'] = f'Bearer {api_key}'
 
 
-    async def __get_page(self, session:aiohttp.ClientSession, url:str, headers:Dict[str, str]):  # type: ignore[no-untyped-def]
+    async def __get_page(self, session:aiohttp.ClientSession, url:str, headers:Dict[str, str]):  # type: ignore[no-untyped-def] # (unk. return type)
         async with session.get(url, headers=headers) as response:
             if response.status == 200:
                 return await response.json()

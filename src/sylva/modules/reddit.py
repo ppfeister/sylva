@@ -109,7 +109,7 @@ class Reddit:
             body_key = 'selftext'
 
         communities_to_ignore: list[str] = \
-            self.RM_SUBREDDIT_DATA.loc[self.RM_SUBREDDIT_DATA['ignore_text'] == 'Y', 'name'].tolist()  # type: ignore[operator]
+            self.RM_SUBREDDIT_DATA.loc[self.RM_SUBREDDIT_DATA['ignore_text'] == 'Y', 'name'].tolist()
 
         request_url_base: str = f'https://reddit.com/user/{username}/{type}.json?t=all&limit=100&sort=new'
         request_url: str = request_url_base

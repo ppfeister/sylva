@@ -54,10 +54,10 @@ class NatLangProcessor:
         discovered_locations: list[str] = []
 
         doc = self.nlp(message)
-        matches = self.matcher(doc, with_alignments=True)
+        matches = self.matcher(doc)
 
         assembled_location: str = ''
-        for match_id, start, end, alignments in matches:
+        for match_id, start, end in matches:
             span = doc[start:end]
 
             for token in span:
