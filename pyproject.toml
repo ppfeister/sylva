@@ -133,9 +133,8 @@ exclude = [
     "src/sylva/helpers/flaresolverr/",
     "src/sylva/integrations/intelxapi.py",
 ]
-follow_imports = "skip" # FIXME Not ideal, but necessary to function within tox
-disallow_untyped_defs = true  # TODO Enable disallow untyped defs
-#disallow_any_unimported = true  # TODO Enable disallow any unimported
+disallow_untyped_defs = true
+disallow_any_unimported = true
 no_implicit_optional = true
 warn_return_any = true
 warn_unused_ignores = true
