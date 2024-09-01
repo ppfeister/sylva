@@ -261,7 +261,7 @@ class Handler:
                     depth_str:str = ''
                     if loglevel >= LogLevel.INFO.value:
                         depth_str = f' {i+1}' # Only show depth if verbosity above SUCCESS_ONLY
-                    print(f'{Fore.BLUE}{Style.BRIGHT}[Branch{depth_str}]{Fore.RESET}{Style.RESET_ALL} {new_query.query}')  # fmt: skip # noqa: E501
+                    print(f'{Fore.BLUE}{Style.BRIGHT}[Branch{depth_str}]{Fore.RESET}{Style.RESET_ALL} {new_query.query} {Style.DIM} -  {new_query.type.value.lower()}{Style.RESET_ALL}')  # fmt: skip # noqa: E501
                 if not self.search_all(query=new_query):
                     overwrite_previous_line()
 

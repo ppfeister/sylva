@@ -6,14 +6,14 @@ import pandas as pd
 
 class QueryType(Enum):
     """Used to more consistently define the type of a query"""
-    TEXT = 0
-    EMAIL = 1
-    PHONE = 2
-    USERNAME = 3
-    FULLNAME = 4
-    FIRSTNAME = 5
-    LASTNAME = 6
-    FIRSTNAME_LASTNAME = 7
+    TEXT = 'Simple'
+    EMAIL = 'Email'
+    PHONE = 'Phone'
+    USERNAME = 'Username'
+    FULLNAME = 'Full Name'
+    FIRSTNAME = 'First Name'
+    LASTNAME = 'Last Name'
+    FIRSTNAME_LASTNAME = 'Divided Name'
 
 @dataclass
 class SearchArgs:
