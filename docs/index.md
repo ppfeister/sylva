@@ -14,7 +14,7 @@ Give us a star on [GitHub]{:target="_blank"} and watch the repository for releas
 ## Commands
 
 * `#!bash sylva config --edit` - Interactively edit the configuration file and add API keys.
-* `#!bash sylva search [username]` - Run a cursory search for a given string.
+* `#!bash sylva search [fadwafawaz88@gmail.com]` - Run a cursory search for a given string.
 * `#!bash sylva branch [username]` - Start searching based on a simple string, and branch out as more identities are discovered.
 * `#!bash sylva --help` - Print help message and exit.
 
